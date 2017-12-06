@@ -16,5 +16,23 @@ public class AppController {
     public static boolean Clickabl = true;
     public static boolean goHome = true;
 
+    public static boolean ali = false;
+
+    public static final String BAIKE = "baike";
+    public static final String CALC = "calc";
+    public static final String DATETIME = "datetime";
+    public static final String FLIGHT = "flight";
+    public static final String JOKE = "joke";
+    public static final String MUSICX = "musicX";
+    public static final String NEWS = "news";
+    public static final String OPENAPPTEST_APP = "OPENAPPTEST.APP";
+    public static final String OPENQA = "openQA";
+    public static final String POETRY = "poetry";
+    public static final String STORY = "story";
+    public static final String OPENAPPTEST_SHIPING = "OPENAPPTEST.shiping";
+    public static final String WEATHER = "weather";
+
+
+
 
 }

@@ -1,6 +1,8 @@
 package com.zhengpu.aiuilibrary.iflytekutils;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 
@@ -18,8 +20,11 @@ import com.zhengpu.aiuilibrary.iflytekaction.JokeAction;
 import com.zhengpu.aiuilibrary.iflytekaction.OpenAppAction;
 import com.zhengpu.aiuilibrary.iflytekaction.PlayMusicxAction;
 import com.zhengpu.aiuilibrary.iflytekaction.PlayVideoAction;
+import com.zhengpu.aiuilibrary.iflytekbean.BaikeBean;
+import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekbean.CalcBean;
 import com.zhengpu.aiuilibrary.iflytekbean.DatetimeBean;
+import com.zhengpu.aiuilibrary.iflytekbean.FlightBean;
 import com.zhengpu.aiuilibrary.iflytekbean.JokeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.MusicXBean;
 import com.zhengpu.aiuilibrary.iflytekbean.NewsBean;
@@ -29,6 +34,7 @@ import com.zhengpu.aiuilibrary.iflytekbean.PoetryBean;
 import com.zhengpu.aiuilibrary.iflytekbean.StoryBean;
 import com.zhengpu.aiuilibrary.iflytekbean.VideoBean;
 import com.zhengpu.aiuilibrary.iflytekbean.WeatherBean;
+import com.zhengpu.aiuilibrary.utils.PreferUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,12 +62,10 @@ public class VoiceToWords {
 
     private Context context;
     // 函数调用返回值,表示返回结果，失败或成功
-    int ret = 0;
     //设置回调接口
     private IGetVoiceToWord mIGetVoiceToWord;
     private String operation;
-    private static VoiceToWords voiceToWords;
-
+    public static VoiceToWords voiceToWords;
 
     /**
      * 构造方法
@@ -72,7 +76,6 @@ public class VoiceToWords {
         //设置参数
         setParams();
     }
-
 
     public static synchronized VoiceToWords getInstance(Context context) {
         if (voiceToWords == null)
@@ -104,11 +107,9 @@ public class VoiceToWords {
     public void startRecognizer() {
         //清空听写结果
         mIatResults.clear();
-        ret = mIat.startUnderstanding(mSpeechUnderstanderListener);
-        if (ret != ErrorCode.SUCCESS)
-            Logger.e("听写失败,错误码：" + ret);
+        if (mIat.startUnderstanding(mSpeechUnderstanderListener) != ErrorCode.SUCCESS)
+            Logger.e("听写失败,错误码：" + mIat.startUnderstanding(mSpeechUnderstanderListener));
     }
-
 
     /**
      * 为听写对象设置参数
@@ -119,9 +120,10 @@ public class VoiceToWords {
         //SpeechConstant.KEY_SPEECH_TIMEOUT:语音输入超时时间  默认60秒
         //mIat.setParameter(SpeechConstant.SAMPLE_RATE, "16000") 默认的识别采样率支持16000Hz和8000Hz
         // 清空参数
+//    mIat.setParameter(SpeechConstant.NET_TIMEOUT,"30000");
         mIat.setParameter(SpeechConstant.PARAMS, null);
         //设置语音输入超时时间
-        mIat.setParameter(SpeechConstant.KEY_SPEECH_TIMEOUT, "100000");
+        mIat.setParameter(SpeechConstant.KEY_SPEECH_TIMEOUT, "10000");
         mIat.setParameter(SpeechConstant.SAMPLE_RATE, "16000");
         // 设置听写引擎
         mIat.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
@@ -152,7 +154,7 @@ public class VoiceToWords {
 
         mIat.setParameter(SpeechConstant.VAD_ENABLE, "1");
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
-        mIat.setParameter(SpeechConstant.VAD_BOS, "10000");
+        mIat.setParameter(SpeechConstant.VAD_BOS, "1000");
 
         // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
         mIat.setParameter(SpeechConstant.VAD_EOS, "2000");
@@ -190,7 +192,6 @@ public class VoiceToWords {
         }
     }
 
-
     /**
      * 语义理解回调。
      */
@@ -201,13 +202,12 @@ public class VoiceToWords {
             if (null != result) {
                 Logger.e(result.getResultString());
                 String text = result.getResultString();
-                JSONObject jsonObject2 = null;
-                String service = null;
-                int rc = 4;
+                JSONObject jsonObject2;
+                String service;
                 try {
                     jsonObject2 = new JSONObject(text);
                     service = jsonObject2.getString("service");
-                    rc = jsonObject2.getInt("rc");
+                    int rc = jsonObject2.getInt("rc");
                     if (service != null && rc != 4) {
                         judgeService(service, text);
                     } else {
@@ -221,31 +221,33 @@ public class VoiceToWords {
                     }
                     e.printStackTrace();
                 }
-
             }
         }
 
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
+
             //showTip("当前正在说话，音量大小：" + volume);
             //Log.d(TAG, "返回音频数据：" + data.length);
-            //Log.d("返回音频数据"+ data.length);
         }
 
         @Override
         public void onEndOfSpeech() {
             // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
             //showTip("结束说话");
+//            Logger.e("结束说话");
+            if (mIGetVoiceToWord != null) {
+                mIGetVoiceToWord.SpeechOver();
+            }
 
         }
 
         @Override
         public void onBeginOfSpeech() {
-            // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
-//            Logger.e("讯飞结束说话");
-            if (mIGetVoiceToWord != null) {
-                mIGetVoiceToWord.SpeechOver();
-            }
+            // 此回调表示：检测到了语音的前端点，已经进入识别
+//            Logger.e("开始说话");
+            if (mIGetVoiceToWord != null)
+                mIGetVoiceToWord.SpeechStart();
         }
 
         @Override
@@ -289,16 +291,50 @@ public class VoiceToWords {
     //语义场景判断
     private void judgeService(String service, String text) {
 
-        if (!AppController.service_flag) {//如果不在一项服务中才进行服务的判断
+        if (!AppController.service_flag) { //如果不在一项服务中才进行服务的判断
 
+            BaseBean baseBean = new BaseBean();
             switch (service) {
-                case "calc":     //  数值计算问答
+
+                case "baike": {  //   互动百科词条查询。
+
+                    BaikeBean baikeBean = JsonParser.parseResultBaikeBean(text);
+                    if (baikeBean != null && baikeBean.getAnswer() != null) {
+
+
+                        baseBean.setItemType(BaseBean.BAIKE);
+                        baseBean.setContext(baikeBean.getText());
+                        baseBean.setBaikeBean(baikeBean);
+                        mIGetVoiceToWord.getResult(service, baseBean);
+
+                        String txt = baikeBean.getAnswer().getText();
+                        CalcAction calcAction = new CalcAction(txt);
+                        calcAction.start();
+
+//                        if (baikeBean.getSemantic() != null && baikeBean.getSemantic().get(0).getSlotsBean().getValue() != null) {
+//                            //打开浏览器进行百度百科进行搜索
+//                            String keywords = baikeBean.getSemantic().get(0).getSlotsBean().getValue();
+//                            Intent intent = new Intent(Intent.ACTION_VIEW);
+//                            intent.setData(Uri.parse("https://www.baidu.com/s?wd=" + keywords + "&tn=SE_PSStatistics_p1d9m0nf"));
+//                            context.startActivity(intent);
+//                        }
+                    }
+                    break;
+                }
+                case "calc": {    //  数值计算问答
                     CalcBean calcBean = JsonParser.parseResultCalc(text);
                     operation = calcBean.getOperation();
                     switch (operation) {
                         case "ANSWER":
                             if (calcBean.getAnswer() != null) {
                                 if (calcBean.getAnswer().getText() != null) {
+
+                                    baseBean.setItemType(BaseBean.CALC);
+                                    baseBean.setContext(calcBean.getText());
+                                    baseBean.setCalcBean(calcBean);
+                                    mIGetVoiceToWord.getResult(service, baseBean);
+
+
                                     String str = calcBean.getAnswer().getText();
                                     CalcAction calcAction = new CalcAction(str);
                                     calcAction.start();
@@ -307,13 +343,21 @@ public class VoiceToWords {
                             break;
                     }
                     break;
-                case "datetime":    //  时间、日期的查询。
+                }
+                case "datetime": {   //  时间、日期的查询。
                     DatetimeBean datetimeBean = JsonParser.parseResultDatetimeBean(text);
                     operation = datetimeBean.getOperation();
                     switch (operation) {
                         case "ANSWER": {
                             if (datetimeBean.getAnswer() != null) {
                                 if (datetimeBean.getAnswer().getText() != null) {
+
+                                    baseBean.setItemType(BaseBean.DATETIME);
+                                    baseBean.setContext(datetimeBean.getText());
+                                    baseBean.setDatetimeBean(datetimeBean);
+                                    mIGetVoiceToWord.getResult(service, baseBean);
+
+
                                     String str = datetimeBean.getAnswer().getText();
                                     CalcAction calcAction = new CalcAction(str);
                                     calcAction.start();
@@ -322,12 +366,92 @@ public class VoiceToWords {
                         }
                         break;
                     }
-                    break;
+                }
+                case "flight": {  //飞机票、航班信息的查询及订购。
 
-                case "news":    //  新闻的搜索和点播
+                    FlightBean flightBean = JsonParser.parseResultFlightoBean(text);
+                    if (flightBean != null && flightBean.getAnswer() != null) {
+
+                        baseBean.setItemType(BaseBean.FLIGHT);
+                        baseBean.setContext(flightBean.getText());
+                        baseBean.setFlightBean(flightBean);
+                        mIGetVoiceToWord.getResult(service, baseBean);
+
+
+                        String txt = flightBean.getAnswer().getText();
+                        CalcAction calcAction = new CalcAction(txt);
+                        calcAction.start();
+                    }
+                    break;
+                }
+
+                case "joke": {  //     笑话的点播
+                    JokeBean jokeBean = JsonParser.parseResultJokeBean(text);
+                    if (jokeBean != null && jokeBean.getData() != null) {
+                        if (jokeBean.getData().getResult().size() != 0) {
+
+                            baseBean.setItemType(BaseBean.JOKE);
+                            baseBean.setContext(jokeBean.getText());
+                            baseBean.setJokeBean(jokeBean);
+                            mIGetVoiceToWord.getResult(service, baseBean);
+
+
+                            if (jokeBean.getData().getResult().get(0).getTitle() != null && jokeBean.getData().getResult().get(0).getMp3Url() != null) {
+                                String mp3Url = jokeBean.getData().getResult().get(0).getMp3Url();
+                                JokeAction jokeAction = new JokeAction(mp3Url, context);
+                                jokeAction.start();
+                            } else {
+                                if (jokeBean.getData().getResult().get(0).getTitle() != null &&
+                                        jokeBean.getData().getResult().get(0).getContent() != null) {
+                                    String title = jokeBean.getData().getResult().get(0).getTitle();
+                                    String content = jokeBean.getData().getResult().get(0).getContent();
+                                    CalcAction calcAction = new CalcAction("请欣赏 " + title + content);
+                                    calcAction.start();
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                case "musicX": {  //   音乐的搜索和播放
+
+                    MusicXBean musicXBean = JsonParser.parseResultMusicXBean(text);
+                    if (musicXBean.getSemantic().size() != 0) {
+                        if (musicXBean.getSemantic().get(0).getSlots().size() != 0) {
+                            if (musicXBean.getSemantic().get(0).getSlots().get(0).getValue() != null) {
+
+
+                                baseBean.setItemType(BaseBean.MUSICX);
+                                baseBean.setContext(musicXBean.getText());
+                                baseBean.setMusicXBean(musicXBean);
+                                mIGetVoiceToWord.getResult(service, baseBean);
+
+
+                                String songName = musicXBean.getSemantic().get(0).getSlots().get(0).getValue();
+                                String appName = "酷狗音乐";
+                                String str = musicXBean.getAnswer().getText();
+
+                                if (isAppInstalled(context, appName)) {
+                                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(songName, appName, str, context);
+                                    playMusicxAction.start();
+                                } else {
+                                    Logger.e("没有安装酷狗音乐APP");
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                case "news": {  //  新闻的搜索和点播
 
                     NewsBean newsBean = JsonParser.parseResultNewsBean(text);
                     if (newsBean != null && newsBean.getAnswer() != null) {
+
+                        baseBean.setItemType(BaseBean.NEWS);
+                        baseBean.setContext(newsBean.getText());
+                        baseBean.setNewsBean(newsBean);
+                        mIGetVoiceToWord.getResult(service, baseBean);
+
 
                         String str = newsBean.getAnswer().getText();
                         String content = newsBean.getData().getResult().get(0).getContent();
@@ -335,12 +459,121 @@ public class VoiceToWords {
                         calcAction.start();
 
                     }
-                    break;
 
-                case "weather":    //  天气情况的查询。
+                    break;
+                }
+                case "OPENAPPTEST.APP": {   //打开App
+
+                    OpenAppBean openAppBean = JsonParser.parseResultOpenAppBean(text);
+                    if (openAppBean != null && openAppBean.getSemantic().size() != 0) {
+                        if (openAppBean.getSemantic().get(0).getSlots().size() != 0) {
+                            if (openAppBean.getSemantic().get(0).getSlots().get(0).getNormValue() != null) {
+
+                                baseBean.setItemType(BaseBean.OPENAPPTEST_APP);
+                                baseBean.setContext(openAppBean.getText());
+                                baseBean.setOpenAppBean(openAppBean);
+                                mIGetVoiceToWord.getResult(service, baseBean);
+
+                                String appName = openAppBean.getSemantic().get(0).getSlots().get(0).getNormValue();
+                                OpenAppAction openAppAction = new OpenAppAction(appName, context);
+                                openAppAction.start();
+                            }
+                        }
+                    }
+                    break;
+                }
+                case "openQA": {  //     开放问答
+
+                    OpenQABean openQABean = JsonParser.parseResultOpenQABean(text);
+                    if (openQABean != null && openQABean.getAnswer() != null) {
+
+                        baseBean.setItemType(BaseBean.OPENQA);
+                        baseBean.setContext(openQABean.getText());
+                        baseBean.setOpenQABean(openQABean);
+                        mIGetVoiceToWord.getResult(service, baseBean);
+
+                        String str = openQABean.getAnswer().getText();
+                        CalcAction calcAction = new CalcAction(str);
+                        calcAction.start();
+
+                    }
+
+                    break;
+                }
+                case "poetry": {  //     诗词查询和诗句对答。
+                    PoetryBean poetryBean = JsonParser.parseResultPoetryBean(text);
+                    if (poetryBean != null && poetryBean.getData() != null) {
+                        if (poetryBean.getData().getResult().size() != 0) {
+                            if (poetryBean.getData().getResult().get(0).getTitle() != null && poetryBean.getData().getResult().get(0).getShowContent() != null) {
+
+                                baseBean.setItemType(BaseBean.POETRY);
+                                baseBean.setContext(poetryBean.getText());
+                                baseBean.setPoetryBean(poetryBean);
+                                mIGetVoiceToWord.getResult(service, baseBean);
+
+
+                                String showContent = poetryBean.getData().getResult().get(0).getShowContent();
+                                String title = poetryBean.getData().getResult().get(0).getTitle();
+                                JokeAction jokeAction = new JokeAction(title + "  " + showContent, context);
+                                jokeAction.start();
+                            }
+                        }
+                    }
+                    break;
+                }
+                case "story": { //     故事的点播
+                    StoryBean storyBean = JsonParser.parseResultStoryBean(text);
+                    if (storyBean != null && storyBean.getAnswer() != null) {
+
+                        baseBean.setItemType(BaseBean.STORY);
+                        baseBean.setContext(storyBean.getText());
+                        baseBean.setStoryBean(storyBean);
+                        mIGetVoiceToWord.getResult(service, baseBean);
+
+
+//                        PreferUtil.getInstance().setPlayStoryUrl(s);
+                        String str = storyBean.getAnswer().getText();
+                        CalcAction calcAction = new CalcAction(str);
+                        calcAction.start();
+                    }
+
+                    break;
+                }
+                case "OPENAPPTEST.shiping": {//   视频的搜索和播放
+
+                    VideoBean videoBean = JsonParser.parseResultVideoBean(text);
+                    if (videoBean != null && videoBean.getSemantic().size() != 0) {
+                        if (videoBean.getSemantic().get(0).getSlots().size() != 0) {
+                            if (videoBean.getSemantic().get(0).getSlots().get(0).getValue() != null) {
+
+                                baseBean.setItemType(BaseBean.OPENAPPTEST_SHIPING);
+                                baseBean.setContext(videoBean.getText());
+                                baseBean.setVideoBean(videoBean);
+                                mIGetVoiceToWord.getResult(service, baseBean);
+
+
+                                String videoName = videoBean.getSemantic().get(0).getSlots().get(0).getValue();
+                                String appName = "爱奇艺";
+                                if (isAppInstalled(context, appName)) {
+                                    PlayVideoAction playMusicxAction = new PlayVideoAction(videoName, appName, context);
+                                    playMusicxAction.start();
+                                } else {
+                                    Logger.e("没有安装爱奇艺APP");
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                case "weather": {  //  天气情况的查询。
 
                     WeatherBean weatherBean = JsonParser.parseResultWeatherBean(text);
                     if (weatherBean.getData().getResult().size() != 0) {
+
+                        baseBean.setItemType(BaseBean.WEATHER);
+                        baseBean.setContext(weatherBean.getText());
+                        baseBean.setWeatherBean(weatherBean);
+                        mIGetVoiceToWord.getResult(service, baseBean);
 
                         StringBuilder stringBuffer = new StringBuilder();
                         String humidity = weatherBean.getData().getResult().get(0).getHumidity();  //湿度
@@ -368,118 +601,17 @@ public class VoiceToWords {
                     }
 
                     break;
+                }
+                case "OPENAPPTEST.music_demo": {  //   艺人跟歌曲 搜索和播放
 
-                case "OPENAPPTEST.APP":   //   打开App
-
-                    OpenAppBean openAppBean = JsonParser.parseResultOpenAppBean(text);
-                    if (openAppBean != null && openAppBean.getSemantic().size() != 0) {
-                        if (openAppBean.getSemantic().get(0).getSlots().size() != 0) {
-                            if (openAppBean.getSemantic().get(0).getSlots().get(0).getNormValue() != null) {
-                                String appName = openAppBean.getSemantic().get(0).getSlots().get(0).getNormValue();
-                                OpenAppAction openAppAction = new OpenAppAction(appName, context);
-                                openAppAction.start();
-
-                            }
-                        }
-                    }
-
-                case "openQA":   //     开放问答
-
-                    OpenQABean openQABean = JsonParser.parseResultOpenQABean(text);
-                    if (openQABean != null && openQABean.getAnswer() != null) {
-                        String str = openQABean.getAnswer().getText();
-                        CalcAction calcAction = new CalcAction(str);
-                        calcAction.start();
-                    }
 
                     break;
-
-                case "story":   //     故事的点播
-                    StoryBean storyBean = JsonParser.parseResultStoryBean(text);
-                    if (storyBean != null && storyBean.getAnswer() != null) {
-                        String str = storyBean.getAnswer().getText();
-                        CalcAction calcAction = new CalcAction(str);
-                        calcAction.start();
-                    }
-
-                    break;
-
-
-                case "joke":   //     笑话的点播
-                    JokeBean jokeBean = JsonParser.parseResultJokeBean(text);
-                    if (jokeBean != null && jokeBean.getData() != null) {
-                        if (jokeBean.getData().getResult().size() != 0) {
-                            if (jokeBean.getData().getResult().get(0).getTitle() != null && jokeBean.getData().getResult().get(0).getMp3Url() != null) {
-                                String mp3Url = jokeBean.getData().getResult().get(0).getMp3Url();
-                                JokeAction jokeAction = new JokeAction(mp3Url, context);
-                                jokeAction.start();
-                            }
-                        }
-                    }
-                    break;
-
-                case "poetry":   //     诗词查询和诗句对答。
-                    PoetryBean poetryBean = JsonParser.parseResultPoetryBean(text);
-                    if (poetryBean != null && poetryBean.getData() != null) {
-                        if (poetryBean.getData().getResult().size() != 0) {
-                            if (poetryBean.getData().getResult().get(0).getTitle() != null && poetryBean.getData().getResult().get(0).getShowContent() != null) {
-                                String showContent = poetryBean.getData().getResult().get(0).getShowContent();
-                                String title = poetryBean.getData().getResult().get(0).getTitle();
-                                JokeAction jokeAction = new JokeAction(title + "  " + showContent, context);
-                                jokeAction.start();
-                            }
-                        }
-                    }
-                    break;
-
-
-                case "musicX":   //   音乐的搜索和播放
-
-                    MusicXBean musicXBean = JsonParser.parseResultMusicXBean(text);
-                    if (musicXBean.getSemantic().size() != 0) {
-                        if (musicXBean.getSemantic().get(0).getSlots().size() != 0) {
-                            if (musicXBean.getSemantic().get(0).getSlots().get(0).getValue() != null) {
-
-                                String songName = musicXBean.getSemantic().get(0).getSlots().get(0).getValue();
-                                String appName = "酷狗音乐";
-                                String str = musicXBean.getAnswer().getText();
-
-                                if (isAppInstalled(context, appName)) {
-                                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(songName, appName, str, context);
-                                    playMusicxAction.start();
-                                } else {
-                                    Logger.e("没有安装酷狗音乐APP");
-                                }
-                            }
-                        }
-                    }
-                    break;
-
-
-                case "OPENAPPTEST.shiping":   //   视频的搜索和播放
-
-                    VideoBean videoBean = JsonParser.parseResultVideoBean(text);
-                    if (videoBean != null && videoBean.getSemantic().size() != 0) {
-                        if (videoBean.getSemantic().get(0).getSlots().size() != 0) {
-                            if (videoBean.getSemantic().get(0).getSlots().get(0).getValue() != null) {
-
-                                String videoName = videoBean.getSemantic().get(0).getSlots().get(0).getValue();
-                                String appName = "优酷";
-                                if (isAppInstalled(context, appName)) {
-                                    PlayVideoAction playMusicxAction = new PlayVideoAction(videoName, appName, context);
-                                    playMusicxAction.start();
-                                } else {
-                                    Logger.e("没有安装优酷APP");
-                                }
-                            }
-                        }
-                    }
-                    break;
-
-
+                }
                 default:
                     WordsToVoice.startSynthesizer("不好意思，我好像没听懂。");
             }
+
         }
     }
+
 }

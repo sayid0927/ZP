@@ -5,7 +5,7 @@ package com.zhengpu.aiuilibrary.iflytekbean;
  * Created by wengmf on 2017/11/29.
  */
 
-public class StoryBean {
+public class StoryBean extends BaseBean {
 
 
     /**
@@ -30,6 +30,23 @@ public class StoryBean {
     private AnswerBean answer;
     private String dialog_stat;
     private String sid;
+
+
+    public static class AnswerBean {
+
+        private String text;
+
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+    }
+
 
 
     public boolean isSave_history() {

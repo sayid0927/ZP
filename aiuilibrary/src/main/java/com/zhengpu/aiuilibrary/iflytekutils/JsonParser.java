@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.zhengpu.aiuilibrary.iflytekbean.BaikeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.CalcBean;
 import com.zhengpu.aiuilibrary.iflytekbean.DatetimeBean;
+import com.zhengpu.aiuilibrary.iflytekbean.FlightBean;
 import com.zhengpu.aiuilibrary.iflytekbean.JokeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.MusicXBean;
 import com.zhengpu.aiuilibrary.iflytekbean.NewsBean;
@@ -174,6 +175,22 @@ public class JsonParser {
         }
         return videoBean;
     }
+
+
+    static FlightBean parseResultFlightoBean(String json) {
+        FlightBean flightBean = new FlightBean();
+        try {
+            Type type = new TypeToken<FlightBean>() {
+            }.getType();
+            flightBean = new Gson().fromJson(json, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return flightBean;
+    }
+
+
+
 
 
 }

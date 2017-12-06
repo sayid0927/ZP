@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/chatlist_image_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/aiui" />
+
+    <TextView
+        android:id="@+id/chatlist_text_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/chatlist_image_other"
+        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@id/chatlist_image_other"
+        android:background="@mipmap/chatfrom_bg_normal"
+
+        android:maxWidth="200dp"
+        android:paddingBottom="18dip"
+        android:paddingTop="13dip"
+        android:text="hewdfb" />
+
+
+</RelativeLayout>

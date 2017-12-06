@@ -4,7 +4,7 @@ package com.zhengpu.aiuilibrary.iflytekbean;
  * Created by Administrator on 2017/11/23 0023.
  */
 
-public class CalcBean {
+public class CalcBean extends BaseBean {
 
 
     /**
@@ -28,6 +28,7 @@ public class CalcBean {
     private String text;
     private String uuid;
     private String sid;
+
 
     public AnswerBean getAnswer() {
         return answer;

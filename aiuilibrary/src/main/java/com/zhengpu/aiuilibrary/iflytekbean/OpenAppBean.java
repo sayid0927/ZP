@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Administrator on 2017/11/24 0024.
  */
 
-public class OpenAppBean {
+public class OpenAppBean extends BaseBean {
 
 
     /**
@@ -40,6 +40,7 @@ public class OpenAppBean {
     private String sid;
     private String text;
     private List<SemanticBean> semantic;
+
 
     public String getCategory() {
         return category;

@@ -6,11 +6,19 @@ import java.util.List;
  * Created by Administrator on 2017/11/23 0023.
  */
 
-public class WeatherBean {
+public class WeatherBean extends BaseBean {
 
 
     /**
-     * data : {"result":[{"airData":85,"airQuality":"良","city":"上海","date":"2017-11-23","dateLong":1511366400,"exp":{"ct":{"expName":"穿衣指数","level":"较冷","prompt":"建议着厚外套加毛衣等服装。年老体弱者宜着大衣、呢外套加羊毛衫。"}},"humidity":"44%","lastUpdateTime":"2017-11-23 18:00","pm25":"58","temp":8,"tempRange":"5℃","weather":"晴","weatherType":0,"wind":"西风微风","windLevel":0},{"city":"上海","date":"2017-11-24","dateLong":1511452800,"lastUpdateTime":"2017-11-23 18:00","tempRange":"7℃ ~ 14℃","weather":"晴转多云","weatherType":0,"wind":"西风微风","windLevel":0},{"city":"上海","date":"2017-11-25","dateLong":1511539200,"lastUpdateTime":"2017-11-23 18:00","tempRange":"8℃ ~ 15℃","weather":"多云转阴","weatherType":1,"wind":"西南风微风","windLevel":0},{"city":"上海","date":"2017-11-26","dateLong":1511625600,"lastUpdateTime":"2017-11-23 18:00","tempRange":"7℃ ~ 17℃","weather":"多云转晴","weatherType":1,"wind":"北风微风","windLevel":0},{"city":"上海","date":"2017-11-27","dateLong":1511712000,"lastUpdateTime":"2017-11-23 18:00","tempRange":"8℃ ~ 16℃","weather":"晴转多云","weatherType":0,"wind":"东南风微风","windLevel":0},{"city":"上海","date":"2017-11-28","dateLong":1511798400,"lastUpdateTime":"2017-11-23 18:00","tempRange":"11℃ ~ 17℃","weather":"小雨转多云","weatherType":7,"wind":"西北风微风","windLevel":0},{"city":"上海","date":"2017-11-29","dateLong":1511884800,"lastUpdateTime":"2017-11-23 18:00","tempRange":"10℃ ~ 15℃","weather":"小雨转大雨","weatherType":7,"wind":"东北风3-4级","windLevel":1}]}
+     * data : {"result":[{"airData":85,"airQuality":"良","city":"上海","date":"2017-11-23","dateLong":1511366400,
+     * "exp":{"ct":{"expName":"穿衣指数","level":"较冷","prompt":"建议着厚外套加毛衣等服装。年老体弱者宜着大衣、呢外套加羊毛衫。"}},
+     * "humidity":"44%","lastUpdateTime":"2017-11-23 18:00","pm25":"58","temp":8,"tempRange":"5℃","weather":"晴","weatherType":0,"wind":"西风微风","windLevel":0},
+     * {"city":"上海","date":"2017-11-24","dateLong":1511452800,"lastUpdateTime":"2017-11-23 18:00","tempRange":"7℃ ~ 14℃","weather":"晴转多云","weatherType":0,"wind":"西风微风","windLevel":0},
+     * {"city":"上海","date":"2017-11-25","dateLong":1511539200,"lastUpdateTime":"2017-11-23 18:00","tempRange":"8℃ ~ 15℃","weather":"多云转阴","weatherType":1,"wind":"西南风微风","windLevel":0},
+     * {"city":"上海","date":"2017-11-26","dateLong":1511625600,"lastUpdateTime":"2017-11-23 18:00","tempRange":"7℃ ~ 17℃","weather":"多云转晴","weatherType":1,"wind":"北风微风","windLevel":0},
+     * {"city":"上海","date":"2017-11-27","dateLong":1511712000,"lastUpdateTime":"2017-11-23 18:00","tempRange":"8℃ ~ 16℃","weather":"晴转多云","weatherType":0,"wind":"东南风微风","windLevel":0},
+     * {"city":"上海","date":"2017-11-28","dateLong":1511798400,"lastUpdateTime":"2017-11-23 18:00","tempRange":"11℃ ~ 17℃","weather":"小雨转多云","weatherType":7,"wind":"西北风微风","windLevel":0},
+     * {"city":"上海","date":"2017-11-29","dateLong":1511884800,"lastUpdateTime":"2017-11-23 18:00","tempRange":"10℃ ~ 15℃","weather":"小雨转大雨","weatherType":7,"wind":"东北风3-4级","windLevel":1}]}
      * rc : 0
      * semantic : [{"intent":"QUERY","slots":[{"name":"location.city","value":"上海市","normValue":"上海市"},{"name":"location.cityAddr","value":"上海","normValue":"上海"},{"name":"location.type","value":"LOC_BASIC","normValue":"LOC_BASIC"},{"name":"queryType","value":"内容"},{"name":"subfocus","value":"天气状态"}]}]
      * service : weather
@@ -33,6 +41,14 @@ public class WeatherBean {
     private String dialog_stat;
     private boolean save_history;
     private String sid;
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 
     public DataBean getData() {
         return data;

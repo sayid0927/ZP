@@ -5,7 +5,7 @@ package com.zhengpu.aiuilibrary.iflytekbean;
  * Created by wengmf on 2017/11/24.
  */
 
-public class OpenQABean {
+public class OpenQABean extends BaseBean {
 
 
     /**
@@ -31,6 +31,7 @@ public class OpenQABean {
     private String text;
     private String uuid;
     private String sid;
+
 
     public AnswerBean getAnswer() {
         return answer;

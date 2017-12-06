@@ -7,7 +7,7 @@ import java.util.List;
  * Created by wengmf on 2017/11/29.
  */
 
-public class VideoBean {
+public class VideoBean extends BaseBean {
 
 
     /**

@@ -34,6 +34,58 @@ public class BaikeBean {
     private String sid;
     private AnswerBean answer;
 
+    private List<SemanticBean> semantic;
+
+
+    public static class SemanticBean {
+        /**
+         * semantic : [{"intent":"QUERY","slots":[{"name":"keyword","value":"太阳的后裔"}]}]
+         */
+        private String intent;
+        private SlotsBean slotsBean;
+
+        public String getIntent() {
+            return intent;
+        }
+
+        public void setIntent(String intent) {
+            this.intent = intent;
+        }
+
+        public SlotsBean getSlotsBean() {
+            return slotsBean;
+        }
+
+        public void setSlotsBean(SlotsBean slotsBean) {
+            this.slotsBean = slotsBean;
+        }
+
+        public static class SlotsBean {
+
+            private String name;
+
+            private String value;
+
+            public String getName() {
+                return name;
+            }
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public String getValue() {
+                return value;
+            }
+
+            public void setValue(String value) {
+                this.value = value;
+            }
+        }
+
+
+    }
+
     /**
      * data : {"result":[{"category":[],"img":"http://a3.att.hudong.com/36/75/20300542878330141507757086727_140.jpg","sectionList":[],"summary":"《催眠大师》，原名《催眠档案之彻夜未眠》，是由陈正道导演执导，徐峥、莫文蔚、吕中等主演的国产悬疑电影。主要讲述了知名心理治疗师徐瑞宁为古怪的女病人任小妍进行催眠治疗不料却陷入了对方事先设置好的\u201c陷阱\u201d的故事。通过两人多次互相催眠，两个人过去的痛苦经历便完整地呈现在观众面前，影片情节复杂，逻辑缜密，看点颇多。影片由万达影视传媒有限公司出品，于2014年4月29日上映，演员精湛的演技和精彩的剧情获得了观众较高的评价和十分可观的票房收入。","title":"催眠大师","url":"http://www.baike.com/gwiki/催眠大师"}]}
      * semantic : [{"intent":"QUERY","slots":[{"name":"keyword","value":"催眠大师"}]}]
@@ -60,6 +112,15 @@ public class BaikeBean {
             this.text = text;
         }
 
+    }
+
+
+    public List<SemanticBean> getSemantic() {
+        return semantic;
+    }
+
+    public void setSemantic(List<SemanticBean> semantic) {
+        this.semantic = semantic;
     }
 
     public AnswerBean getAnswer() {

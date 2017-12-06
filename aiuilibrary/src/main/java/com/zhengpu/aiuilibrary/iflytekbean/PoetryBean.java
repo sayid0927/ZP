@@ -7,7 +7,7 @@ import java.util.List;
  * Created by wengmf on 2017/11/29.
  */
 
-public class PoetryBean {
+public class PoetryBean extends BaseBean {
 
 
     /**
@@ -34,6 +34,23 @@ public class PoetryBean {
     private String dialog_stat;
     private boolean save_history;
     private String sid;
+
+
+    public static class AnswerBean {
+
+        private String text;
+
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+    }
+
 
 
     public DataBean getData() {

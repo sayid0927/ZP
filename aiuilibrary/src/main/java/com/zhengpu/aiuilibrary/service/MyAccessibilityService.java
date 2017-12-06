@@ -7,7 +7,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.zhengpu.aiuilibrary.appaction.AppActionListener;
 import com.zhengpu.aiuilibrary.appaction.KuGou;
-import com.zhengpu.aiuilibrary.appaction.YouKu;
+import com.zhengpu.aiuilibrary.appaction.Qiyi;
 import com.zhengpu.aiuilibrary.base.AppController;
 
 /**
@@ -36,9 +36,9 @@ public class MyAccessibilityService extends AccessibilityService implements AppA
                 }
                 break;
 
-            case "com.youku.phone":
+            case "com.qiyi.video":
 
-                YouKu youKu = new YouKu(this, this);
+                Qiyi youKu = new Qiyi(this, this);
                 youKu.start(rootNode);
 
                 break;
@@ -73,6 +73,7 @@ public class MyAccessibilityService extends AccessibilityService implements AppA
         AppController.appAction = false;
         AppController.Clickabl = false;
         AppController.goHome = true;
+
     }
 
     @Override

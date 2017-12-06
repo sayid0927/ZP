@@ -7,7 +7,7 @@ import java.util.List;
  * Created by wengmf on 2017/11/24.
  */
 
-public class MusicXBean {
+public class MusicXBean extends BaseBean {
 
 
     /**
@@ -33,6 +33,7 @@ public class MusicXBean {
     private String dialog_stat;
     private String sid;
     private java.util.List<SemanticBean> semantic;
+
 
     public boolean isSave_history() {
         return save_history;

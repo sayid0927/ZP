@@ -4,7 +4,7 @@ package com.zhengpu.aiuilibrary.iflytekbean;
  * Created by Administrator on 2017/11/23 0023.
  */
 
-public class DatetimeBean {
+public class DatetimeBean extends BaseBean {
 
 
     /**
@@ -28,6 +28,7 @@ public class DatetimeBean {
     private String text;
     private String uuid;
     private String sid;
+
 
     public AnswerBean getAnswer() {
         return answer;
