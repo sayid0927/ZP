@@ -445,18 +445,17 @@ public class VoiceToWords {
                 case "news": {  //  新闻的搜索和点播
 
                     NewsBean newsBean = JsonParser.parseResultNewsBean(text);
-                    if (newsBean != null && newsBean.getAnswer() != null) {
+                    if (newsBean != null && newsBean.getData() != null && newsBean.getData().getResult() != null) {
 
                         baseBean.setItemType(BaseBean.NEWS);
                         baseBean.setContext(newsBean.getText());
                         baseBean.setNewsBean(newsBean);
                         mIGetVoiceToWord.getResult(service, baseBean);
 
-
-                        String str = newsBean.getAnswer().getText();
-                        String content = newsBean.getData().getResult().get(0).getContent();
-                        CalcAction calcAction = new CalcAction(str + content);
-                        calcAction.start();
+//                        String str = newsBean.getAnswer().getText();
+//                        String content = newsBean.getData().getResult().get(0).getContent();
+//                        CalcAction calcAction = new CalcAction(str + content);
+//                        calcAction.start();
 
                     }
 

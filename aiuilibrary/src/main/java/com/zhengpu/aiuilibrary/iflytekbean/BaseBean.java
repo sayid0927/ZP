@@ -25,6 +25,7 @@ public class BaseBean implements MultiItemEntity {
     public static final int OPENAPPTEST_SHIPING = 10012;
     public static final int WEATHER = 10013;
     public static final int USER_CHAT = 10014;
+    public static final int HELP_CHAT = 10015;
 
 
     private int itemType;
@@ -44,7 +45,15 @@ public class BaseBean implements MultiItemEntity {
     private VideoBean videoBean;
     private WeatherBean weatherBean;
     private UserChatBean userChatBean;
+    private HelpBean helpBean;
 
+    public HelpBean getHelpBean() {
+        return helpBean;
+    }
+
+    public void setHelpBean(HelpBean helpBean) {
+        this.helpBean = helpBean;
+    }
 
     public String getContext() {
         return context;

@@ -5,18 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.blankj.utilcode.utils.StringUtils;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.entity.MultiItemEntity;
-import com.orhanobut.logger.Logger;
 import com.zhengpu.aiui.R;
-import com.zhengpu.aiuilibrary.base.AppController;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
+import com.zhengpu.aiuilibrary.iflytekbean.NewsBean;
 import com.zhengpu.aiuilibrary.iflytekbean.WeatherBean;
-
 
 import java.util.List;
 
@@ -28,6 +25,8 @@ import java.util.List;
 public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHolder> {
 
     private Context context;
+    private NewsAdapter newsAdapter;
+
 
     public TalkApadtep(Context context, List data) {
         super(data);
@@ -39,13 +38,16 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
         addItemType(BaseBean.FLIGHT, R.layout.item_calc_chat);
         addItemType(BaseBean.JOKE, R.layout.item_calc_chat);
         addItemType(BaseBean.MUSICX, R.layout.item_calc_chat);
-        addItemType(BaseBean.NEWS, R.layout.item_calc_chat);
+        addItemType(BaseBean.NEWS, R.layout.item_news_chat);
         addItemType(BaseBean.OPENAPPTEST_APP, R.layout.item_calc_chat);
         addItemType(BaseBean.OPENAPPTEST_SHIPING, R.layout.item_calc_chat);
         addItemType(BaseBean.OPENQA, R.layout.item_calc_chat);
         addItemType(BaseBean.POETRY, R.layout.item_calc_chat);
         addItemType(BaseBean.STORY, R.layout.item_calc_chat);
         addItemType(BaseBean.WEATHER, R.layout.item_weather_chat);
+
+        addItemType(BaseBean.HELP_CHAT, R.layout.item_help_chat);
+
     }
 
     @Override
@@ -101,7 +103,13 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
                 helper.setText(R.id.chatlist_text_other, item.getMusicXBean().getAnswer().getText());
                 break;
             case BaseBean.NEWS:
-                helper.setText(R.id.chatlist_text_other, item.getNewsBean().getAnswer().getText());
+
+                if (item.getNewsBean() != null && item.getNewsBean().getData() != null && item.getNewsBean().getData().getResult() != null) {
+                    newsAdapter = new NewsAdapter(item.getNewsBean().getData().getResult(), context);
+                    RecyclerView rvNews = helper.getView(R.id.rv_news);
+                    rvNews.setAdapter(newsAdapter);
+                }
+
                 break;
             case BaseBean.OPENAPPTEST_APP:
                 helper.setText(R.id.chatlist_text_other, item.getOpenAppBean().getText());
@@ -139,6 +147,24 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
 
                 }
 
+                break;
+
+
+            case BaseBean.HELP_CHAT:
+
+                int type = item.getHelpBean().getType();
+                if (type == 0) {
+                    TextView textView = helper.getView(R.id.context);
+                    textView.setTextColor(context.getResources().getColor(R.color.color_0082ff));
+                    textView.setTextSize(24);
+                    helper.setText(R.id.context, item.getHelpBean().getText());
+                } else {
+
+                    TextView textView = helper.getView(R.id.context);
+                    textView.setTextColor(context.getResources().getColor(R.color.color_666666));
+                    textView.setTextSize(17);
+                    helper.setText(R.id.context, item.getHelpBean().getText());
+                }
                 break;
 
         }
