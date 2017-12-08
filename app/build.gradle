@@ -60,6 +60,7 @@ dependencies {
 
     provided 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.commit451:PhotoView:1.2.4'
+    compile 'com.github.open-android:ViewPager:0.1.0'
 
     compile 'com.bugtags.library:bugtags-lib:2.2.3'
     compile 'com.bugtags.library:bugtags-lib:latest.integration'

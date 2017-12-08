@@ -97,10 +97,10 @@ public class SpeechRecognizerService extends Service implements IGetVoiceToWord,
     }
 
     /**
-     * 语音转文本回调
+     * 听不懂状态
      */
     @Override
-    public void appendResult(CharSequence sequence) {
+    public void ResultR4Start(String sequence) {
 
     }
 
