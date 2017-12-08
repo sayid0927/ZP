@@ -45,8 +45,7 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
         addItemType(BaseBean.POETRY, R.layout.item_calc_chat);
         addItemType(BaseBean.STORY, R.layout.item_calc_chat);
         addItemType(BaseBean.WEATHER, R.layout.item_weather_chat);
-
-        addItemType(BaseBean.HELP_CHAT, R.layout.item_help_chat);
+        addItemType(BaseBean.R4, R.layout.item_calc_chat);
 
     }
 
@@ -149,25 +148,10 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
 
                 break;
 
-
-            case BaseBean.HELP_CHAT:
-
-                int type = item.getHelpBean().getType();
-                if (type == 0) {
-                    TextView textView = helper.getView(R.id.context);
-                    textView.setTextColor(context.getResources().getColor(R.color.color_0082ff));
-                    textView.setTextSize(24);
-                    helper.setText(R.id.context, item.getHelpBean().getText());
-                } else {
-
-                    TextView textView = helper.getView(R.id.context);
-                    textView.setTextColor(context.getResources().getColor(R.color.color_666666));
-                    textView.setTextSize(17);
-                    helper.setText(R.id.context, item.getHelpBean().getText());
-                }
+            case BaseBean.R4:
+                helper.setText(R.id.chatlist_text_other, item.getR4Bean().getText());
                 break;
 
         }
     }
-
 }

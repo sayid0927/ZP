@@ -1,8 +1,10 @@
 package com.zhengpu.aiui.ui.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -18,22 +20,23 @@ import com.zhengpu.aiui.component.AppComponent;
 import com.zhengpu.aiui.component.DaggerMainComponent;
 import com.zhengpu.aiui.presenter.contract.MainContract;
 import com.zhengpu.aiui.presenter.impl.MainActivityPresenter;
+import com.zhengpu.aiui.ui.adapter.HelpFragmentAdapter;
 import com.zhengpu.aiui.ui.adapter.TalkApadtep;
+import com.zhengpu.aiui.ui.fragment.FragmentHelp_1;
+import com.zhengpu.aiui.ui.fragment.FragmentHelp_Home_2;
+import com.zhengpu.aiui.ui.view.HelpViewPager;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
-import com.zhengpu.aiuilibrary.iflytekbean.HelpBean;
 import com.zhengpu.aiuilibrary.iflytekbean.UserChatBean;
 import com.zhengpu.aiuilibrary.iflytekutils.IGetVoiceToWord;
 import com.zhengpu.aiuilibrary.iflytekutils.VoiceToWords;
 import com.zhengpu.aiuilibrary.service.SpeechRecognizerService;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
@@ -65,17 +68,21 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     ImageView ivPhone;
     @BindView(R.id.iv_help)
     ImageView ivHelp;
+    @BindView(R.id.viewpager)
+    HelpViewPager viewpager;
 
 
+    public static MainActivity mainActivity;
     private TalkApadtep mAdapter;
     private BaseBean data;
     private List<BaseBean> datas;
-    private List<BaseBean> saveData;
     private VoiceToWords voiceToWords;
     private boolean isFist = true;
     private boolean isClickHelp = false;
     private UserChatBean userChatBean;
 
+    private List<Fragment> fragmentList;
+    private HelpFragmentAdapter helpFragmentAdapter;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -97,6 +104,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         mPresenter.detachView();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void initView() {
 
@@ -105,13 +113,23 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 //        }
 
 
+        fragmentList = new ArrayList<>();
+        fragmentList.add(new FragmentHelp_1());
+        fragmentList.add(new FragmentHelp_Home_2());
+
+
+        helpFragmentAdapter = new HelpFragmentAdapter(fragmentList, getSupportFragmentManager());
+
+        viewpager.setAdapter(helpFragmentAdapter);
+
+
         datas = new ArrayList<>();
 
         mAdapter = new TalkApadtep(this, datas);
         rvSpeech.setLayoutManager(new LinearLayoutManager(this));
         rvSpeech.setAdapter(mAdapter);
-
         mAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
+
 //        UmengUtil.onEvent(MainActivity.this, "MainActivity", null);
         startService(new Intent(MainActivity.this, SpeechRecognizerService.class));
 
@@ -123,6 +141,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
             }
         }, 1000);
+        mainActivity = this;
     }
 
     @Override
@@ -133,20 +152,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     public void getResult(String service, BaseBean result) {
 //        Logger.e("service" + service + "说话内容" + result.toString());
         isFist = false;
+
         if (llCentet.getVisibility() == View.VISIBLE)
             llCentet.setVisibility(View.INVISIBLE);
+
         if (rvSpeech.getVisibility() == View.GONE)
             rvSpeech.setVisibility(View.VISIBLE);
+
         if (RippleVoice_N.getVisibility() == View.GONE)
             RippleVoice_N.setVisibility(View.VISIBLE);
 
-        Iterator<BaseBean> iter = datas.iterator();
-        while (iter.hasNext()) {
-            BaseBean dict = iter.next();
-            if (dict.getHelpBean() != null) {
-                iter.remove();
-            }
-        }
+        if (viewpager.getVisibility() == View.VISIBLE)
+            viewpager.setVisibility(View.GONE);
+
 
         userChatBean = new UserChatBean();
         data = new BaseBean();
@@ -167,9 +185,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         voiceToWords.startRecognizer();
     }
 
+
+    /**
+     * 听不懂状态
+     */
     @Override
-    public void appendResult(CharSequence sequence) {
-//        Logger.e("说话内容" + sequence);
+    public void ResultR4Start(String sequence) {
+
+
     }
 
     @Override
@@ -197,105 +220,77 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         voiceToWords.startRecognizer();
     }
 
-
-    @OnClick({R.id.iv_phone, R.id.iv_help})
+    @OnClick({R.id.iv_phone, R.id.iv_help, R.id.llExit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+
+            case R.id.llExit:
+
+                if (FragmentHelp_Home_2.fragmentHelpHome2.getvisibilityType() != 0) {
+                    FragmentHelp_Home_2.fragmentHelpHome2.setvisibilityStatr();
+                } else if (isClickHelp) {
+                    isClickHelp = false;
+                    if (viewpager.getVisibility() == View.VISIBLE)
+                        viewpager.setVisibility(View.GONE);
+                    if (datas.size() == 0) {
+                        if (rvSpeech.getVisibility() == View.VISIBLE)
+                            rvSpeech.setVisibility(View.GONE);
+                        if (RippleVoice_N.getVisibility() == View.VISIBLE)
+                            RippleVoice_N.setVisibility(View.GONE);
+                        if (llCentet.getVisibility() == View.INVISIBLE)
+                            llCentet.setVisibility(View.VISIBLE);
+                        break;
+                    } else {
+                        if (rvSpeech.getVisibility() == View.GONE)
+                            rvSpeech.setVisibility(View.VISIBLE);
+
+                    }
+                }
+
+                break;
+
             case R.id.iv_phone:
                 break;
             case R.id.iv_help:
 
-                saveData = datas;
-
-
                 if (!isClickHelp) {
-
-                    if (datas.size() != 0)
-                        datas.clear();
 
                     if (llCentet.getVisibility() == View.VISIBLE)
                         llCentet.setVisibility(View.INVISIBLE);
-                    if (rvSpeech.getVisibility() == View.GONE)
-                        rvSpeech.setVisibility(View.VISIBLE);
+                    if (rvSpeech.getVisibility() == View.VISIBLE)
+                        rvSpeech.setVisibility(View.GONE);
                     if (RippleVoice_N.getVisibility() == View.GONE)
                         RippleVoice_N.setVisibility(View.VISIBLE);
+                    if (viewpager.getVisibility() == View.GONE)
+                        viewpager.setVisibility(View.VISIBLE);
 
-
-                    BaseBean data = new BaseBean();
-                    HelpBean helpBean = new HelpBean();
-                    helpBean.setText("你可以这样对我说");
-                    helpBean.setType(0);
-                    data.setHelpBean(helpBean);
-                    data.setItemType(BaseBean.HELP_CHAT);
-                    datas.add(data);
-
-                    BaseBean data1 = new BaseBean();
-                    HelpBean helpBean1 = new HelpBean();
-                    helpBean1.setText("......");
-                    helpBean1.setType(0);
-                    data1.setHelpBean(helpBean1);
-                    data1.setItemType(BaseBean.HELP_CHAT);
-                    datas.add(data1);
-
-                    BaseBean data2 = new BaseBean();
-                    HelpBean helpBean2 = new HelpBean();
-                    helpBean2.setText("你是谁？");
-                    helpBean2.setType(1);
-                    data2.setHelpBean(helpBean2);
-                    data2.setItemType(BaseBean.HELP_CHAT);
-                    datas.add(data2);
-
-                    BaseBean data3 = new BaseBean();
-                    HelpBean helpBean3 = new HelpBean();
-                    helpBean3.setText("给我讲个故事");
-                    helpBean3.setType(1);
-                    data3.setHelpBean(helpBean3);
-                    data3.setItemType(BaseBean.HELP_CHAT);
-                    datas.add(data3);
-
-                    BaseBean data4 = new BaseBean();
-                    HelpBean helpBean4 = new HelpBean();
-                    helpBean4.setText("给我讲个笑话");
-                    helpBean4.setType(1);
-                    data4.setHelpBean(helpBean4);
-                    data4.setItemType(BaseBean.HELP_CHAT);
-                    datas.add(data4);
-
-                    BaseBean data5 = new BaseBean();
-                    HelpBean helpBean5 = new HelpBean();
-                    helpBean5.setText("你会做什么？");
-                    helpBean5.setType(1);
-                    data5.setHelpBean(helpBean5);
-                    data5.setItemType(BaseBean.HELP_CHAT);
-                    datas.add(data5);
-
-                    BaseBean data6 = new BaseBean();
-                    HelpBean helpBean6 = new HelpBean();
-                    helpBean6.setText("你多大了？");
-                    helpBean6.setType(1);
-                    data6.setHelpBean(helpBean6);
-                    data6.setItemType(BaseBean.HELP_CHAT);
-                    datas.add(data6);
-
-                    mAdapter.notifyDataSetChanged();
                     isClickHelp = true;
                     break;
 
                 } else {
-
-                    Iterator<BaseBean> iter = datas.iterator();
-                    while (iter.hasNext()) {
-                        BaseBean dict = iter.next();
-                        if (dict.getHelpBean() != null) {
-                            iter.remove();
-                        }
-                    }
-
-                    mAdapter.setNewData(saveData);
-                    mAdapter.notifyDataSetChanged();
                     isClickHelp = false;
-                    break;
+                    if (viewpager.getVisibility() == View.VISIBLE)
+                        viewpager.setVisibility(View.GONE);
+                    if (datas.size() == 0) {
+                        if (rvSpeech.getVisibility() == View.VISIBLE)
+                            rvSpeech.setVisibility(View.GONE);
+                        if (RippleVoice_N.getVisibility() == View.VISIBLE)
+                            RippleVoice_N.setVisibility(View.GONE);
+                        if (llCentet.getVisibility() == View.INVISIBLE)
+                            llCentet.setVisibility(View.VISIBLE);
+                        break;
+                    } else {
+                        if (rvSpeech.getVisibility() == View.GONE)
+                            rvSpeech.setVisibility(View.VISIBLE);
+                        break;
+                    }
                 }
         }
     }
+
+
+    public void setScanScroll(boolean isCanScroll) {
+        viewpager.setScanScroll(isCanScroll);
+    }
+
 }

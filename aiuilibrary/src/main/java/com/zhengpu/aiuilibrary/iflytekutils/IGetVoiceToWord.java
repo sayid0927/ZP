@@ -15,7 +15,7 @@ public interface IGetVoiceToWord {
     //声音太小10118错误
     void showLowVoice(String result);
 
-    void appendResult(CharSequence sequence);
+    void ResultR4Start(String sequence);
 
     void SpeechOver();
 

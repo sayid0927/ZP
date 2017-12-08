@@ -13,6 +13,7 @@ import com.zhengpu.aiuilibrary.iflytekbean.NewsBean;
 import com.zhengpu.aiuilibrary.iflytekbean.OpenAppBean;
 import com.zhengpu.aiuilibrary.iflytekbean.OpenQABean;
 import com.zhengpu.aiuilibrary.iflytekbean.PoetryBean;
+import com.zhengpu.aiuilibrary.iflytekbean.R4Bean;
 import com.zhengpu.aiuilibrary.iflytekbean.StoryBean;
 import com.zhengpu.aiuilibrary.iflytekbean.VideoBean;
 import com.zhengpu.aiuilibrary.iflytekbean.WeatherBean;
@@ -188,6 +189,21 @@ public class JsonParser {
         }
         return flightBean;
     }
+
+
+    static R4Bean parseResultR4Bean(String json) {
+        R4Bean r4Bean = new R4Bean();
+        try {
+            Type type = new TypeToken<R4Bean>() {
+            }.getType();
+            r4Bean = new Gson().fromJson(json, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return r4Bean;
+    }
+
+
 
 
 

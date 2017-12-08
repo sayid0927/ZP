@@ -10,12 +10,22 @@
         android:id="@+id/commonbar"
         layout="@layout/common_toolbar" />
 
+
+    <com.zhengpu.aiui.ui.view.HelpViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_botom"
+        android:layout_below="@+id/commonbar"
+        android:visibility="gone"
+        app:orientation="vertical" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_speech"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/commonbar"
         android:layout_above="@+id/rl_botom"
+        android:layout_below="@+id/commonbar"
         android:visibility="gone" />
 
     <LinearLayout
@@ -37,8 +47,8 @@
             app:rb_duration="1000"
             app:rb_radius="35dp"
             app:rb_rippleAmount="4"
-            app:rb_type="strokeRipple"
-            app:rb_scale="5">
+            app:rb_scale="5"
+            app:rb_type="strokeRipple">
 
             <ImageView
                 android:id="@+id/voice"
@@ -56,8 +66,8 @@
         android:id="@+id/rl_botom"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginBottom="30dp"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp">
 
 
         <ImageView
@@ -73,16 +83,16 @@
 
         <com.skyfishjy.library.RippleBackground
             android:id="@+id/ripple_voice_n"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:visibility="gone"
             app:rb_color="@color/colorText"
             app:rb_duration="1000"
             app:rb_radius="28dp"
-            app:rb_type="strokeRipple"
             app:rb_rippleAmount="4"
-            app:rb_scale="5">
+            app:rb_scale="5"
+            app:rb_type="strokeRipple">
 
 
             <ImageView

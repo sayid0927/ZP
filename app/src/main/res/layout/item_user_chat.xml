@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/white">
 
     <ImageView
+        android:layout_centerInParent="true"
         android:id="@+id/chatlist_image_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,20 +16,40 @@
         android:layout_marginTop="29dp"
         android:src="@mipmap/user_chat" />
 
-    <TextView
+
+    <com.github.library.bubbleview.BubbleTextView
         android:id="@+id/chatlist_text_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/chatlist_image_me"
-        android:layout_marginRight="10dp"
         android:layout_toLeftOf="@id/chatlist_image_me"
-        android:background="@mipmap/chatto_bg_normal"
-        android:maxWidth="200dp"
-        android:gravity="center"
-        android:paddingBottom="18dip"
-        android:paddingTop="13dip"
+        android:padding="10dp"
         android:text=""
+        android:layout_centerInParent="true"
+        android:layout_marginRight="10dp"
+        android:textColor="@android:color/white"
+        app:angle="8dp"
+        app:arrowCenter="true"
+        app:arrowHeight="10dp"
+        app:arrowLocation="right"
+        app:arrowPosition="14dp"
+        app:arrowWidth="8dp"
+        app:bubbleColor="#7EC0EE" />
 
-        android:textSize="8sp" />
+
+    <!--<TextView-->
+    <!--android:id="@+id/chatlist_text_me"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignTop="@id/chatlist_image_me"-->
+    <!--android:layout_marginRight="10dp"-->
+    <!--android:layout_toLeftOf="@id/chatlist_image_me"-->
+    <!--android:background="@mipmap/chatto_bg_normal"-->
+    <!--android:maxWidth="200dp"-->
+    <!--android:gravity="center"-->
+    <!--android:paddingBottom="18dip"-->
+    <!--android:paddingTop="13dip"-->
+    <!--android:text=""-->
+
+    <!--android:textSize="8sp" />-->
 
 </RelativeLayout>

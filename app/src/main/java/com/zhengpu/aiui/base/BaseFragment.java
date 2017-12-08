@@ -58,12 +58,8 @@ public abstract class BaseFragment extends Fragment {
     protected void initView(Bundle bundle) {
     }
 
-    ;
-
     protected void initView() {
     }
-
-    ;
 
     protected abstract void setupActivityComponent(AppComponent appComponent);
 
