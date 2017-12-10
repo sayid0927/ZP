@@ -2,6 +2,7 @@ package com.zhengpu.aiui.ui.activity;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -27,7 +28,9 @@ import com.zhengpu.aiui.ui.fragment.FragmentHelp_Home_2;
 import com.zhengpu.aiui.ui.view.HelpViewPager;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekbean.UserChatBean;
+import com.zhengpu.aiuilibrary.iflytekbean.WeatherBean;
 import com.zhengpu.aiuilibrary.iflytekutils.IGetVoiceToWord;
+import com.zhengpu.aiuilibrary.iflytekutils.JsonParser;
 import com.zhengpu.aiuilibrary.iflytekutils.VoiceToWords;
 import com.zhengpu.aiuilibrary.service.SpeechRecognizerService;
 
@@ -37,6 +40,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
@@ -73,6 +77,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
 
     public static MainActivity mainActivity;
+
     private TalkApadtep mAdapter;
     private BaseBean data;
     private List<BaseBean> datas;
@@ -122,8 +127,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
         viewpager.setAdapter(helpFragmentAdapter);
 
-
         datas = new ArrayList<>();
+
 
         mAdapter = new TalkApadtep(this, datas);
         rvSpeech.setLayoutManager(new LinearLayoutManager(this));
@@ -220,7 +225,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         voiceToWords.startRecognizer();
     }
 
-    @OnClick({R.id.iv_phone, R.id.iv_help, R.id.llExit})
+    @OnClick({R.id.iv_phone, R.id.iv_help, R.id.llExit,R.id.video_n})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -249,7 +254,212 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
                 break;
 
+            case  R.id.video_n:
+
+                isFist = false;
+                if (llCentet.getVisibility() == View.VISIBLE)
+                    llCentet.setVisibility(View.INVISIBLE);
+
+                if (rvSpeech.getVisibility() == View.GONE)
+                    rvSpeech.setVisibility(View.VISIBLE);
+
+                if (RippleVoice_N.getVisibility() == View.GONE)
+                    RippleVoice_N.setVisibility(View.VISIBLE);
+
+                if (viewpager.getVisibility() == View.VISIBLE)
+                    viewpager.setVisibility(View.GONE);
+
+
+
+
+                String   text= "{\n" +
+                        "  \"data\": {\n" +
+                        "    \"result\": [\n" +
+                        "      {\n" +
+                        "        \"airData\": 66,\n" +
+                        "        \"airQuality\": \"良\",\n" +
+                        "        \"city\": \"深圳\",\n" +
+                        "        \"date\": \"2017-12-11\",\n" +
+                        "        \"dateLong\": 1512921600,\n" +
+                        "        \"exp\": {\n" +
+                        "          \"ct\": {\n" +
+                        "            \"expName\": \"穿衣指数\",\n" +
+                        "            \"level\": \"较舒适\",\n" +
+                        "            \"prompt\": \"建议着薄外套、开衫牛仔衫裤等服装。年老体弱者应适当添加衣物，宜着夹克衫、薄毛衣等。\"\n" +
+                        "          }\n" +
+                        "        },\n" +
+                        "        \"humidity\": \"35%\",\n" +
+                        "        \"lastUpdateTime\": \"2017-12-11 11:00\",\n" +
+                        "        \"pm25\": \"47\",\n" +
+                        "        \"temp\": 19,\n" +
+                        "        \"tempRange\": \"15℃ ~ 22℃\",\n" +
+                        "        \"weather\": \"多云\",\n" +
+                        "        \"weatherType\": 1,\n" +
+                        "        \"wind\": \"无持续风向微风\",\n" +
+                        "        \"windLevel\": 0\n" +
+                        "      },\n" +
+                        "      {\n" +
+                        "        \"city\": \"深圳\",\n" +
+                        "        \"date\": \"2017-12-12\",\n" +
+                        "        \"dateLong\": 1513008000,\n" +
+                        "        \"lastUpdateTime\": \"2017-12-11 11:00\",\n" +
+                        "        \"tempRange\": \"14℃ ~ 18℃\",\n" +
+                        "        \"weather\": \"阴\",\n" +
+                        "        \"weatherType\": 2,\n" +
+                        "        \"wind\": \"无持续风向微风\",\n" +
+                        "        \"windLevel\": 0\n" +
+                        "      },\n" +
+                        "      {\n" +
+                        "        \"city\": \"深圳\",\n" +
+                        "        \"date\": \"2017-12-13\",\n" +
+                        "        \"dateLong\": 1513094400,\n" +
+                        "        \"lastUpdateTime\": \"2017-12-11 11:00\",\n" +
+                        "        \"tempRange\": \"13℃ ~ 17℃\",\n" +
+                        "        \"weather\": \"小雨\",\n" +
+                        "        \"weatherType\": 7,\n" +
+                        "        \"wind\": \"无持续风向微风\",\n" +
+                        "        \"windLevel\": 0\n" +
+                        "      },\n" +
+                        "      {\n" +
+                        "        \"city\": \"深圳\",\n" +
+                        "        \"date\": \"2017-12-14\",\n" +
+                        "        \"dateLong\": 1513180800,\n" +
+                        "        \"lastUpdateTime\": \"2017-12-11 11:00\",\n" +
+                        "        \"tempRange\": \"14℃ ~ 18℃\",\n" +
+                        "        \"weather\": \"阴\",\n" +
+                        "        \"weatherType\": 2,\n" +
+                        "        \"wind\": \"无持续风向微风\",\n" +
+                        "        \"windLevel\": 0\n" +
+                        "      },\n" +
+                        "      {\n" +
+                        "        \"city\": \"深圳\",\n" +
+                        "        \"date\": \"2017-12-15\",\n" +
+                        "        \"dateLong\": 1513267200,\n" +
+                        "        \"lastUpdateTime\": \"2017-12-11 11:00\",\n" +
+                        "        \"tempRange\": \"15℃ ~ 19℃\",\n" +
+                        "        \"weather\": \"阴转多云\",\n" +
+                        "        \"weatherType\": 2,\n" +
+                        "        \"wind\": \"无持续风向微风\",\n" +
+                        "        \"windLevel\": 0\n" +
+                        "      },\n" +
+                        "      {\n" +
+                        "        \"city\": \"深圳\",\n" +
+                        "        \"date\": \"2017-12-16\",\n" +
+                        "        \"dateLong\": 1513353600,\n" +
+                        "        \"lastUpdateTime\": \"2017-12-11 11:00\",\n" +
+                        "        \"tempRange\": \"11℃ ~ 20℃\",\n" +
+                        "        \"weather\": \"多云\",\n" +
+                        "        \"weatherType\": 1,\n" +
+                        "        \"wind\": \"东北风3-4级\",\n" +
+                        "        \"windLevel\": 1\n" +
+                        "      },\n" +
+                        "      {\n" +
+                        "        \"city\": \"深圳\",\n" +
+                        "        \"date\": \"2017-12-17\",\n" +
+                        "        \"dateLong\": 1513440000,\n" +
+                        "        \"lastUpdateTime\": \"2017-12-11 11:00\",\n" +
+                        "        \"tempRange\": \"9℃ ~ 18℃\",\n" +
+                        "        \"weather\": \"多云转阴\",\n" +
+                        "        \"weatherType\": 1,\n" +
+                        "        \"wind\": \"东北风3-4级\",\n" +
+                        "        \"windLevel\": 1\n" +
+                        "      }\n" +
+                        "    ]\n" +
+                        "  },\n" +
+                        "  \"rc\": 0,\n" +
+                        "  \"semantic\": [\n" +
+                        "    {\n" +
+                        "      \"intent\": \"QUERY\",\n" +
+                        "      \"slots\": [\n" +
+                        "        {\n" +
+                        "          \"name\": \"location.city\",\n" +
+                        "          \"value\": \"深圳市\",\n" +
+                        "          \"normValue\": \"深圳市\"\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "          \"name\": \"location.cityAddr\",\n" +
+                        "          \"value\": \"深圳\",\n" +
+                        "          \"normValue\": \"深圳\"\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "          \"name\": \"location.type\",\n" +
+                        "          \"value\": \"LOC_BASIC\",\n" +
+                        "          \"normValue\": \"LOC_BASIC\"\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "          \"name\": \"queryType\",\n" +
+                        "          \"value\": \"内容\"\n" +
+                        "        },\n" +
+                        "        {\n" +
+                        "          \"name\": \"subfocus\",\n" +
+                        "          \"value\": \"天气状态\"\n" +
+                        "        }\n" +
+                        "      ]\n" +
+                        "    }\n" +
+                        "  ],\n" +
+                        "  \"service\": \"weather\",\n" +
+                        "  \"state\": {\n" +
+                        "    \"fg::weather::default::default\": {\n" +
+                        "      \"state\": \"default\"\n" +
+                        "    }\n" +
+                        "  },\n" +
+                        "  \"text\": \"深圳天气\",\n" +
+                        "  \"uuid\": \"atn057bdfd6@ch2eca0d894d616f2601\",\n" +
+                        "  \"used_state\": {\n" +
+                        "    \"state_key\": \"fg::weather::default::default\",\n" +
+                        "    \"state\": \"default\"\n" +
+                        "  },\n" +
+                        "  \"answer\": {\n" +
+                        "    \"text\": \"\\\"深圳\\\"今天\\\"多云\\\"，\\\"15℃ ~ 22℃\\\"，\\\"无持续风向微风\\\"\"\n" +
+                        "  },\n" +
+                        "  \"dialog_stat\": \"DataValid\",\n" +
+                        "  \"save_history\": true,\n" +
+                        "  \"sid\": \"atn057bdfd6@ch2eca0d894d616f2601\"\n" +
+                        "}";
+
+                data = new BaseBean();
+                BaseBean baseBean = new BaseBean();
+                WeatherBean weatherBean = JsonParser.parseResultWeatherBean(text);
+                if (weatherBean.getData().getResult().size() != 0) {
+                    baseBean.setItemType(BaseBean.WEATHER);
+
+                    baseBean.setContext(weatherBean.getText());
+                    baseBean.setWeatherBean(weatherBean);
+                    data.setItemType(BaseBean.WEATHER);
+                    data.setWeatherBean(weatherBean);
+                    datas.add(data);
+                    mAdapter.notifyDataSetChanged();
+                    rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
+                }
+
+                    break;
             case R.id.iv_phone:
+
+                isFist = false;
+                if (llCentet.getVisibility() == View.VISIBLE)
+                    llCentet.setVisibility(View.INVISIBLE);
+
+                if (rvSpeech.getVisibility() == View.GONE)
+                    rvSpeech.setVisibility(View.VISIBLE);
+
+                if (RippleVoice_N.getVisibility() == View.GONE)
+                    RippleVoice_N.setVisibility(View.VISIBLE);
+
+                if (viewpager.getVisibility() == View.VISIBLE)
+                    viewpager.setVisibility(View.GONE);
+
+
+                userChatBean = new UserChatBean();
+                data = new BaseBean();
+                userChatBean.setText("XXXXXXXX");
+                data.setItemType(BaseBean.USER_CHAT);
+                data.setUserChatBean(userChatBean);
+                datas.add(data);
+
+                mAdapter.notifyDataSetChanged();
+                rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
+
+
                 break;
             case R.id.iv_help:
 

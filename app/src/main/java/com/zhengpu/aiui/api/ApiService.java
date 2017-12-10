@@ -17,15 +17,24 @@ package com.zhengpu.aiui.api;
 
 
 import com.zhengpu.aiui.base.Constant;
+import com.zhengpu.aiui.bean.ZhiHuNewsBean;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.Url;
 import rx.Observable;
 
 
 public interface ApiService {
 
+
+    /**
+     *   知乎新闻
+     */
+    @Headers({"url_name:zhihu"})
+    @GET("api/4/news/latest")
+    Observable<ZhiHuNewsBean> getDailyNews();
 
 }

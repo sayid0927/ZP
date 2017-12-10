@@ -16,7 +16,7 @@
         android:layout_marginTop="20dp"
         android:src="@mipmap/aiui" />
 
-    <com.github.library.bubbleview.BubbleLinearLayout
+    <com.zhengpu.aiui.ui.view.bubbleview.BubbleLinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/chatlist_image_other"
@@ -29,9 +29,10 @@
         app:arrowCenter="true"
         app:arrowHeight="10dp"
         app:arrowLocation="left"
-        app:arrowPosition="14dp"
-        app:arrowWidth="8dp"
-        app:bubbleColor="#7EC0EE">
+        app:arrowPosition="55dp"
+        app:arrowWidth="15dp"
+        app:strokeColor= "#CCCCCC"
+        app:bubbleColor="@color/white">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -128,6 +129,9 @@
 
         </LinearLayout>
 
+
+
+
         <LinearLayout
             android:layout_margin="15dp"
             android:layout_width="wrap_content"
@@ -193,6 +197,6 @@
 
         </LinearLayout>
 
-    </com.github.library.bubbleview.BubbleLinearLayout>
+    </com.zhengpu.aiui.ui.view.bubbleview.BubbleLinearLayout>
 
 </RelativeLayout>

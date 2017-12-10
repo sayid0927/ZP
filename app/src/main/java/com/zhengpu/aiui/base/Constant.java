@@ -22,6 +22,7 @@ public class Constant {
 
     //    public  static  final String API_BASE_URL="http://120.78.136.232:9000/";
     public static final String API_BASE_URL = "http://tingapi.ting.baidu.com/";
+    public static final String ZHIHU_BASE_URL = "http://news-at.zhihu.com/";
 
 
     public static final String APK_UPDATE = "apk_update";

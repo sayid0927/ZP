@@ -17,23 +17,25 @@
         android:src="@mipmap/user_chat" />
 
 
-    <com.github.library.bubbleview.BubbleTextView
+    <com.zhengpu.aiui.ui.view.bubbleview.BubbleTextVew
         android:id="@+id/chatlist_text_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/chatlist_image_me"
         android:padding="10dp"
+        android:textSize="8sp"
         android:text=""
         android:layout_centerInParent="true"
         android:layout_marginRight="10dp"
-        android:textColor="@android:color/white"
+        android:textColor="#0082ff"
         app:angle="8dp"
         app:arrowCenter="true"
         app:arrowHeight="10dp"
         app:arrowLocation="right"
-        app:arrowPosition="14dp"
-        app:arrowWidth="8dp"
-        app:bubbleColor="#7EC0EE" />
+        app:arrowPosition="10dp"
+        app:arrowWidth="15dp"
+        app:strokeColor= "#27AFED"
+        app:bubbleColor="#F4FAFC" />
 
 
     <!--<TextView-->

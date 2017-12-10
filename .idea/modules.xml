@@ -3,10 +3,13 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ZP.iml" filepath="$PROJECT_DIR$/ZP.iml" />
+      <module fileurl="file://E:\GitZpProject\ZP\ZP.iml" filepath="E:\GitZpProject\ZP\ZP.iml" />
       <module fileurl="file://F:\ZpProject\gitZp\ZP\ZP.iml" filepath="F:\ZpProject\gitZp\ZP\ZP.iml" />
       <module fileurl="file://$PROJECT_DIR$/aiuilibrary/aiuilibrary.iml" filepath="$PROJECT_DIR$/aiuilibrary/aiuilibrary.iml" />
+      <module fileurl="file://E:\GitZpProject\ZP\aiuilibrary\aiuilibrary.iml" filepath="E:\GitZpProject\ZP\aiuilibrary\aiuilibrary.iml" />
       <module fileurl="file://F:\ZpProject\gitZp\ZP\aiuilibrary\aiuilibrary.iml" filepath="F:\ZpProject\gitZp\ZP\aiuilibrary\aiuilibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://E:\GitZpProject\ZP\app\app.iml" filepath="E:\GitZpProject\ZP\app\app.iml" />
       <module fileurl="file://F:\ZpProject\gitZp\ZP\app\app.iml" filepath="F:\ZpProject\gitZp\ZP\app\app.iml" />
     </modules>
   </component>

@@ -1,4 +1,4 @@
-package com.zhengpu.aiuilibrary.iflytekutils;
+package com.zhengpu.aiui.utils;
 
 
 import com.google.gson.Gson;
@@ -63,7 +63,7 @@ public class JsonParser {
     }
 
 
-    public static WeatherBean parseResultWeatherBean(String json) {
+    static WeatherBean parseResultWeatherBean(String json) {
         WeatherBean weatherBean = new WeatherBean();
         try {
             Type type = new TypeToken<WeatherBean>() {

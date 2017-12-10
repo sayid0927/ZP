@@ -64,8 +64,6 @@ dependencies {
     // 多dex 打包的类库
     compile 'com.android.support:multidex:1.0.1'
 
-
-    compile 'com.github.lguipeng:BubbleView:1.0.1'
 }
 
 
