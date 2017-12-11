@@ -2,6 +2,7 @@ package com.zhengpu.aiuilibrary.iflytekbean;
 
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
 /**
  * sayid ....
@@ -46,9 +47,16 @@ public class BaseBean implements MultiItemEntity {
     private WeatherBean weatherBean;
     private UserChatBean userChatBean;
     private R4Bean r4Bean;
+    private ZhiHuNewsBean zhiHuNewsBean;
 
 
+    public ZhiHuNewsBean getZhiHuNewsBean() {
+        return zhiHuNewsBean;
+    }
 
+    public void setZhiHuNewsBean(ZhiHuNewsBean zhiHuNewsBean) {
+        this.zhiHuNewsBean = zhiHuNewsBean;
+    }
 
     public R4Bean getR4Bean() {
         return r4Bean;

@@ -7,8 +7,9 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.zhengpu.aiui.R;
-import com.zhengpu.aiui.bean.ZhiHuNewsBean;
+
 import com.zhengpu.aiuilibrary.iflytekbean.NewsBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class NewsAdapter extends BaseQuickAdapter<ZhiHuNewsBean.TopStoriesBean, 
 
         ImageView iv = helper.getView(R.id.im_url);
         Glide.with(context).load(item.getImage()).into(iv);
+        helper.setText(R.id.title,item.getTitle());
 
     }
 }

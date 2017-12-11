@@ -17,7 +17,8 @@ package com.zhengpu.aiui.presenter.contract;
 
 
 import com.zhengpu.aiui.base.BaseContract;
-import com.zhengpu.aiui.bean.ZhiHuNewsBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
+
 
 import java.io.File;
 

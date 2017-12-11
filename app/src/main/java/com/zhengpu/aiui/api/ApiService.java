@@ -17,7 +17,8 @@ package com.zhengpu.aiui.api;
 
 
 import com.zhengpu.aiui.base.Constant;
-import com.zhengpu.aiui.bean.ZhiHuNewsBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
+
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;

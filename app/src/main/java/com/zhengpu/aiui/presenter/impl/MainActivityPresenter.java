@@ -18,8 +18,9 @@ package com.zhengpu.aiui.presenter.impl;
 
 import com.zhengpu.aiui.api.Api;
 import com.zhengpu.aiui.base.RxPresenter;
-import com.zhengpu.aiui.bean.ZhiHuNewsBean;
+
 import com.zhengpu.aiui.presenter.contract.MainContract;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
 import javax.inject.Inject;
 

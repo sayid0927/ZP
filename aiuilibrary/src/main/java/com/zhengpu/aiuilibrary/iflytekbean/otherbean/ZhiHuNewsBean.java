@@ -1,6 +1,4 @@
-package com.zhengpu.aiui.bean;
-
-import com.zhengpu.aiuilibrary.iflytekbean.*;
+package com.zhengpu.aiuilibrary.iflytekbean.otherbean;
 
 import java.util.List;
 
@@ -9,7 +7,7 @@ import java.util.List;
  * Created by wengmf on 2017/12/11.
  */
 
-public class ZhiHuNewsBean extends com.zhengpu.aiuilibrary.iflytekbean.BaseBean {
+public class ZhiHuNewsBean {
 
 
     /**

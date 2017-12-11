@@ -463,7 +463,7 @@ public class VoiceToWords {
                 case "news": {  //  新闻的搜索和点播
 
                     NewsBean newsBean = JsonParser.parseResultNewsBean(text);
-                    if (newsBean != null && newsBean.getData() != null && newsBean.getData().getResult() != null) {
+                  if (newsBean != null && newsBean.getText()!= null) {
 
                         baseBean.setItemType(BaseBean.NEWS);
                         baseBean.setContext(newsBean.getText());
@@ -475,7 +475,7 @@ public class VoiceToWords {
 //                        CalcAction calcAction = new CalcAction(str + content);
 //                        calcAction.start();
 
-                    }
+                 }
 
                     break;
                 }
