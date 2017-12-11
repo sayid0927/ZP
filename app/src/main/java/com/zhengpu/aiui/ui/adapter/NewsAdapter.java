@@ -7,6 +7,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.zhengpu.aiui.R;
+import com.zhengpu.aiui.bean.ZhiHuNewsBean;
 import com.zhengpu.aiuilibrary.iflytekbean.NewsBean;
 
 import java.util.List;
@@ -16,21 +17,21 @@ import java.util.List;
  * Created by wengmf on 2017/12/7.
  */
 
-public class NewsAdapter extends BaseQuickAdapter<NewsBean.DataBean.ResultBean, BaseViewHolder> {
+public class NewsAdapter extends BaseQuickAdapter<ZhiHuNewsBean.TopStoriesBean, BaseViewHolder> {
 
 
     private Context context;
 
-    public NewsAdapter(List<NewsBean.DataBean.ResultBean> data, Context context) {
+    public NewsAdapter(List<ZhiHuNewsBean.TopStoriesBean> data, Context context) {
         super(R.layout.item_news, data);
         this.context = context;
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, NewsBean.DataBean.ResultBean item) {
+    protected void convert(BaseViewHolder helper, ZhiHuNewsBean.TopStoriesBean item) {
 
         ImageView iv = helper.getView(R.id.im_url);
-        Glide.with(context).load(item.getUrl()).into(iv);
+        Glide.with(context).load(item.getImage()).into(iv);
 
     }
 }

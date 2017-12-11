@@ -2,7 +2,6 @@ package com.zhengpu.aiui.ui.activity;
 
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -17,6 +16,7 @@ import com.orhanobut.logger.Logger;
 import com.skyfishjy.library.RippleBackground;
 import com.zhengpu.aiui.R;
 import com.zhengpu.aiui.base.BaseActivity;
+import com.zhengpu.aiui.bean.ZhiHuNewsBean;
 import com.zhengpu.aiui.component.AppComponent;
 import com.zhengpu.aiui.component.DaggerMainComponent;
 import com.zhengpu.aiui.presenter.contract.MainContract;
@@ -40,7 +40,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
@@ -158,6 +157,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 //        Logger.e("service" + service + "说话内容" + result.toString());
         isFist = false;
 
+
+
         if (llCentet.getVisibility() == View.VISIBLE)
             llCentet.setVisibility(View.INVISIBLE);
 
@@ -177,7 +178,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         data.setItemType(BaseBean.USER_CHAT);
         data.setUserChatBean(userChatBean);
         datas.add(data);
-        datas.add(result);
+
+        switch (service) {
+            case "news":
+                mPresenter.getZhiHuNewsBean();
+                break;
+        }
+
+        if (!service.equals("news"))
+            datas.add(result);
 
         mAdapter.notifyDataSetChanged();
         rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
@@ -225,7 +234,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         voiceToWords.startRecognizer();
     }
 
-    @OnClick({R.id.iv_phone, R.id.iv_help, R.id.llExit,R.id.video_n})
+    @OnClick({R.id.iv_phone, R.id.iv_help, R.id.llExit, R.id.video_n})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -254,7 +263,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
                 break;
 
-            case  R.id.video_n:
+            case R.id.video_n:
 
                 isFist = false;
                 if (llCentet.getVisibility() == View.VISIBLE)
@@ -270,9 +279,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                     viewpager.setVisibility(View.GONE);
 
 
-
-
-                String   text= "{\n" +
+                String text = "{\n" +
                         "  \"data\": {\n" +
                         "    \"result\": [\n" +
                         "      {\n" +
@@ -432,35 +439,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                     rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
                 }
 
-                    break;
+                break;
             case R.id.iv_phone:
 
-                isFist = false;
-                if (llCentet.getVisibility() == View.VISIBLE)
-                    llCentet.setVisibility(View.INVISIBLE);
-
-                if (rvSpeech.getVisibility() == View.GONE)
-                    rvSpeech.setVisibility(View.VISIBLE);
-
-                if (RippleVoice_N.getVisibility() == View.GONE)
-                    RippleVoice_N.setVisibility(View.VISIBLE);
-
-                if (viewpager.getVisibility() == View.VISIBLE)
-                    viewpager.setVisibility(View.GONE);
-
-
-                userChatBean = new UserChatBean();
-                data = new BaseBean();
-                userChatBean.setText("XXXXXXXX");
-                data.setItemType(BaseBean.USER_CHAT);
-                data.setUserChatBean(userChatBean);
-                datas.add(data);
-
-                mAdapter.notifyDataSetChanged();
-                rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
-
+                mPresenter.getZhiHuNewsBean();
 
                 break;
+
             case R.id.iv_help:
 
                 if (!isClickHelp) {
@@ -498,9 +483,38 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         }
     }
 
-
     public void setScanScroll(boolean isCanScroll) {
         viewpager.setScanScroll(isCanScroll);
     }
 
+    @Override
+    public void getZhiHuNewsBeanSuccess(ZhiHuNewsBean zhiHuNewsBean) {
+
+        if (llCentet.getVisibility() == View.VISIBLE)
+            llCentet.setVisibility(View.INVISIBLE);
+
+        if (rvSpeech.getVisibility() == View.GONE)
+            rvSpeech.setVisibility(View.VISIBLE);
+
+        if (RippleVoice_N.getVisibility() == View.GONE)
+            RippleVoice_N.setVisibility(View.VISIBLE);
+
+        if (viewpager.getVisibility() == View.VISIBLE)
+            viewpager.setVisibility(View.GONE);
+
+
+
+
+        zhiHuNewsBean.setItemType(BaseBean.NEWS);
+        datas.add(zhiHuNewsBean);
+        mAdapter.notifyDataSetChanged();
+        rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
+
+    }
+
+    @Override
+    public void getZhiHuNewsBeanErrror(String error) {
+        Logger.d(error);
+
+    }
 }

@@ -18,9 +18,15 @@ package com.zhengpu.aiui.presenter.impl;
 
 import com.zhengpu.aiui.api.Api;
 import com.zhengpu.aiui.base.RxPresenter;
+import com.zhengpu.aiui.bean.ZhiHuNewsBean;
 import com.zhengpu.aiui.presenter.contract.MainContract;
 
 import javax.inject.Inject;
+
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivityPresenter extends RxPresenter<MainContract.View> implements MainContract.Presenter<MainContract.View> {
 
@@ -31,6 +37,35 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
     public MainActivityPresenter(Api bookApi) {
         this.bookApi = bookApi;
     }
+
+
+    @Override
+    public void getZhiHuNewsBean() {
+
+        Subscription rxSubscription = bookApi.getDailyNews().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ZhiHuNewsBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mView != null ) {
+                            mView.getZhiHuNewsBeanErrror(e.toString());
+                        }
+                    }
+                    @Override
+                    public void onNext(ZhiHuNewsBean data) {
+                        if (data != null && mView != null ) {
+                            mView.getZhiHuNewsBeanSuccess(data);
+                        }
+                    }
+                });
+        addSubscrebe(rxSubscription);
+    }
+
 
 
 }

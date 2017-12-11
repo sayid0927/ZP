@@ -38,20 +38,4 @@
         app:bubbleColor="#F4FAFC" />
 
 
-    <!--<TextView-->
-    <!--android:id="@+id/chatlist_text_me"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignTop="@id/chatlist_image_me"-->
-    <!--android:layout_marginRight="10dp"-->
-    <!--android:layout_toLeftOf="@id/chatlist_image_me"-->
-    <!--android:background="@mipmap/chatto_bg_normal"-->
-    <!--android:maxWidth="200dp"-->
-    <!--android:gravity="center"-->
-    <!--android:paddingBottom="18dip"-->
-    <!--android:paddingTop="13dip"-->
-    <!--android:text=""-->
-
-    <!--android:textSize="8sp" />-->
-
 </RelativeLayout>

@@ -47,6 +47,9 @@ public class BaseBean implements MultiItemEntity {
     private UserChatBean userChatBean;
     private R4Bean r4Bean;
 
+
+
+
     public R4Bean getR4Bean() {
         return r4Bean;
     }

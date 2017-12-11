@@ -103,11 +103,16 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
                 break;
             case BaseBean.NEWS:
 
-                if (item.getNewsBean() != null && item.getNewsBean().getData() != null && item.getNewsBean().getData().getResult() != null) {
-                    newsAdapter = new NewsAdapter(item.getNewsBean().getData().getResult(), context);
-                    RecyclerView rvNews = helper.getView(R.id.rv_news);
-                    rvNews.setAdapter(newsAdapter);
-                }
+
+//                newsAdapter = new NewsAdapter(item.get, context);
+//                RecyclerView rvNews = helper.getView(R.id.rv_news);
+//                rvNews.setAdapter(newsAdapter);
+
+//                if (item.getNewsBean() != null && item.getNewsBean().getData() != null && item.getNewsBean().getData().getResult() != null) {
+//                    newsAdapter = new NewsAdapter(item.getNewsBean().getData().getResult(), context);
+//                    RecyclerView rvNews = helper.getView(R.id.rv_news);
+//                    rvNews.setAdapter(newsAdapter);
+//                }
 
                 break;
             case BaseBean.OPENAPPTEST_APP:

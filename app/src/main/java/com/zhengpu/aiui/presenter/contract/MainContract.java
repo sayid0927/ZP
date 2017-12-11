@@ -17,15 +17,19 @@ package com.zhengpu.aiui.presenter.contract;
 
 
 import com.zhengpu.aiui.base.BaseContract;
+import com.zhengpu.aiui.bean.ZhiHuNewsBean;
+
+import java.io.File;
 
 public interface MainContract {
 
     interface View extends BaseContract.BaseView {
 
-
+        void getZhiHuNewsBeanSuccess(ZhiHuNewsBean data );
+        void getZhiHuNewsBeanErrror(String error );
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
-
+        void getZhiHuNewsBean();
     }
 }

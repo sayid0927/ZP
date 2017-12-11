@@ -17,6 +17,7 @@ package com.zhengpu.aiui.api;
 
 
 import com.zhengpu.aiui.base.Constant;
+import com.zhengpu.aiui.bean.ZhiHuNewsBean;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -48,11 +49,9 @@ public class Api {
         return instance;
     }
 
-
-
-
-
-
+    public Observable<ZhiHuNewsBean> getDailyNews() {
+        return service.getDailyNews();
+    }
 
 
 }

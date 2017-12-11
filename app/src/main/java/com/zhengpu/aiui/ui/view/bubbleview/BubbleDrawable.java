@@ -92,6 +92,7 @@ public class BubbleDrawable extends Drawable {
         switch (bubbleType) {
             case COLOR:
                 mPaint.setColor(bubbleColor);
+                mPaint.setAntiAlias(true);
                 mPaint.setStyle(Paint.Style.FILL);
 
                 break;
@@ -108,7 +109,7 @@ public class BubbleDrawable extends Drawable {
         }
         setUpPath(mArrowLocation, mPath);
         canvas.drawPath(mPath, mPaint);
-
+        mPaint.setAntiAlias(true);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(strokeColor);
         canvas.drawPath(mPath, mPaint);

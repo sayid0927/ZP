@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
     <ImageView
@@ -13,20 +15,26 @@
         android:layout_marginTop="20dp"
         android:src="@mipmap/aiui" />
 
-    <LinearLayout
+    <com.zhengpu.aiui.ui.view.bubbleview.BubbleLinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/chatlist_image_other"
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@id/chatlist_image_other"
-        android:background="@mipmap/chatfrom_bg_normal"
+        android:gravity="center"
         android:maxWidth="200dp"
         android:orientation="vertical"
-        android:paddingBottom="18dip"
-        android:paddingTop="8dip">
-
+        android:paddingTop="8dip"
+        app:arrowCenter="true"
+        app:arrowHeight="10dp"
+        app:arrowLocation="left"
+        app:arrowPosition="55dp"
+        app:arrowWidth="15dp"
+        app:strokeColor= "#CCCCCC"
+        app:bubbleColor="@color/white">
 
         <android.support.v7.widget.RecyclerView
+            android:layout_gravity="center"
             android:id="@+id/rv_news"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -34,6 +42,6 @@
         </android.support.v7.widget.RecyclerView>
 
 
-    </LinearLayout>
+    </com.zhengpu.aiui.ui.view.bubbleview.BubbleLinearLayout>
 
 </RelativeLayout>
