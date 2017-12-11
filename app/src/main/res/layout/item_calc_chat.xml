@@ -26,7 +26,7 @@
         android:layout_toRightOf="@id/chatlist_image_other"
         android:padding="10dp"
         android:text=""
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="8sp"
         app:angle="8dp"
         app:arrowCenter="true"
@@ -47,7 +47,6 @@
     <!--android:layout_marginLeft="10dp"-->
     <!--android:layout_toEndOf="@id/chatlist_image_other"-->
     <!--android:background="@mipmap/chatfrom_bg_normal"-->
-
     <!--android:maxWidth="200dp"-->
     <!--android:paddingBottom="18dip"-->
     <!--android:paddingTop="13dip"-->
