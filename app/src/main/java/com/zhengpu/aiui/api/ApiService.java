@@ -17,6 +17,7 @@ package com.zhengpu.aiui.api;
 
 
 import com.zhengpu.aiui.base.Constant;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -49,6 +50,19 @@ public interface ApiService {
     @Headers({"url_name:wechat"})
     @GET("wxnew")
     Observable<WXItemBean> getWXHot(@Query("key") String key, @Query("num") int num, @Query("page") int page);
+
+
+    /**
+     * 搜索酷狗音乐
+     */
+    @Headers({"url_name:kugou"})
+    @GET("api/v3/search/song")
+    Observable<KuGouSongBean> getSearchKugouSong(@Query("format") String format, @Query("keyword") String keyword,
+                                                 @Query("page") String page, @Query("pagesize") String pagesize);
+
+
+
+
 
 
 }

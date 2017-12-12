@@ -17,6 +17,7 @@ package com.zhengpu.aiui.api;
 
 
 import com.zhengpu.aiui.base.Constant;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -29,6 +30,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public class Api {
@@ -62,5 +64,8 @@ public class Api {
         return service.getWXHot(Constant.WECHAT_KEY_API,num,page);
     }
 
+    public Observable<KuGouSongBean> getSearchKugouSong(String keyword , String page, String pagesize ) {
+        return service.getSearchKugouSong("json",keyword,page,pagesize);
+    }
 
 }

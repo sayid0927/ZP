@@ -29,6 +29,8 @@ public class Constant {
     public static final String ZHIHU_BASE_URL = "http://news-at.zhihu.com/";
     public static final String WECHAT_BASE_URL = "http://api.tianapi.com/";
 
+    public static final String KUGOU_BASE_URL = "http://mobilecdn.kugou.com/";
+
 
 
     public static final String APK_UPDATE = "apk_update";

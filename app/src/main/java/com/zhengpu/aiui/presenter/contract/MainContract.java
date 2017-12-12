@@ -17,6 +17,7 @@ package com.zhengpu.aiui.presenter.contract;
 
 
 import com.zhengpu.aiui.base.BaseContract;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -28,13 +29,14 @@ public interface MainContract {
     interface View extends BaseContract.BaseView {
 
         void getZhiHuNewsBeanSuccess(ZhiHuNewsBean data );
-        void getZhiHuNewsBeanErrror(String error );
-
+        void getErrror(String error);
         void  getWXHotSuccess(WXItemBean wxItemBeans);
+        void  getSearchKugouSongSuccess(KuGouSongBean kuGouSongBean);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
         void getZhiHuNewsBean();
         void getWXHot(int num, int page);
+        void  getSearchKugouSongSuccess(String keyword ,String page, String pagesize);
     }
 }

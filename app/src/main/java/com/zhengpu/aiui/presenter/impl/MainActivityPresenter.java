@@ -21,6 +21,7 @@ import com.zhengpu.aiui.api.Api;
 import com.zhengpu.aiui.base.RxPresenter;
 
 import com.zhengpu.aiui.presenter.contract.MainContract;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -58,7 +59,7 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
                     @Override
                     public void onError(Throwable e) {
                         if (mView != null) {
-                            mView.getZhiHuNewsBeanErrror(e.toString());
+                            mView.getErrror(e.toString());
                         }
                     }
 
@@ -91,13 +92,40 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
                     @Override
                     public void onNext(WXItemBean wxItemBeans) {
-                        if (wxItemBeans != null && wxItemBeans.getCode()==200 && mView != null) {
+                        if (wxItemBeans != null && wxItemBeans.getCode() == 200 && mView != null) {
 
                             mView.getWXHotSuccess(wxItemBeans);
                         }
                     }
                 });
         addSubscrebe(rxSubscription);
+    }
+
+    @Override
+    public void getSearchKugouSongSuccess(String keyword, String page, String pagesize) {
+
+        Subscription rxSubscription = bookApi.getSearchKugouSong(keyword, page, pagesize).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<KuGouSongBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(KuGouSongBean kuGouSongBean) {
+                        if (kuGouSongBean != null && kuGouSongBean.getErrcode() == 0 && mView != null) {
+                            mView.getSearchKugouSongSuccess(kuGouSongBean);
+                        }
+                    }
+                });
+        addSubscrebe(rxSubscription);
+
     }
 
 }

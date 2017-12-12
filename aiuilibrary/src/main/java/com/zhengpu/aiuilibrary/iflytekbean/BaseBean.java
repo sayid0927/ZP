@@ -33,10 +33,8 @@ public class BaseBean  implements MultiItemEntity {
     public static final int R4 = 10015;
     public static final int POINT = 10016;
 
-
     private int itemType;
     private String context;
-
     private BaikeBean baikeBean;
     private CalcBean calcBean;
     private DatetimeBean datetimeBean;

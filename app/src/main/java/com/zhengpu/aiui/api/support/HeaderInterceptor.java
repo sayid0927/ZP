@@ -54,7 +54,8 @@ public final class HeaderInterceptor implements Interceptor {
                     newBaseUrl = HttpUrl.parse(Constant.ZHIHU_BASE_URL);
                 } else if ("wechat".equals(headerValue)) {
                     newBaseUrl = HttpUrl.parse(Constant.WECHAT_BASE_URL);
-                } else {
+                } else  if("kugou".equals(headerValue)){
+                    newBaseUrl = HttpUrl.parse(Constant.KUGOU_BASE_URL);
 //                    newBaseUrl = oldHttpUrl;
                 }
                 //从request中获取原有的HttpUrl实例oldHttpUrl
