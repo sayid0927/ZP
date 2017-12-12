@@ -31,6 +31,7 @@ public class BaseBean  implements MultiItemEntity {
     public static final int WEATHER = 10013;
     public static final int USER_CHAT = 10014;
     public static final int R4 = 10015;
+    public static final int POINT = 10016;
 
 
     private int itemType;
@@ -53,6 +54,16 @@ public class BaseBean  implements MultiItemEntity {
     private R4Bean r4Bean;
     private ZhiHuNewsBean zhiHuNewsBean;
     private WXItemBean wxItemBean;
+    private  PointBean pointBean;
+
+
+    public PointBean getPointBean() {
+        return pointBean;
+    }
+
+    public void setPointBean(PointBean pointBean) {
+        this.pointBean = pointBean;
+    }
 
     public WXItemBean getWxItemBean() {
         return wxItemBean;

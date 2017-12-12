@@ -25,7 +25,9 @@ import com.zhengpu.aiui.ui.adapter.TalkApadtep;
 import com.zhengpu.aiui.ui.fragment.FragmentHelp_1;
 import com.zhengpu.aiui.ui.fragment.FragmentHelp_Home_2;
 import com.zhengpu.aiui.ui.view.HelpViewPager;
+import com.zhengpu.aiuilibrary.iflytekaction.CalcAction;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
+import com.zhengpu.aiuilibrary.iflytekbean.PointBean;
 import com.zhengpu.aiuilibrary.iflytekbean.UserChatBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
@@ -179,21 +181,28 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         userChatBean.setText(result.getContext());
         data.setItemType(BaseBean.USER_CHAT);
         data.setUserChatBean(userChatBean);
+
+
         datas.add(data);
-
-        switch (service) {
-            case "news":
-                mPresenter.getZhiHuNewsBean();
-                break;
-        }
-
         if (!service.equals("news"))
             datas.add(result);
-
+        else {
+            PointBean pointBean = new PointBean();
+            pointBean.setText("为你推荐如下热门新闻");
+            data.setPointBean(pointBean);
+            data.setItemType(BaseBean.POINT);
+//                mPresenter.getZhiHuNewsBean();
+            mPresenter.getWXHot(NUM_OF_PAGE, currentPage);
+        }
         mAdapter.notifyDataSetChanged();
-        rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
+        rvSpeech.scrollToPosition(mAdapter.getItemCount()-1);
+        if(service.equals("r4")){
+            CalcAction calcAction = new CalcAction("不好意思，我好像没听懂");
+            calcAction.start();
+            voiceToWords.startRecognizer();
+        }
 
-    }
+}
 
     @Override
     public void showLowVoice(String result) {
@@ -201,15 +210,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         voiceToWords.startRecognizer();
     }
 
-
-    /**
-     * 听不懂状态
-     */
-    @Override
-    public void ResultR4Start(String sequence) {
-
-
-    }
 
     @Override
     public void SpeechOver() {
@@ -267,7 +267,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
             case R.id.video_n:
 
-                mPresenter.getWXHot(NUM_OF_PAGE, currentPage);
+//                mPresenter.getWXHot(NUM_OF_PAGE, currentPage);
 
                 break;
             case R.id.iv_phone:
@@ -289,7 +289,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
                     isClickHelp = true;
                     break;
-
                 } else {
                     isClickHelp = false;
                     if (viewpager.getVisibility() == View.VISIBLE)
@@ -337,23 +336,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     @Override
     public void getWXHotSuccess(WXItemBean wxItemBeans) {
 
-
-        isFist = false;
-
-
-        if (llCentet.getVisibility() == View.VISIBLE)
-            llCentet.setVisibility(View.INVISIBLE);
-
-        if (rvSpeech.getVisibility() == View.GONE)
-            rvSpeech.setVisibility(View.VISIBLE);
-
-        if (RippleVoice_N.getVisibility() == View.GONE)
-            RippleVoice_N.setVisibility(View.VISIBLE);
-
-        if (viewpager.getVisibility() == View.VISIBLE)
-            viewpager.setVisibility(View.GONE);
-
-
         data = new BaseBean();
         data.setWxItemBean(wxItemBeans);
         data.setItemType(BaseBean.NEWS);
@@ -361,5 +343,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         datas.add(data);
         mAdapter.notifyDataSetChanged();
         rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
+        voiceToWords.startRecognizer();
     }
 }

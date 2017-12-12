@@ -215,7 +215,7 @@ public class VoiceToWords {
                         judgeService(service, text);
                     } else {
                         if (mIGetVoiceToWord != null) {
-                            mIGetVoiceToWord.SpeechError("不好意思，我好像没听懂");
+//                            mIGetVoiceToWord.SpeechError("不好意思，我好像没听懂");
 
                             R4Bean r4Bean = JsonParser.parseResultR4Bean(text);
                             BaseBean baseBean = new BaseBean();
@@ -229,7 +229,14 @@ public class VoiceToWords {
                     }
                 } catch (JSONException e) {
                     if (mIGetVoiceToWord != null) {
-                        mIGetVoiceToWord.SpeechError("不好意思，我好像没听懂");
+//                        mIGetVoiceToWord.SpeechError("不好意思，我好像没听懂");
+                        R4Bean r4Bean = JsonParser.parseResultR4Bean(text);
+                        BaseBean baseBean = new BaseBean();
+                        baseBean.setItemType(BaseBean.R4);
+                        baseBean.setContext(r4Bean.getText());
+                        baseBean.setR4Bean(r4Bean);
+                        mIGetVoiceToWord.getResult("r4", baseBean);
+
                     }
                     e.printStackTrace();
                 }
@@ -469,11 +476,8 @@ public class VoiceToWords {
                         baseBean.setContext(newsBean.getText());
                         baseBean.setNewsBean(newsBean);
                         mIGetVoiceToWord.getResult(service, baseBean);
-
-//                        String str = newsBean.getAnswer().getText();
-//                        String content = newsBean.getData().getResult().get(0).getContent();
-//                        CalcAction calcAction = new CalcAction(str + content);
-//                        calcAction.start();
+                        CalcAction calcAction = new CalcAction("为你推荐如下热门新闻");
+                        calcAction.start();
 
                  }
 

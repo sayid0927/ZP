@@ -48,6 +48,7 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
         addItemType(BaseBean.STORY, R.layout.item_calc_chat);
         addItemType(BaseBean.WEATHER, R.layout.item_weather_chat);
         addItemType(BaseBean.R4, R.layout.item_calc_chat);
+        addItemType(BaseBean.POINT, R.layout.item_calc_chat);
 
     }
 
@@ -58,6 +59,9 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
 
             case BaseBean.USER_CHAT:
                 helper.setText(R.id.chatlist_text_me, item.getUserChatBean().getText());
+                break;
+            case BaseBean.POINT:
+                helper.setText(R.id.chatlist_text_other, item.getPointBean().getText());
                 break;
             case BaseBean.BAIKE:
 
@@ -147,7 +151,7 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
                 break;
 
             case BaseBean.R4:
-                helper.setText(R.id.chatlist_text_other, item.getR4Bean().getText());
+                helper.setText(R.id.chatlist_text_other, "不好意思，我好像没听懂");
                 break;
 
         }

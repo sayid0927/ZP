@@ -96,13 +96,6 @@ public class SpeechRecognizerService extends Service implements IGetVoiceToWord,
 //        voiceToWords.startRecognizer();
     }
 
-    /**
-     * 听不懂状态
-     */
-    @Override
-    public void ResultR4Start(String sequence) {
-
-    }
 
     /**
      * 结束说话回调
