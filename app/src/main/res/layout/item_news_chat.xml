@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/white">
 
     <ImageView
@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_centerInParent="true"
         android:layout_marginStart="23dp"
         android:layout_marginTop="20dp"
         android:src="@mipmap/aiui" />
@@ -21,25 +22,172 @@
         android:layout_alignTop="@id/chatlist_image_other"
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@id/chatlist_image_other"
-        android:gravity="center"
         android:maxWidth="200dp"
         android:orientation="vertical"
         android:paddingTop="8dip"
         app:arrowCenter="true"
         app:arrowHeight="10dp"
         app:arrowLocation="left"
-        app:arrowPosition="55dp"
+        app:arrowPosition="165dp"
         app:arrowWidth="15dp"
-        app:strokeColor= "#CCCCCC"
-        app:bubbleColor="@color/white">
+        app:bubbleColor="@color/white"
+        app:strokeColor="#CCCCCC">
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_gravity="center"
-            android:id="@+id/rv_news"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/rl_news_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp">
 
-        </android.support.v7.widget.RecyclerView>
+            <ImageView
+                android:id="@+id/iv_picUrl"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nothing"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="11dp"
+                android:layout_toRightOf="@+id/iv_picUrl"
+                android:text="VVVVVVVVVV" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_news_item1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/iv_picUrl1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nothing"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_title1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="11dp"
+                android:layout_toRightOf="@+id/iv_picUrl1"
+                android:text="VVVVVVVVVV" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_news_item2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/iv_picUrl2"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nothing"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="11dp"
+                android:layout_toRightOf="@+id/iv_picUrl2"
+                android:text="VVVVVVVVVV" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_news_item3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/iv_picUrl3"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nothing"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_title3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="11dp"
+                android:layout_toRightOf="@+id/iv_picUrl3"
+                android:text="VVVVVVVVVV" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_news_item4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/iv_picUrl4"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
+                android:src="@drawable/nothing"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_title4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="11dp"
+                android:layout_toRightOf="@+id/iv_picUrl4"
+                android:text="VVVVVVVVVV" />
+
+        </RelativeLayout>
+
+
+        <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:layout_gravity="center"-->
+        <!--android:id="@+id/rv_news"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--</android.support.v7.widget.RecyclerView>-->
 
 
     </com.zhengpu.aiui.ui.view.bubbleview.BubbleLinearLayout>

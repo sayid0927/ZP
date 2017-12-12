@@ -17,8 +17,11 @@ package com.zhengpu.aiui.api;
 
 
 import com.zhengpu.aiui.base.Constant;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
+
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -52,6 +55,11 @@ public class Api {
 
     public Observable<ZhiHuNewsBean> getDailyNews() {
         return service.getDailyNews();
+    }
+
+
+    public Observable<WXItemBean> getWXHot(int num, int page) {
+        return service.getWXHot(Constant.WECHAT_KEY_API,num,page);
     }
 
 

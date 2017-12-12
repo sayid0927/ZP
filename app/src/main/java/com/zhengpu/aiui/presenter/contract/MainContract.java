@@ -17,10 +17,11 @@ package com.zhengpu.aiui.presenter.contract;
 
 
 import com.zhengpu.aiui.base.BaseContract;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
 
-import java.io.File;
+import java.util.List;
 
 public interface MainContract {
 
@@ -28,9 +29,12 @@ public interface MainContract {
 
         void getZhiHuNewsBeanSuccess(ZhiHuNewsBean data );
         void getZhiHuNewsBeanErrror(String error );
+
+        void  getWXHotSuccess(WXItemBean wxItemBeans);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
         void getZhiHuNewsBean();
+        void getWXHot(int num, int page);
     }
 }

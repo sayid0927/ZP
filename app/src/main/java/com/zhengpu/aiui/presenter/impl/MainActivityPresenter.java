@@ -16,11 +16,15 @@
 package com.zhengpu.aiui.presenter.impl;
 
 
+import com.orhanobut.logger.Logger;
 import com.zhengpu.aiui.api.Api;
 import com.zhengpu.aiui.base.RxPresenter;
 
 import com.zhengpu.aiui.presenter.contract.MainContract;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -53,13 +57,14 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
                     @Override
                     public void onError(Throwable e) {
-                        if (mView != null ) {
+                        if (mView != null) {
                             mView.getZhiHuNewsBeanErrror(e.toString());
                         }
                     }
+
                     @Override
                     public void onNext(ZhiHuNewsBean data) {
-                        if (data != null && mView != null ) {
+                        if (data != null && mView != null) {
                             mView.getZhiHuNewsBeanSuccess(data);
                         }
                     }
@@ -67,6 +72,32 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
         addSubscrebe(rxSubscription);
     }
 
+    @Override
+    public void getWXHot(int num, int page) {
 
+
+        Subscription rxSubscription = bookApi.getWXHot(num, page).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<WXItemBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(WXItemBean wxItemBeans) {
+                        if (wxItemBeans != null && wxItemBeans.getCode()==200 && mView != null) {
+
+                            mView.getWXHotSuccess(wxItemBeans);
+                        }
+                    }
+                });
+        addSubscrebe(rxSubscription);
+    }
 
 }

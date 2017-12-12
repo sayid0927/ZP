@@ -27,6 +27,7 @@ import com.zhengpu.aiui.ui.fragment.FragmentHelp_Home_2;
 import com.zhengpu.aiui.ui.view.HelpViewPager;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekbean.UserChatBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 import com.zhengpu.aiuilibrary.iflytekutils.IGetVoiceToWord;
 import com.zhengpu.aiuilibrary.iflytekutils.VoiceToWords;
@@ -85,6 +86,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
     private List<Fragment> fragmentList;
     private HelpFragmentAdapter helpFragmentAdapter;
+
+
+    private static final int NUM_OF_PAGE = 20;
+    private int currentPage = 1;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -154,7 +159,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     public void getResult(String service, BaseBean result) {
 //        Logger.e("service" + service + "说话内容" + result.toString());
         isFist = false;
-
 
 
         if (llCentet.getVisibility() == View.VISIBLE)
@@ -263,6 +267,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
             case R.id.video_n:
 
+                mPresenter.getWXHot(NUM_OF_PAGE, currentPage);
+
                 break;
             case R.id.iv_phone:
 
@@ -314,8 +320,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
 
         data = new BaseBean();
-         data.setZhiHuNewsBean(zhiHuNewsBean);
-         data.setItemType(BaseBean.NEWS);
+        data.setZhiHuNewsBean(zhiHuNewsBean);
+        data.setItemType(BaseBean.NEWS);
         datas.add(data);
         mAdapter.notifyDataSetChanged();
         rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
@@ -326,5 +332,34 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     public void getZhiHuNewsBeanErrror(String error) {
         Logger.d(error);
 
+    }
+
+    @Override
+    public void getWXHotSuccess(WXItemBean wxItemBeans) {
+
+
+        isFist = false;
+
+
+        if (llCentet.getVisibility() == View.VISIBLE)
+            llCentet.setVisibility(View.INVISIBLE);
+
+        if (rvSpeech.getVisibility() == View.GONE)
+            rvSpeech.setVisibility(View.VISIBLE);
+
+        if (RippleVoice_N.getVisibility() == View.GONE)
+            RippleVoice_N.setVisibility(View.VISIBLE);
+
+        if (viewpager.getVisibility() == View.VISIBLE)
+            viewpager.setVisibility(View.GONE);
+
+
+        data = new BaseBean();
+        data.setWxItemBean(wxItemBeans);
+        data.setItemType(BaseBean.NEWS);
+        data.setWxItemBean(wxItemBeans);
+        datas.add(data);
+        mAdapter.notifyDataSetChanged();
+        rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 }

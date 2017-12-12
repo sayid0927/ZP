@@ -17,13 +17,17 @@ package com.zhengpu.aiui.api;
 
 
 import com.zhengpu.aiui.base.Constant;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Query;
 import retrofit2.http.Url;
 import rx.Observable;
 
@@ -37,5 +41,14 @@ public interface ApiService {
     @Headers({"url_name:zhihu"})
     @GET("api/4/news/latest")
     Observable<ZhiHuNewsBean> getDailyNews();
+
+
+    /**
+     * 微信精选列表
+     */
+    @Headers({"url_name:wechat"})
+    @GET("wxnew")
+    Observable<WXItemBean> getWXHot(@Query("key") String key, @Query("num") int num, @Query("page") int page);
+
 
 }

@@ -4,15 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.QuickContactBadge;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.zhengpu.aiui.R;
+import com.zhengpu.aiui.utils.GlideUtils;
+import com.zhengpu.aiui.utils.ToastUtils;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
-import com.zhengpu.aiuilibrary.iflytekbean.NewsBean;
 import com.zhengpu.aiuilibrary.iflytekbean.WeatherBean;
 
 import java.util.List;
@@ -101,19 +103,9 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
             case BaseBean.MUSICX:
                 helper.setText(R.id.chatlist_text_other, item.getMusicXBean().getAnswer().getText());
                 break;
+
             case BaseBean.NEWS:
-
-
-
-                newsAdapter = new NewsAdapter(item.getZhiHuNewsBean().getTop_stories(), context);
-                RecyclerView rvNews = helper.getView(R.id.rv_news);
-                rvNews.setAdapter(newsAdapter);
-
-//                if (item.getNewsBean() != null && item.getNewsBean().getData() != null && item.getNewsBean().getData().getResult() != null) {
-//                    newsAdapter = new NewsAdapter(item.getNewsBean().getData().getResult(), context);
-//                    RecyclerView rvNews = helper.getView(R.id.rv_news);
-//                    rvNews.setAdapter(newsAdapter);
-//                }
+                setNews(helper, item);
 
                 break;
             case BaseBean.OPENAPPTEST_APP:
@@ -159,5 +151,55 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
                 break;
 
         }
+    }
+
+    private void setNews(BaseViewHolder helper, final BaseBean item) {
+
+        helper.setText(R.id.tv_title, item.getWxItemBean().getNewslist().get(0).getTitle());
+        helper.setText(R.id.tv_title1, item.getWxItemBean().getNewslist().get(1).getTitle());
+        helper.setText(R.id.tv_title2, item.getWxItemBean().getNewslist().get(2).getTitle());
+        helper.setText(R.id.tv_title3, item.getWxItemBean().getNewslist().get(3).getTitle());
+        helper.setText(R.id.tv_title4, item.getWxItemBean().getNewslist().get(4).getTitle());
+
+        GlideUtils.loadMovieTopImg((ImageView) helper.getView(R.id.iv_picUrl), item.getWxItemBean().getNewslist().get(0).getPicUrl());
+        GlideUtils.loadMovieTopImg((ImageView) helper.getView(R.id.iv_picUrl1), item.getWxItemBean().getNewslist().get(1).getPicUrl());
+        GlideUtils.loadMovieTopImg((ImageView) helper.getView(R.id.iv_picUrl2), item.getWxItemBean().getNewslist().get(2).getPicUrl());
+        GlideUtils.loadMovieTopImg((ImageView) helper.getView(R.id.iv_picUrl3), item.getWxItemBean().getNewslist().get(3).getPicUrl());
+        GlideUtils.loadMovieTopImg((ImageView) helper.getView(R.id.iv_picUrl4), item.getWxItemBean().getNewslist().get(4).getPicUrl());
+
+        helper.getView(R.id.rl_news_item).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getWxItemBean().getNewslist().get(0).getUrl())));
+            }
+        });
+
+        helper.getView(R.id.rl_news_item1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getWxItemBean().getNewslist().get(1).getUrl())));
+            }
+        });
+
+        helper.getView(R.id.rl_news_item2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getWxItemBean().getNewslist().get(2).getUrl())));
+            }
+        });
+
+        helper.getView(R.id.rl_news_item3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getWxItemBean().getNewslist().get(3).getUrl())));
+            }
+        });
+
+        helper.getView(R.id.rl_news_item4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(item.getWxItemBean().getNewslist().get(4).getUrl())));
+            }
+        });
     }
 }

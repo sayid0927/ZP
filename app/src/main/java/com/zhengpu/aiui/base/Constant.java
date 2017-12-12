@@ -17,12 +17,18 @@ package com.zhengpu.aiui.base;
 
 public class Constant {
 
+    //需要APIKEY请去 http://www.tianapi.com/#wxnew 申请,复用会减少访问可用次数。还有很多别的接口大家可以研究。
+
+    public static final String WECHAT_KEY_API = "e6d6ec3ba2f9d7a3051a6c09f0524738";
+
 
     public static final String FILEPATH = "TuPian";
 
     //    public  static  final String API_BASE_URL="http://120.78.136.232:9000/";
     public static final String API_BASE_URL = "http://tingapi.ting.baidu.com/";
     public static final String ZHIHU_BASE_URL = "http://news-at.zhihu.com/";
+    public static final String WECHAT_BASE_URL = "http://api.tianapi.com/";
+
 
 
     public static final String APK_UPDATE = "apk_update";

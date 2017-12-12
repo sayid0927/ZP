@@ -40,6 +40,7 @@ public final class HeaderInterceptor implements Interceptor {
             //获取request
             Request request = chain.request();
             //获取request的创建者builder
+
             Request.Builder builder = request.newBuilder();
             //从request中获取headers，通过给定的键url_name
             List<String> headerValues = request.headers("url_name");
@@ -51,8 +52,8 @@ public final class HeaderInterceptor implements Interceptor {
                 HttpUrl newBaseUrl = null;
                 if ("zhihu".equals(headerValue)) {
                     newBaseUrl = HttpUrl.parse(Constant.ZHIHU_BASE_URL);
-                } else if ("book".equals(headerValue)) {
-                    newBaseUrl = HttpUrl.parse(Constant.API_BASE_URL);
+                } else if ("wechat".equals(headerValue)) {
+                    newBaseUrl = HttpUrl.parse(Constant.WECHAT_BASE_URL);
                 } else {
 //                    newBaseUrl = oldHttpUrl;
                 }

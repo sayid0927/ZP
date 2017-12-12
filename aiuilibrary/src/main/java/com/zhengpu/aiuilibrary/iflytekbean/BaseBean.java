@@ -1,15 +1,19 @@
 package com.zhengpu.aiuilibrary.iflytekbean;
 
 
+import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
+
+import java.util.List;
 
 /**
  * sayid ....
  * Created by wengmf on 2017/12/5.
  */
 
-public class BaseBean implements MultiItemEntity {
+public class BaseBean  implements MultiItemEntity {
 
 
     public static final int BAIKE = 10001;
@@ -48,7 +52,15 @@ public class BaseBean implements MultiItemEntity {
     private UserChatBean userChatBean;
     private R4Bean r4Bean;
     private ZhiHuNewsBean zhiHuNewsBean;
+    private WXItemBean wxItemBean;
 
+    public WXItemBean getWxItemBean() {
+        return wxItemBean;
+    }
+
+    public void setWxItemBean(WXItemBean wxItemBean) {
+        this.wxItemBean = wxItemBean;
+    }
 
     public ZhiHuNewsBean getZhiHuNewsBean() {
         return zhiHuNewsBean;
