@@ -170,7 +170,7 @@ public class BubbleDrawable extends Drawable {
         path.lineTo(rect.right - mArrowWidth,  mArrowPosition);
         path.lineTo(rect.right, mArrowPosition + mArrowHeight / 2);
         path.lineTo(rect.right - mArrowWidth, mArrowPosition + mArrowHeight);
-        path.lineTo(rect.right - mArrowWidth, rect.bottom - 10);
+        path.lineTo(rect.right - mArrowWidth, rect.bottom - mAngle);
 
         path.arcTo(new RectF(rect.right - mAngle - mArrowWidth, rect.bottom - mAngle,
                 rect.right - mArrowWidth, rect.bottom), 0, 90);

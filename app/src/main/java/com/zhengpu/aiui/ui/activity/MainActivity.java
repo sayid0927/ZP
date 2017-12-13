@@ -20,6 +20,7 @@ import com.zhengpu.aiui.component.AppComponent;
 import com.zhengpu.aiui.component.DaggerMainComponent;
 import com.zhengpu.aiui.presenter.contract.MainContract;
 import com.zhengpu.aiui.presenter.impl.MainActivityPresenter;
+import com.zhengpu.aiui.thread.KuGuoMuiscPlayListener;
 import com.zhengpu.aiui.thread.KuGuoMuiscPlayThread;
 import com.zhengpu.aiui.ui.adapter.HelpFragmentAdapter;
 import com.zhengpu.aiui.ui.adapter.TalkApadtep;
@@ -52,7 +53,7 @@ import butterknife.OnClick;
 import static com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice.wordsToVoice;
 
 
-public class MainActivity extends BaseActivity implements MainContract.View, IGetVoiceToWord, IGetWordToVoice {
+public class MainActivity extends BaseActivity implements MainContract.View, IGetVoiceToWord, IGetWordToVoice, KuGuoMuiscPlayListener {
 
     @Inject
     MainActivityPresenter mPresenter;
@@ -102,6 +103,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     private static final int NUM_OF_PAGE = 20;
     private int currentPage = 1;
     private String songnameValue;
+    private KuGuoMuiscPlayThread kuGuoMuiscPlayThread;
 
 
     @Override
@@ -137,18 +139,17 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         fragmentList.add(new FragmentHelp_1());
         fragmentList.add(new FragmentHelp_Home_2());
 
-
         helpFragmentAdapter = new HelpFragmentAdapter(fragmentList, getSupportFragmentManager());
-
         viewpager.setAdapter(helpFragmentAdapter);
-
         datas = new ArrayList<>();
-
 
         mAdapter = new TalkApadtep(this, datas);
         rvSpeech.setLayoutManager(new LinearLayoutManager(this));
         rvSpeech.setAdapter(mAdapter);
         mAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
+
+        kuGuoMuiscPlayThread = KuGuoMuiscPlayThread.getInstance(MainActivity.this);
+        kuGuoMuiscPlayThread.setKuGuoMuiscPlayListener(this);
 
 //        UmengUtil.onEvent(MainActivity.this, "MainActivity", null);
         startService(new Intent(MainActivity.this, SpeechRecognizerService.class));
@@ -282,7 +283,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
             case R.id.video_n:
 
-                mPresenter.getSearchKugouSong("七里香","1", "20");
+                mPresenter.getSearchKugouSong("周杰伦七里香","1", "20");
 
                 break;
             case R.id.iv_phone:
@@ -402,10 +403,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
     @Override
     public void getKugouSongInfoSuccess(KuGouSongInfoResult kuGouSongInfoResult) {
-             final String url = kuGouSongInfoResult.getUrl();
              if(wordsToVoice.isTtsSpeaking())
                  wordsToVoice.mTtsStop();
              voiceToWords.mTtsStop();
-             KuGuoMuiscPlayThread.getInstance(MainActivity.this,url);
+             kuGuoMuiscPlayThread.playUrl(kuGouSongInfoResult.getUrl());
+    }
+
+    @Override
+    public void KuGuoMuiscPlayPause() {
+        voiceToWords.startRecognizer();
+    }
+
+    @Override
+    public void KuGuoMuiscPlayStop() {
+        voiceToWords.startRecognizer();
     }
 }

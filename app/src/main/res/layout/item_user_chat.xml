@@ -28,7 +28,7 @@
         android:layout_centerInParent="true"
         android:layout_marginRight="10dp"
         android:textColor="#0082ff"
-        app:angle="8dp"
+        app:angle="5dp"
         app:arrowCenter="true"
         app:arrowHeight="10dp"
         app:arrowLocation="right"

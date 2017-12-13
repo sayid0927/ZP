@@ -28,7 +28,7 @@
         android:text=""
         android:textColor="@color/black"
         android:textSize="8sp"
-        app:angle="8dp"
+        app:angle="5dp"
         app:arrowCenter="true"
         app:arrowHeight="10dp"
         app:arrowLocation="left"
