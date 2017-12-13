@@ -20,6 +20,7 @@ import com.zhengpu.aiui.component.AppComponent;
 import com.zhengpu.aiui.component.DaggerMainComponent;
 import com.zhengpu.aiui.presenter.contract.MainContract;
 import com.zhengpu.aiui.presenter.impl.MainActivityPresenter;
+import com.zhengpu.aiui.thread.KuGuoMuiscPlayThread;
 import com.zhengpu.aiui.ui.adapter.HelpFragmentAdapter;
 import com.zhengpu.aiui.ui.adapter.TalkApadtep;
 import com.zhengpu.aiui.ui.fragment.FragmentHelp_1;
@@ -29,10 +30,15 @@ import com.zhengpu.aiuilibrary.iflytekaction.CalcAction;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekbean.PointBean;
 import com.zhengpu.aiuilibrary.iflytekbean.UserChatBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouAudioInfo;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongInfoResult;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 import com.zhengpu.aiuilibrary.iflytekutils.IGetVoiceToWord;
+import com.zhengpu.aiuilibrary.iflytekutils.IGetWordToVoice;
 import com.zhengpu.aiuilibrary.iflytekutils.VoiceToWords;
+import com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice;
 import com.zhengpu.aiuilibrary.service.SpeechRecognizerService;
 
 import java.util.ArrayList;
@@ -43,8 +49,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice.wordsToVoice;
 
-public class MainActivity extends BaseActivity implements MainContract.View, IGetVoiceToWord {
+
+public class MainActivity extends BaseActivity implements MainContract.View, IGetVoiceToWord, IGetWordToVoice {
 
     @Inject
     MainActivityPresenter mPresenter;
@@ -82,6 +90,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     private BaseBean data;
     private List<BaseBean> datas;
     private VoiceToWords voiceToWords;
+    private  WordsToVoice wordsToVoice;
     private boolean isFist = true;
     private boolean isClickHelp = false;
     private UserChatBean userChatBean;
@@ -92,6 +101,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
     private static final int NUM_OF_PAGE = 20;
     private int currentPage = 1;
+    private String songnameValue;
+
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -147,6 +158,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
             public void run() {
                 voiceToWords = VoiceToWords.getInstance(MainActivity.this);
                 voiceToWords.setmIGetVoiceToWord(MainActivity.this);
+
+
+                wordsToVoice = WordsToVoice.getInstance(MainActivity.this);
+                wordsToVoice.setiGetWordToVoice(MainActivity.this);
 
             }
         }, 1000);
@@ -267,7 +282,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
             case R.id.video_n:
 
-//                mPresenter.getWXHot(NUM_OF_PAGE, currentPage);
+                mPresenter.getSearchKugouSong("七里香","1", "20");
 
                 break;
             case R.id.iv_phone:
@@ -328,10 +343,33 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     }
 
     @Override
-    public void getZhiHuNewsBeanErrror(String error) {
-        Logger.d(error);
+    public void getErrror(String error) {
 
     }
+
+//    @Override
+//    public void getZhiHuNewsBeanErrror(String error) {
+//        Logger.d(error);
+//
+//    }
+
+    /**
+     * 语音播放结束
+     */
+    @Override
+    public void SpeechEnd() {
+
+    }
+    /**
+     * 语音播放失败
+     */
+    @Override
+    public void SpeechError() {
+
+    }
+
+
+
 
     @Override
     public void getWXHotSuccess(WXItemBean wxItemBeans) {
@@ -344,5 +382,30 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         mAdapter.notifyDataSetChanged();
         rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
         voiceToWords.startRecognizer();
+    }
+
+    @Override
+    public void getSearchKugouSongSuccess(KuGouSongBean kuGouSongBean) {
+       List<KuGouSongBean.DataBean.InfoBean> infoBeanList = kuGouSongBean.getData().getInfo();
+              if(infoBeanList.size()!=0){
+                  for (int i =0;i<infoBeanList.size(); i++){
+                     String FileExt = infoBeanList.get(i).getExtname();
+                     String singername = infoBeanList.get(i).getSingername();
+                     String songname = infoBeanList.get(i).getSongname();
+                      songnameValue="七里香";
+                      if(FileExt.equals("mp3")&& songname.equals(songnameValue)){
+                       mPresenter.getKugouSongInfo(infoBeanList.get(i).getHash());
+                      }
+                  }
+              }
+    }
+
+    @Override
+    public void getKugouSongInfoSuccess(KuGouSongInfoResult kuGouSongInfoResult) {
+             final String url = kuGouSongInfoResult.getUrl();
+             if(wordsToVoice.isTtsSpeaking())
+                 wordsToVoice.mTtsStop();
+             voiceToWords.mTtsStop();
+             KuGuoMuiscPlayThread.getInstance(MainActivity.this,url);
     }
 }

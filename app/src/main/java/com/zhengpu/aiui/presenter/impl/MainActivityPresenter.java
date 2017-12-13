@@ -22,6 +22,7 @@ import com.zhengpu.aiui.base.RxPresenter;
 
 import com.zhengpu.aiui.presenter.contract.MainContract;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongInfoResult;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -102,7 +103,7 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
     }
 
     @Override
-    public void getSearchKugouSongSuccess(String keyword, String page, String pagesize) {
+    public void getSearchKugouSong(String keyword, String page, String pagesize) {
 
         Subscription rxSubscription = bookApi.getSearchKugouSong(keyword, page, pagesize).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -119,13 +120,36 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
                     @Override
                     public void onNext(KuGouSongBean kuGouSongBean) {
-                        if (kuGouSongBean != null && kuGouSongBean.getErrcode() == 0 && mView != null) {
+                        if (kuGouSongBean != null && kuGouSongBean.getStatus() == 1 && mView != null) {
                             mView.getSearchKugouSongSuccess(kuGouSongBean);
                         }
                     }
                 });
         addSubscrebe(rxSubscription);
-
     }
 
+    @Override
+    public void getKugouSongInfo(String hash) {
+        Subscription rxSubscription = bookApi.getKugouSongInfo(hash).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<KuGouSongInfoResult>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(KuGouSongInfoResult kuGouSongInfoResult) {
+                        if (kuGouSongInfoResult != null  && mView != null) {
+                            mView.getKugouSongInfoSuccess(kuGouSongInfoResult);
+                        }
+                    }
+                });
+        addSubscrebe(rxSubscription);
+    }
 }

@@ -18,6 +18,7 @@ package com.zhengpu.aiui.api;
 
 import com.zhengpu.aiui.base.Constant;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongInfoResult;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -62,6 +63,12 @@ public interface ApiService {
 
 
 
+    /**
+     * 酷狗音乐下载地址
+     */
+    @Headers({"url_name:KuGouSongInfo"})
+    @GET("app/i/getSongInfo.php")
+    Observable<KuGouSongInfoResult> getKugouSongInfo(@Query("cmd") String cmd, @Query("hash") String hash);
 
 
 

@@ -30,7 +30,7 @@ public class Constant {
     public static final String WECHAT_BASE_URL = "http://api.tianapi.com/";
 
     public static final String KUGOU_BASE_URL = "http://mobilecdn.kugou.com/";
-
+    public static final String KUGOU_SONG_INFO_BASE_URL = "http://m.kugou.com/";
 
 
     public static final String APK_UPDATE = "apk_update";

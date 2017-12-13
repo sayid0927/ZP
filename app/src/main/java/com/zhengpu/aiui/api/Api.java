@@ -18,6 +18,7 @@ package com.zhengpu.aiui.api;
 
 import com.zhengpu.aiui.base.Constant;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongInfoResult;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -66,6 +67,10 @@ public class Api {
 
     public Observable<KuGouSongBean> getSearchKugouSong(String keyword , String page, String pagesize ) {
         return service.getSearchKugouSong("json",keyword,page,pagesize);
+    }
+
+    public Observable<KuGouSongInfoResult> getKugouSongInfo(String hash ) {
+        return service.getKugouSongInfo("playInfo",hash);
     }
 
 }
