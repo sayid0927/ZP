@@ -3,6 +3,7 @@ package com.zhengpu.aiuilibrary.iflytekbean;
 
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.TianJokeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -32,6 +33,7 @@ public class BaseBean  implements MultiItemEntity {
     public static final int USER_CHAT = 10014;
     public static final int R4 = 10015;
     public static final int POINT = 10016;
+    public static final int CMD = 10018;
 
     private int itemType;
     private String context;
@@ -53,7 +55,25 @@ public class BaseBean  implements MultiItemEntity {
     private ZhiHuNewsBean zhiHuNewsBean;
     private WXItemBean wxItemBean;
     private  PointBean pointBean;
+    private CmdBean cmdBean;
+    private TianJokeBean tianJokeBean;
 
+
+    public TianJokeBean getTianJokeBean() {
+        return tianJokeBean;
+    }
+
+    public void setTianJokeBean(TianJokeBean tianJokeBean) {
+        this.tianJokeBean = tianJokeBean;
+    }
+
+    public CmdBean getCmdBean() {
+        return cmdBean;
+    }
+
+    public void setCmdBean(CmdBean cmdBean) {
+        this.cmdBean = cmdBean;
+    }
 
     public PointBean getPointBean() {
         return pointBean;

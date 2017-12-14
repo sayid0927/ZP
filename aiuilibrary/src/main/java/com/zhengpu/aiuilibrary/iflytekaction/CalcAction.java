@@ -11,13 +11,13 @@ import com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice;
 public class CalcAction {
 
     private String text;
-
-    public CalcAction(String text) {
+    private  String service;
+    public CalcAction( String service,String text) {
         this.text = text;
     }
 
     public void start() {
-        WordsToVoice.startSynthesizer(text);
+        WordsToVoice.startSynthesizer(service,text);
     }
 
 }

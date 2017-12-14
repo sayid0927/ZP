@@ -32,7 +32,7 @@ public class WordsToVoice {
     public static int ret = 0;
 
     public static WordsToVoice wordsToVoice;
-
+    private static String serviceData;
 
     /**
      * 构造方法。
@@ -59,8 +59,9 @@ public class WordsToVoice {
     /**
      * 开始语音合成
      */
-    public static void startSynthesizer(String words) {
+    public static void startSynthesizer(String service ,String words) {
         ret = mTts.startSpeaking(words, mTtsListener);
+        serviceData = service;
         if (ret != ErrorCode.SUCCESS) {
             // showTip("合成失败,错误码：" + ret);
             Logger.e("合成失败,错误码：" + ret);
@@ -181,7 +182,7 @@ public class WordsToVoice {
         public void onCompleted(SpeechError error) {
             if (error == null) {
 //                Logger.e("语音合成回调监听-----------"+"播放完成");
-                iGetWordToVoice.SpeechEnd();
+                iGetWordToVoice.SpeechEnd(serviceData);
 
             } else if (error != null) {
                 //showTip(error.getPlainDescription(true));

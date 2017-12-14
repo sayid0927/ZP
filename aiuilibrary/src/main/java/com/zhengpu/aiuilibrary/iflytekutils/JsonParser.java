@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.zhengpu.aiuilibrary.iflytekbean.BaikeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.CalcBean;
+import com.zhengpu.aiuilibrary.iflytekbean.CmdBean;
 import com.zhengpu.aiuilibrary.iflytekbean.DatetimeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.FlightBean;
 import com.zhengpu.aiuilibrary.iflytekbean.JokeBean;
@@ -202,6 +203,21 @@ public class JsonParser {
         }
         return r4Bean;
     }
+
+
+    static CmdBean parseResultCmdBean(String json) {
+        CmdBean cmdBean = new CmdBean();
+        try {
+            Type type = new TypeToken<CmdBean>() {
+            }.getType();
+            cmdBean = new Gson().fromJson(json, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cmdBean;
+    }
+
+
 
 
 

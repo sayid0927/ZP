@@ -27,8 +27,6 @@ import java.util.List;
 public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHolder> {
 
     private Context context;
-    private NewsAdapter newsAdapter;
-
 
     public TalkApadtep(Context context, List data) {
         super(data);
@@ -38,7 +36,7 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
         addItemType(BaseBean.CALC, R.layout.item_calc_chat);
         addItemType(BaseBean.DATETIME, R.layout.item_calc_chat);
         addItemType(BaseBean.FLIGHT, R.layout.item_calc_chat);
-        addItemType(BaseBean.JOKE, R.layout.item_calc_chat);
+        addItemType(BaseBean.JOKE, R.layout.item_joke_chat);
         addItemType(BaseBean.MUSICX, R.layout.item_calc_chat);
         addItemType(BaseBean.NEWS, R.layout.item_news_chat);
         addItemType(BaseBean.OPENAPPTEST_APP, R.layout.item_calc_chat);
@@ -102,7 +100,10 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
                 break;
 
             case BaseBean.JOKE:
-                helper.setText(R.id.chatlist_text_other, item.getJokeBean().getAnswer().getText());
+
+                helper.setText(R.id.tv_title, item.getTianJokeBean().getNewslist().get(0).getTitle());
+                helper.setText(R.id.tv_content, item.getTianJokeBean().getNewslist().get(0).getContent());
+
                 break;
             case BaseBean.MUSICX:
                 helper.setText(R.id.chatlist_text_other, item.getMusicXBean().getAnswer().getText());

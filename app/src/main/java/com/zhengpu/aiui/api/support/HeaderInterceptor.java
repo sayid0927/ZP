@@ -52,8 +52,8 @@ public final class HeaderInterceptor implements Interceptor {
                 HttpUrl newBaseUrl = null;
                 if ("zhihu".equals(headerValue)) {
                     newBaseUrl = HttpUrl.parse(Constant.ZHIHU_BASE_URL);
-                } else if ("wechat".equals(headerValue)) {
-                    newBaseUrl = HttpUrl.parse(Constant.WECHAT_BASE_URL);
+                } else if ("tianapi".equals(headerValue)) {
+                    newBaseUrl = HttpUrl.parse(Constant.TIANAPI_BASE_URL);
                 } else  if("kugou".equals(headerValue)){
                     newBaseUrl = HttpUrl.parse(Constant.KUGOU_BASE_URL);
                 }else  if("KuGouSongInfo".equals(headerValue)){

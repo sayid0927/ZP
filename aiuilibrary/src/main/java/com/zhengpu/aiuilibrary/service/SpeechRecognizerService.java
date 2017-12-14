@@ -9,6 +9,7 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.orhanobut.logger.Logger;
 import com.zhengpu.aiuilibrary.R;
+import com.zhengpu.aiuilibrary.base.AppController;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekutils.IGetVoiceToWord;
 import com.zhengpu.aiuilibrary.iflytekutils.IGetWordToVoice;
@@ -24,7 +25,7 @@ import com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice;
  * Created by wengmf on 2017/11/21.
  */
 
-public class SpeechRecognizerService extends Service implements IGetVoiceToWord, WakeUpListener, IGetWordToVoice {
+public class SpeechRecognizerService extends Service implements IGetVoiceToWord, WakeUpListener {
 
     private IflytekWakeUp iflytekWakeUp;
     private VoiceToWords voiceToWords;
@@ -42,10 +43,10 @@ public class SpeechRecognizerService extends Service implements IGetVoiceToWord,
         voiceToWords = VoiceToWords.getInstance(this);
         voiceToWords.setmIGetVoiceToWord(this);
         wordsToVoice = WordsToVoice.getInstance(this);
-        wordsToVoice.setiGetWordToVoice(this);
+//        wordsToVoice.setiGetWordToVoice(this);
         iflytekWakeUp = new IflytekWakeUp(this, new MyWakeuperListener(this, this));
 
-        wordsToVoice.startSynthesizer(this.getResources().getString(R.string.launcher_text));
+        wordsToVoice.startSynthesizer(AppController.LAUNCHER_TEXT,getResources().getString(R.string.launcher_text));
 
         iflytekWakeUp.startWakeuper();
 
@@ -112,7 +113,7 @@ public class SpeechRecognizerService extends Service implements IGetVoiceToWord,
 
     @Override
     public void SpeechError(String error) {
-        wordsToVoice.startSynthesizer(error);
+
     }
 
     /**
@@ -120,8 +121,8 @@ public class SpeechRecognizerService extends Service implements IGetVoiceToWord,
      */
     @Override
     public void OnWakeUpSuccess() {
-        wordsToVoice.startSynthesizer("是的主人");
-        voiceToWords.startRecognizer();
+//        wordsToVoice.startSynthesizer("是的主人");
+//        voiceToWords.startRecognizer();
     }
 
     /**
@@ -132,19 +133,4 @@ public class SpeechRecognizerService extends Service implements IGetVoiceToWord,
 
     }
 
-    /**
-     * 语音播放结束
-     */
-    @Override
-    public void SpeechEnd() {
-        voiceToWords.startRecognizer();
-    }
-
-    /**
-     * 语音播放失败
-     */
-    @Override
-    public void SpeechError() {
-
-    }
 }

@@ -3,6 +3,8 @@ package com.zhengpu.aiui.thread;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
+import android.util.Log;
 
 import com.orhanobut.logger.Logger;
 import com.zhengpu.aiuilibrary.iflytekutils.VoiceToWords;
@@ -19,8 +21,22 @@ public class KuGuoMuiscPlayThread implements MediaPlayer.OnBufferingUpdateListen
     static MediaPlayer mediaPlayer;
     private Context context;
     static KuGuoMuiscPlayThread kuGuoMuiscPlayThread;
-    private   KuGuoMuiscPlayListener kuGuoMuiscPlayListener;
+    private KuGuoMuiscPlayListener kuGuoMuiscPlayListener;
+    private  String musicUrl;
+    private Handler mHandler = new Handler();
 
+
+    private Runnable mRunnable = new Runnable() {
+        public void run() {
+            try {
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(musicUrl); // 设置数据源
+                mediaPlayer.prepare();                           // prepare自动播放
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     public static synchronized KuGuoMuiscPlayThread getInstance(Context context) {
         if (kuGuoMuiscPlayThread == null)
@@ -37,42 +53,56 @@ public class KuGuoMuiscPlayThread implements MediaPlayer.OnBufferingUpdateListen
         mediaPlayer.setOnCompletionListener(this);
     }
 
-    public  void setKuGuoMuiscPlayListener(KuGuoMuiscPlayListener kuGuoMuiscPlayListener){
-        this.kuGuoMuiscPlayListener= kuGuoMuiscPlayListener;
+    public void setKuGuoMuiscPlayListener(KuGuoMuiscPlayListener kuGuoMuiscPlayListener) {
+        this.kuGuoMuiscPlayListener = kuGuoMuiscPlayListener;
     }
 
-    public  void playUrl(final String url) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    mediaPlayer.reset();
-                    mediaPlayer.setDataSource(url); // 设置数据源
-                    mediaPlayer.prepare(); // prepare自动播放
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+    public void playUrl(final String url) {
+        this.musicUrl=url;
+        mHandler.post(mRunnable);
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    mediaPlayer.reset();
+//                    mediaPlayer.setDataSource(url); // 设置数据源
+//                    mediaPlayer.prepare(); // prepare自动播放
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+    }
+
+    public void start() {
+        mediaPlayer.start();
+    }
+
+    public boolean isPlay() {
+
+        return mediaPlayer.isPlaying();
     }
 
     // 停止
-  public   void stop() {
+    public void stop() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
-            if(kuGuoMuiscPlayListener!=null)
+            if (kuGuoMuiscPlayListener != null)
                 kuGuoMuiscPlayListener.KuGuoMuiscPlayStop();
-
         }
     }
 
     // 暂停
-  public   void pause() {
+    public void pause() {
         mediaPlayer.pause();
-        if(kuGuoMuiscPlayListener!=null)
+        if (kuGuoMuiscPlayListener != null)
             kuGuoMuiscPlayListener.KuGuoMuiscPlayPause();
+    }
+    // 线程销毁
+    public  void remove(){
+        mHandler.removeCallbacks(mRunnable);
     }
 
     @Override
@@ -87,7 +117,8 @@ public class KuGuoMuiscPlayThread implements MediaPlayer.OnBufferingUpdateListen
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(kuGuoMuiscPlayListener!=null)
+        if (kuGuoMuiscPlayListener != null)
             kuGuoMuiscPlayListener.KuGuoMuiscPlayStop();
     }
+
 }

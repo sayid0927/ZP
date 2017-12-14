@@ -7,7 +7,7 @@ package com.zhengpu.aiuilibrary.iflytekutils;
 
 public interface IGetWordToVoice {
 
-    void SpeechEnd();
+    void SpeechEnd(String wordsData);
 
     void SpeechError();
 

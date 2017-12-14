@@ -23,6 +23,7 @@ import com.zhengpu.aiui.base.RxPresenter;
 import com.zhengpu.aiui.presenter.contract.MainContract;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongInfoResult;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.TianJokeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -147,6 +148,32 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
                     public void onNext(KuGouSongInfoResult kuGouSongInfoResult) {
                         if (kuGouSongInfoResult != null  && mView != null) {
                             mView.getKugouSongInfoSuccess(kuGouSongInfoResult);
+                        }
+                    }
+                });
+        addSubscrebe(rxSubscription);
+    }
+
+    @Override
+    public void getTianJoke() {
+
+        Subscription rxSubscription = bookApi.getTianJoke().subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<TianJokeBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(TianJokeBean jokeBean) {
+                        if(jokeBean!=null&&jokeBean.getCode()==200&& mView!=null){
+                         mView.getTianJokeSuccess(jokeBean);
                         }
                     }
                 });

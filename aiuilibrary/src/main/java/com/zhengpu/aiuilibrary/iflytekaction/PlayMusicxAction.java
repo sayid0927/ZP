@@ -64,16 +64,16 @@ public class PlayMusicxAction {
                     Uri uri = Uri.parse("content://contacts/people");
                     Intent i = new Intent("android.intent.action.VIEW", uri);
                     context.startActivity(i);
-                    WordsToVoice.startSynthesizer(text);
+                    WordsToVoice.startSynthesizer(AppController.OPENAPPTEST_APP,text);
                 } else {
                     intent = pm.getLaunchIntentForPackage(pkgname);
                     intent.addCategory("android.intent.category.LAUNCHER");
                     context.startActivity(intent);
-                    WordsToVoice.startSynthesizer(text);
+                    WordsToVoice.startSynthesizer(AppController.OPENAPPTEST_APP,text);
                 }
                 return;
             }
         }
-        WordsToVoice.startSynthesizer("没有找到酷狗音乐播放" + songName + "哦");
+        WordsToVoice.startSynthesizer(AppController.OPENAPPTEST_APP,"没有找到酷狗音乐播放" + songName + "哦");
     }
 }

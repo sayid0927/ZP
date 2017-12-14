@@ -15,9 +15,9 @@ public class AppController {
     public static boolean appAction = true;
     public static boolean Clickabl = true;
     public static boolean goHome = true;
-
     public static boolean ali = false;
 
+    public  static  final  String LAUNCHER_TEXT="launcher_text";
     public static final String BAIKE = "baike";
     public static final String CALC = "calc";
     public static final String DATETIME = "datetime";
@@ -31,6 +31,7 @@ public class AppController {
     public static final String STORY = "story";
     public static final String OPENAPPTEST_SHIPING = "OPENAPPTEST.shiping";
     public static final String WEATHER = "weather";
+    public static final String R4 = "r4";
 
 
 

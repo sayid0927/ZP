@@ -19,6 +19,7 @@ package com.zhengpu.aiui.api;
 import com.zhengpu.aiui.base.Constant;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongInfoResult;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.TianJokeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -62,15 +63,19 @@ public class Api {
 
 
     public Observable<WXItemBean> getWXHot(int num, int page) {
-        return service.getWXHot(Constant.WECHAT_KEY_API,num,page);
+        return service.getWXHot(Constant.WECHAT_KEY_API, num, page);
     }
 
-    public Observable<KuGouSongBean> getSearchKugouSong(String keyword , String page, String pagesize ) {
-        return service.getSearchKugouSong("json",keyword,page,pagesize);
+    public Observable<KuGouSongBean> getSearchKugouSong(String keyword, String page, String pagesize) {
+        return service.getSearchKugouSong("json", keyword, page, pagesize);
     }
 
-    public Observable<KuGouSongInfoResult> getKugouSongInfo(String hash ) {
-        return service.getKugouSongInfo("playInfo",hash);
+    public Observable<KuGouSongInfoResult> getKugouSongInfo(String hash) {
+        return service.getKugouSongInfo("playInfo", hash);
+    }
+
+    public Observable<TianJokeBean> getTianJoke() {
+        return service.getJoke(Constant.WECHAT_KEY_API);
     }
 
 }

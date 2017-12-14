@@ -65,7 +65,7 @@ public class PlayVideoAction {
                 return;
             }
         }
-        WordsToVoice.startSynthesizer("没有找到优酷视频播放" + videoName + "哦");
+        WordsToVoice.startSynthesizer(AppController.OPENAPPTEST_APP,"没有找到优酷视频播放" + videoName + "哦");
     }
 
 

@@ -19,6 +19,7 @@ package com.zhengpu.aiui.api;
 import com.zhengpu.aiui.base.Constant;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongInfoResult;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.TianJokeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
@@ -48,7 +49,7 @@ public interface ApiService {
     /**
      * 微信精选列表
      */
-    @Headers({"url_name:wechat"})
+    @Headers({"url_name:tianapi"})
     @GET("wxnew")
     Observable<WXItemBean> getWXHot(@Query("key") String key, @Query("num") int num, @Query("page") int page);
 
@@ -69,6 +70,16 @@ public interface ApiService {
     @Headers({"url_name:KuGouSongInfo"})
     @GET("app/i/getSongInfo.php")
     Observable<KuGouSongInfoResult> getKugouSongInfo(@Query("cmd") String cmd, @Query("hash") String hash);
+
+    /**
+     * 雷人笑话
+     */
+    @Headers({"url_name:tianapi"})
+    @GET("txapi/joke/")
+    Observable<TianJokeBean> getJoke(@Query("key") String key);
+
+
+
 
 
 

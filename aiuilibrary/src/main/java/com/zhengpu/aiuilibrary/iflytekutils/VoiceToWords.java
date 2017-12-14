@@ -23,6 +23,7 @@ import com.zhengpu.aiuilibrary.iflytekaction.PlayVideoAction;
 import com.zhengpu.aiuilibrary.iflytekbean.BaikeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekbean.CalcBean;
+import com.zhengpu.aiuilibrary.iflytekbean.CmdBean;
 import com.zhengpu.aiuilibrary.iflytekbean.DatetimeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.FlightBean;
 import com.zhengpu.aiuilibrary.iflytekbean.JokeBean;
@@ -333,8 +334,8 @@ public class VoiceToWords {
                         } else {
                             txt = "为你在百度百科中搜索";
                         }
-                        CalcAction calcAction = new CalcAction(txt);
-                        calcAction.start();
+//                        CalcAction calcAction = new CalcAction(txt);
+//                        calcAction.start();
 
 //                        if (baikeBean.getSemantic() != null && baikeBean.getSemantic().get(0).getSlotsBean().getValue() != null) {
 //                            //打开浏览器进行百度百科进行搜索
@@ -360,9 +361,9 @@ public class VoiceToWords {
                                     mIGetVoiceToWord.getResult(service, baseBean);
 
 
-                                    String str = calcBean.getAnswer().getText();
-                                    CalcAction calcAction = new CalcAction(str);
-                                    calcAction.start();
+//                                    String str = calcBean.getAnswer().getText();
+//                                    CalcAction calcAction = new CalcAction(str);
+//                                    calcAction.start();
                                 }
                             }
                             break;
@@ -383,9 +384,9 @@ public class VoiceToWords {
                                     mIGetVoiceToWord.getResult(service, baseBean);
 
 
-                                    String str = datetimeBean.getAnswer().getText();
-                                    CalcAction calcAction = new CalcAction(str);
-                                    calcAction.start();
+//                                    String str = datetimeBean.getAnswer().getText();
+//                                    CalcAction calcAction = new CalcAction(str);
+//                                    calcAction.start();
                                 }
                             }
                         }
@@ -403,9 +404,9 @@ public class VoiceToWords {
                         mIGetVoiceToWord.getResult(service, baseBean);
 
 
-                        String txt = flightBean.getAnswer().getText();
-                        CalcAction calcAction = new CalcAction(txt);
-                        calcAction.start();
+//                        String txt = flightBean.getAnswer().getText();
+//                        CalcAction calcAction = new CalcAction(txt);
+//                        calcAction.start();
                     }
                     break;
                 }
@@ -420,20 +421,19 @@ public class VoiceToWords {
                             baseBean.setJokeBean(jokeBean);
                             mIGetVoiceToWord.getResult(service, baseBean);
 
-
-                            if (jokeBean.getData().getResult().get(0).getTitle() != null && jokeBean.getData().getResult().get(0).getMp3Url() != null) {
-                                String mp3Url = jokeBean.getData().getResult().get(0).getMp3Url();
-                                JokeAction jokeAction = new JokeAction(mp3Url, context);
-                                jokeAction.start();
-                            } else {
-                                if (jokeBean.getData().getResult().get(0).getTitle() != null &&
-                                        jokeBean.getData().getResult().get(0).getContent() != null) {
-                                    String title = jokeBean.getData().getResult().get(0).getTitle();
-                                    String content = jokeBean.getData().getResult().get(0).getContent();
-                                    CalcAction calcAction = new CalcAction("请欣赏 " + title + content);
-                                    calcAction.start();
-                                }
-                            }
+//                            if (jokeBean.getData().getResult().get(0).getTitle() != null && jokeBean.getData().getResult().get(0).getMp3Url() != null) {
+//                                String mp3Url = jokeBean.getData().getResult().get(0).getMp3Url();
+//                                JokeAction jokeAction = new JokeAction(mp3Url, context);
+//                                jokeAction.start();
+//                            } else {
+//                                if (jokeBean.getData().getResult().get(0).getTitle() != null &&
+//                                        jokeBean.getData().getResult().get(0).getContent() != null) {
+//                                    String title = jokeBean.getData().getResult().get(0).getTitle();
+//                                    String content = jokeBean.getData().getResult().get(0).getContent();
+////                                    CalcAction calcAction = new CalcAction("请欣赏 " + title + content);
+////                                    calcAction.start();
+//                                }
+//                            }
                         }
                     }
                     break;
@@ -445,23 +445,21 @@ public class VoiceToWords {
                         if (musicXBean.getSemantic().get(0).getSlots().size() != 0) {
                             if (musicXBean.getSemantic().get(0).getSlots().get(0).getValue() != null) {
 
-
                                 baseBean.setItemType(BaseBean.MUSICX);
                                 baseBean.setContext(musicXBean.getText());
                                 baseBean.setMusicXBean(musicXBean);
                                 mIGetVoiceToWord.getResult(service, baseBean);
 
-
-                                String songName = musicXBean.getSemantic().get(0).getSlots().get(0).getValue();
-                                String appName = "酷狗音乐";
-                                String str = musicXBean.getAnswer().getText();
-
-                                if (isAppInstalled(context, appName)) {
-                                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(songName, appName, str, context);
-                                    playMusicxAction.start();
-                                } else {
-                                    Logger.e("没有安装酷狗音乐APP");
-                                }
+//                                String songName = musicXBean.getSemantic().get(0).getSlots().get(0).getValue();
+//                                String appName = "酷狗音乐";
+//                                String str = musicXBean.getAnswer().getText();
+//
+//                                if (isAppInstalled(context, appName)) {
+//                                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(songName, appName, str, context);
+//                                    playMusicxAction.start();
+//                                } else {
+//                                    Logger.e("没有安装酷狗音乐APP");
+//                                }
                             }
                         }
                     }
@@ -476,8 +474,8 @@ public class VoiceToWords {
                         baseBean.setContext(newsBean.getText());
                         baseBean.setNewsBean(newsBean);
                         mIGetVoiceToWord.getResult(service, baseBean);
-                        CalcAction calcAction = new CalcAction("为你推荐如下热门新闻");
-                        calcAction.start();
+//                        CalcAction calcAction = new CalcAction("为你推荐如下热门新闻");
+//                        calcAction.start();
 
                  }
 
@@ -513,9 +511,9 @@ public class VoiceToWords {
                         baseBean.setOpenQABean(openQABean);
                         mIGetVoiceToWord.getResult(service, baseBean);
 
-                        String str = openQABean.getAnswer().getText();
-                        CalcAction calcAction = new CalcAction(str);
-                        calcAction.start();
+//                        String str = openQABean.getAnswer().getText();
+//                        CalcAction calcAction = new CalcAction(str);
+//                        calcAction.start();
 
                     }
 
@@ -553,9 +551,9 @@ public class VoiceToWords {
 
 
 //                        PreferUtil.getInstance().setPlayStoryUrl(s);
-                        String str = storyBean.getAnswer().getText();
-                        CalcAction calcAction = new CalcAction(str);
-                        calcAction.start();
+//                        String str = storyBean.getAnswer().getText();
+//                        CalcAction calcAction = new CalcAction(str);
+//                        calcAction.start();
                     }
 
                     break;
@@ -610,14 +608,14 @@ public class VoiceToWords {
                                 .append("天气情况为").append(weather).append("风向以及风力情况为").append(wind)
                                 .append("穿衣指数为").append(prompt);
 
-                        CalcAction calcAction = new CalcAction(stringBuffer.toString());
-                        calcAction.start();
+//                        CalcAction calcAction = new CalcAction(stringBuffer.toString());
+//                        calcAction.start();
 
                     } else {
                         if (weatherBean.getAnswer() != null) {
-                            String str = weatherBean.getAnswer().getText();
-                            CalcAction calcAction = new CalcAction(str);
-                            calcAction.start();
+//                            String str = weatherBean.getAnswer().getText();
+//                            CalcAction calcAction = new CalcAction(str);
+//                            calcAction.start();
                         }
                     }
 
@@ -628,8 +626,9 @@ public class VoiceToWords {
 
                     break;
                 }
+
                 default:
-                    WordsToVoice.startSynthesizer("不好意思，我好像没听懂。");
+                    WordsToVoice.startSynthesizer(AppController.R4,"不好意思，我好像没听懂。");
             }
 
         }
