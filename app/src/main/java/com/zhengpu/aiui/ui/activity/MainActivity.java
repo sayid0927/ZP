@@ -27,6 +27,7 @@ import com.zhengpu.aiui.ui.adapter.HelpFragmentAdapter;
 import com.zhengpu.aiui.ui.adapter.TalkApadtep;
 import com.zhengpu.aiui.ui.fragment.FragmentHelp_1;
 import com.zhengpu.aiui.ui.fragment.FragmentHelp_Home_2;
+import com.zhengpu.aiui.ui.fragment.LrcFragment;
 import com.zhengpu.aiui.ui.view.HelpViewPager;
 import com.zhengpu.aiuilibrary.base.AppController;
 import com.zhengpu.aiuilibrary.iflytekaction.CalcAction;
@@ -104,6 +105,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     private int currentPage = 1;
     private String songnameValue;
     private KuGuoMuiscPlayThread kuGuoMuiscPlayThread;
+    private int  duration;
+    private String fileName;
+    private String hash;
 
 
     @Override
@@ -138,6 +142,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         fragmentList = new ArrayList<>();
         fragmentList.add(new FragmentHelp_1());
         fragmentList.add(new FragmentHelp_Home_2());
+        fragmentList.add(new LrcFragment());
 
         helpFragmentAdapter = new HelpFragmentAdapter(fragmentList, getSupportFragmentManager());
         viewpager.setAdapter(helpFragmentAdapter);
@@ -232,32 +237,28 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
                     break;
             }
-        } else if (service.equals("openQA")) {
+        } else if (service.equals("openQA")) {   //开放问答
             if (!kuGuoMuiscPlayThread.isPlay()) {
                 datas.add(result);
                 WordsToVoice.startSynthesizer(AppController.OPENQA, result.getOpenQABean().getAnswer().getText());
-                voiceToWords.startRecognizer();
             }
-        } else if (service.equals("joke")) {
-
+        } else if (service.equals("joke")) {     //笑话的点播
             mPresenter.getTianJoke();
-
         } else if (service.equals("r4")) {
-            if (!kuGuoMuiscPlayThread.isPlay() && service.equals("r4")) {
+            if (!kuGuoMuiscPlayThread.isPlay() ) {
                 datas.add(result);
                 WordsToVoice.startSynthesizer(AppController.R4, "不好意思，我好像没听懂");
-                voiceToWords.startRecognizer();
             }
-        } else {
+        } else  if(service.equals("poetry")){       //诗词查询和诗句对答。
+            if (!kuGuoMuiscPlayThread.isPlay() ) {
+                datas.add(result);
+                WordsToVoice.startSynthesizer(AppController.POETRY,  result.getPoetryBean().getData().getResult().get(0).getShowContent());
+            }
+        }else {
             datas.add(result);
         }
         mAdapter.notifyDataSetChanged();
         rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
-//        if (!kuGuoMuiscPlayThread.isPlay() && service.equals("r4")) {
-//            CalcAction calcAction = new CalcAction(AppController.R4,"不好意思，我好像没听懂");
-//            calcAction.start();
-//            voiceToWords.startRecognizer();
-//        }
     }
 
     @Override
@@ -320,11 +321,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
             case R.id.video_n:
 
-//            mPresenter.getSearchKugouSong("周杰伦七里香", "1", "20");
-                mPresenter.getTianJoke();
+            mPresenter.getSearchKugouSong("在人间", "1", "20");
+//                mPresenter.getTianJoke();
                 break;
             case R.id.iv_phone:
-
+                setCurrentVolume(1);
                 break;
 
             case R.id.iv_help:
@@ -393,9 +394,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
             case AppController.LAUNCHER_TEXT:
                 voiceToWords = VoiceToWords.getInstance(MainActivity.this);
                 voiceToWords.setmIGetVoiceToWord(MainActivity.this);
-                voiceToWords.startRecognizer();
                 break;
         }
+        voiceToWords.startRecognizer();
     }
 
     /**
@@ -427,9 +428,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                 String FileExt = infoBeanList.get(i).getExtname();
                 String singername = infoBeanList.get(i).getSingername();
                 String songname = infoBeanList.get(i).getSongname();
-                songnameValue = "七里香";
+                duration = infoBeanList.get(i).getDuration();
+                fileName = infoBeanList.get(i).getFilename();
+                hash= infoBeanList.get(i).getHash();
+                songnameValue = "在人间";
                 if (FileExt.equals("mp3") && songname.equals(songnameValue)) {
-                    mPresenter.getKugouSongInfo(infoBeanList.get(i).getHash());
+                    mPresenter.getKugouSongInfo(hash);
                 }
             }
         }
@@ -440,8 +444,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     public void getKugouSongInfoSuccess(KuGouSongInfoResult kuGouSongInfoResult) {
         if (wordsToVoice.isTtsSpeaking())
             wordsToVoice.mTtsStop();
-        voiceToWords.mTtsStop();
         kuGuoMuiscPlayThread.playUrl(kuGouSongInfoResult.getUrl());
+        mPresenter.downloadLyric(fileName,duration,hash);
+    }
+
+
+
+    @Override
+    public void downloadLyric() {
+
     }
 
     //获取笑话内容
@@ -451,19 +462,31 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         if (jokeBean != null && jokeBean.getNewslist().size() != 0 && jokeBean.getNewslist().get(0).getTitle() != null
                 && jokeBean.getNewslist().get(0).getContent() != null) {
             data = new BaseBean();
+
+           String content = jokeBean.getNewslist().get(0).getContent();
+            content = content.replace("<", " ");
+            content = content.replace("b", " ");
+            content = content.replace("r", " ");
+            content = content.replace("/", " ");
+            content = content.replace(">", " ");
+            jokeBean.getNewslist().get(0).setContent(content);
+
             data.setTianJokeBean(jokeBean);
             data.setItemType(BaseBean.JOKE);
             datas.add(data);
             mAdapter.notifyDataSetChanged();
             rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
 
+            if (wordsToVoice.isTtsSpeaking())
+                wordsToVoice.mTtsStop();
+            voiceToWords.mIatDestroy();
+
             WordsToVoice.startSynthesizer(AppController.JOKE,
-                    "请听笑话" + jokeBean.getNewslist().get(0).getTitle() + "    " + jokeBean.getNewslist().get(0).getContent());
+                    "请欣赏笑话" +"       "+ jokeBean.getNewslist().get(0).getTitle() + jokeBean.getNewslist().get(0).getContent());
 
         }
-        voiceToWords.startRecognizer();
-
     }
+
 
     @Override
     public void KuGuoMuiscPlayPause() {

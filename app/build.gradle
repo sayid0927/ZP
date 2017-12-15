@@ -53,11 +53,8 @@ dependencies {
     compile 'com.orhanobut:logger:1.15'
     compile 'pub.devrel:easypermissions:0.2.0'
     compile 'cn.bingoogolapple:bga-banner:2.1.7@aar'
-
     compile 'com.github.bumptech.glide:glide:3.7.0'
     provided 'org.glassfish:javax.annotation:10.0-b28'
-
-
     compile 'com.commit451:PhotoView:1.2.4'
     compile 'com.github.open-android:ViewPager:0.1.0'
     compile 'com.bugtags.library:bugtags-lib:2.2.3'
@@ -66,7 +63,8 @@ dependencies {
     compile 'com.meituan.android.walle:library:1.1.4'
     // 多dex 打包的类库
     compile 'com.android.support:multidex:1.0.1'
-
+    implementation files('libs/jaudiotagger-2.0.4.jar')
+    implementation files('libs/jmac-1.74.jar')
 }
 
 

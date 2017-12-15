@@ -169,7 +169,6 @@ public class VoiceToWords {
         // 设置返回结果格式
         mIat.setParameter(SpeechConstant.RESULT_TYPE, "json");
 
-
     }
 
     public boolean isIatListening() {
@@ -413,9 +412,7 @@ public class VoiceToWords {
 
                 case "joke": {  //     笑话的点播
                     JokeBean jokeBean = JsonParser.parseResultJokeBean(text);
-                    if (jokeBean != null && jokeBean.getData() != null) {
-                        if (jokeBean.getData().getResult().size() != 0) {
-
+                    if (jokeBean != null) {
                             baseBean.setItemType(BaseBean.JOKE);
                             baseBean.setContext(jokeBean.getText());
                             baseBean.setJokeBean(jokeBean);
@@ -434,7 +431,6 @@ public class VoiceToWords {
 ////                                    calcAction.start();
 //                                }
 //                            }
-                        }
                     }
                     break;
                 }
@@ -530,11 +526,6 @@ public class VoiceToWords {
                                 baseBean.setPoetryBean(poetryBean);
                                 mIGetVoiceToWord.getResult(service, baseBean);
 
-
-                                String showContent = poetryBean.getData().getResult().get(0).getShowContent();
-                                String title = poetryBean.getData().getResult().get(0).getTitle();
-                                JokeAction jokeAction = new JokeAction(title + "  " + showContent, context);
-                                jokeAction.start();
                             }
                         }
                     }
@@ -549,11 +540,6 @@ public class VoiceToWords {
                         baseBean.setStoryBean(storyBean);
                         mIGetVoiceToWord.getResult(service, baseBean);
 
-
-//                        PreferUtil.getInstance().setPlayStoryUrl(s);
-//                        String str = storyBean.getAnswer().getText();
-//                        CalcAction calcAction = new CalcAction(str);
-//                        calcAction.start();
                     }
 
                     break;

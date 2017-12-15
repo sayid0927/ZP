@@ -40,6 +40,7 @@ public interface MainContract {
 
         void getKugouSongInfoSuccess(KuGouSongInfoResult kuGouSongInfoResult);
         void getTianJokeSuccess(TianJokeBean jokeBean);
+        void downloadLyric ();
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
@@ -53,6 +54,8 @@ public interface MainContract {
         void getKugouSongInfo(String hash);
 
         void getTianJoke();
+
+        void  downloadLyric(String keyword,int duration,String hash);
 
     }
 }

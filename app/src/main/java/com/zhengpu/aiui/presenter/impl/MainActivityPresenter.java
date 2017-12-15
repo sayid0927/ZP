@@ -21,16 +21,22 @@ import com.zhengpu.aiui.api.Api;
 import com.zhengpu.aiui.base.RxPresenter;
 
 import com.zhengpu.aiui.presenter.contract.MainContract;
+import com.zhengpu.aiui.utils.DeviceUtils;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongInfoResult;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.TianJokeBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -146,7 +152,7 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
                     @Override
                     public void onNext(KuGouSongInfoResult kuGouSongInfoResult) {
-                        if (kuGouSongInfoResult != null  && mView != null) {
+                        if (kuGouSongInfoResult != null && mView != null) {
                             mView.getKugouSongInfoSuccess(kuGouSongInfoResult);
                         }
                     }
@@ -172,11 +178,72 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
                     @Override
                     public void onNext(TianJokeBean jokeBean) {
-                        if(jokeBean!=null&&jokeBean.getCode()==200&& mView!=null){
-                         mView.getTianJokeSuccess(jokeBean);
+                        if (jokeBean != null && jokeBean.getCode() == 200 && mView != null) {
+                            mView.getTianJokeSuccess(jokeBean);
                         }
                     }
                 });
         addSubscrebe(rxSubscription);
     }
+
+    @Override
+    public void downloadLyric(String keyword, int duration, String hash) {
+
+        Subscription rxSubscription = bookApi.downloadLyric(keyword, duration, hash).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Response<ResponseBody>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Response<ResponseBody> responseBodyResponse) {
+
+                        Logger.e(responseBodyResponse.body().toString());
+
+                    }
+                });
+        addSubscrebe(rxSubscription);
+    }
+
+
+
+
+//    private  String destFileName =  + ".krc";
+//
+//    public File saveFile(Response<ResponseBody> response) throws Exception {
+//
+//        String  destFileDir = DeviceUtils.getSDPath();
+//        InputStream in = null;
+//        FileOutputStream out = null;
+//        byte[] buf = new byte[1024];
+//        int len;
+//        try {
+//            File dir = new File(destFileDir);
+//            if (!dir.exists()) {// 如果文件不存在新建一个
+//                dir.mkdirs();
+//            }
+//            in = response.body().byteStream();
+//
+//            File file = new File(dir,destFileName);
+//            out = new FileOutputStream(file);
+//            while ((len = in.read(buf)) != -1){
+//                out.write(buf,0,len);
+//            }
+//            return file;
+//        }catch (Exception e){
+//            e.toString();
+//
+//        }finally {
+//            in.close();
+//            out.close();
+//        }
+//        return null;
+//    }
 }

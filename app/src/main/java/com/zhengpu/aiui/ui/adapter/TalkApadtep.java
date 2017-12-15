@@ -101,6 +101,7 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
 
             case BaseBean.JOKE:
 
+
                 helper.setText(R.id.tv_title, item.getTianJokeBean().getNewslist().get(0).getTitle());
                 helper.setText(R.id.tv_content, item.getTianJokeBean().getNewslist().get(0).getContent());
 

@@ -24,8 +24,6 @@ public class KuGuoMuiscPlayThread implements MediaPlayer.OnBufferingUpdateListen
     private KuGuoMuiscPlayListener kuGuoMuiscPlayListener;
     private  String musicUrl;
     private Handler mHandler = new Handler();
-
-
     private Runnable mRunnable = new Runnable() {
         public void run() {
             try {
@@ -60,18 +58,6 @@ public class KuGuoMuiscPlayThread implements MediaPlayer.OnBufferingUpdateListen
     public void playUrl(final String url) {
         this.musicUrl=url;
         mHandler.post(mRunnable);
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    mediaPlayer.reset();
-//                    mediaPlayer.setDataSource(url); // 设置数据源
-//                    mediaPlayer.prepare(); // prepare自动播放
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
     }
 
     public void start() {
@@ -79,7 +65,6 @@ public class KuGuoMuiscPlayThread implements MediaPlayer.OnBufferingUpdateListen
     }
 
     public boolean isPlay() {
-
         return mediaPlayer.isPlaying();
     }
 
@@ -117,8 +102,8 @@ public class KuGuoMuiscPlayThread implements MediaPlayer.OnBufferingUpdateListen
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+
         if (kuGuoMuiscPlayListener != null)
             kuGuoMuiscPlayListener.KuGuoMuiscPlayStop();
     }
-
 }

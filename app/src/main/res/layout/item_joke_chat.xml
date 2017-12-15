@@ -21,15 +21,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/chatlist_image_other"
+        android:layout_centerInParent="true"
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@id/chatlist_image_other"
-        android:maxWidth="200dp"
         android:orientation="vertical"
         android:paddingTop="8dip"
         app:arrowCenter="true"
         app:arrowHeight="10dp"
         app:arrowLocation="left"
-        app:arrowPosition="30dp"
+        app:arrowPosition="105dp"
         app:arrowWidth="15dp"
         app:bubbleColor="@color/white"
         app:strokeColor="#CCCCCC">
@@ -37,7 +37,7 @@
         <RelativeLayout
             android:id="@+id/rl_joke_item"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp">
@@ -46,14 +46,18 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:layout_marginLeft="11dp"
+                android:gravity="center"
+                android:maxWidth="200dp"
                 android:text="" />
 
             <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_title"
+                android:layout_centerInParent="true"
+                android:maxWidth="200dp"
                 android:text="" />
 
         </RelativeLayout>

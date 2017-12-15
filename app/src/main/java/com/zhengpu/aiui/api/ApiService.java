@@ -63,6 +63,21 @@ public interface ApiService {
                                                  @Query("page") String page, @Query("pagesize") String pagesize);
 
 
+//    http://mobilecdn.kugou.com/new/app/i/krc.php?keyword=" + keyword + "&timelength=" + duration + "&type=1&client=pc&cmd=200&hash=" + hash
+
+
+    /**
+     * 酷狗音乐下载歌词
+     */
+    @Headers({"url_name:kugou"})
+    @GET("new/app/i/krc.php")
+    Observable<Response<ResponseBody>> downloadLyric(@Query("keyword") String keyword, @Query("timelength") int timelength,@Query("type") int type,
+                                            @Query("client") String client, @Query("cmd") int cmd,@Query("hash") String hash);
+
+
+
+
+
 
     /**
      * 酷狗音乐下载地址

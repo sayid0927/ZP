@@ -78,4 +78,11 @@ public class Api {
         return service.getJoke(Constant.WECHAT_KEY_API);
     }
 
+     //http://mobilecdn.kugou.com/new/app/i/krc.php?
+    // keyword=" + keyword + "&timelength=" + duration + "&type=1&client=pc&cmd=200&hash=" + hash
+    public Observable<Response<ResponseBody>> downloadLyric(String keyword,int duration,String hash) {
+        return service.downloadLyric(keyword,duration,1,"pc",200,hash);
+    }
+
+
 }

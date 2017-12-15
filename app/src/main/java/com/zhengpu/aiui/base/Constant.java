@@ -15,6 +15,8 @@
  */
 package com.zhengpu.aiui.base;
 
+import java.io.File;
+
 public class Constant {
 
     //需要APIKEY请去 http://www.tianapi.com/#wxnew 申请,复用会减少访问可用次数。还有很多别的接口大家可以研究。
@@ -24,7 +26,6 @@ public class Constant {
 
     public static final String FILEPATH = "TuPian";
 
-    //    public  static  final String API_BASE_URL="http://120.78.136.232:9000/";
     public static final String API_BASE_URL = "http://tingapi.ting.baidu.com/";
     public static final String ZHIHU_BASE_URL = "http://news-at.zhihu.com/";
     public static final String TIANAPI_BASE_URL = "http://api.tianapi.com/";
@@ -32,15 +33,14 @@ public class Constant {
     public static final String KUGOU_BASE_URL = "http://mobilecdn.kugou.com/";
     public static final String KUGOU_SONG_INFO_BASE_URL = "http://m.kugou.com/";
 
+    /**
+     *  临时目录
+     */
+    public final static String PATH_TEMP = "zhengpu";
 
-    public static final String APK_UPDATE = "apk_update";
-    public static final String APK_UPDATE_PATH = "apk_path";
-
-    public static final String MEINVHA_DIR_LIST = "meinvha_dir_list";
-    public static final String MEINVHA_TITLE_LIST = "meinvha_title_list";
-    public static final String MEINVHA_IMG_LIST = "meinvha_img_list";
-
-    public static final String SUB_URL = "v1/restserver/ting";
-
+    /**
+     * 歌词目录
+     */
+    public final static String PATH_LYRICS = PATH_TEMP + File.separator + "lyrics";
 
 }
