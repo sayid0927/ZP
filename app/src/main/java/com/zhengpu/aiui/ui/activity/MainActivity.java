@@ -1,5 +1,6 @@
 package com.zhengpu.aiui.ui.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
@@ -30,7 +31,6 @@ import com.zhengpu.aiui.ui.fragment.FragmentHelp_Home_2;
 import com.zhengpu.aiui.ui.fragment.LrcFragment;
 import com.zhengpu.aiui.ui.view.HelpViewPager;
 import com.zhengpu.aiuilibrary.base.AppController;
-import com.zhengpu.aiuilibrary.iflytekaction.CalcAction;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekbean.PointBean;
 import com.zhengpu.aiuilibrary.iflytekbean.UserChatBean;
@@ -53,8 +53,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-import static com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice.wordsToVoice;
+import me.weyye.hipermission.HiPermission;
+import me.weyye.hipermission.PermissionCallback;
+import me.weyye.hipermission.PermissionItem;
 
 
 public class MainActivity extends BaseActivity implements MainContract.View, IGetVoiceToWord, IGetWordToVoice, KuGuoMuiscPlayListener {
@@ -95,7 +96,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     private BaseBean data;
     private List<BaseBean> datas;
     private VoiceToWords voiceToWords;
-    private  WordsToVoice wordsToVoice;
+    private WordsToVoice wordsToVoice;
     private boolean isFist = true;
     private boolean isClickHelp = false;
     private UserChatBean userChatBean;
@@ -107,9 +108,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     private static final int NUM_OF_PAGE = 20;
     private int currentPage = 1;
     private KuGuoMuiscPlayThread kuGuoMuiscPlayThread;
-    private String artist="", song="";
+    private String artist = "", song = "";
 
-    private int  duration;
+    private int duration;
     private String fileName;
     private String hash;
     private String singername;
@@ -174,6 +175,34 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
             }
         }, 1000);
         mainActivity = this;
+
+        List<PermissionItem> permissonItems = new ArrayList<PermissionItem>();
+        permissonItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "定位", R.drawable.permission_ic_location));
+        HiPermission.create(MainActivity.this)
+                .permissions(permissonItems)
+                .checkMutiPermission(new PermissionCallback() {
+                    @Override
+                    public void onClose() {
+                        Logger.e("用户关闭权限申请");
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        Logger.e("所有权限申请完成");
+                    }
+
+                    @Override
+                    public void onDeny(String permission, int position) {
+
+                    }
+
+                    @Override
+                    public void onGuarantee(String permission, int position) {
+
+                    }
+                });
+
     }
 
     @Override
@@ -242,14 +271,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
                 case "PLAY": // 播放歌曲命令
                     for (int i = 0; i < result.getMusicXBean().getSemantic().get(0).getSlots().size(); i++) {
-                        String name =result.getMusicXBean().getSemantic().get(0).getSlots().get(i).getName();
-                        if(name.equals("artist")){
-                            artist= result.getMusicXBean().getSemantic().get(0).getSlots().get(i).getValue();
-                        }else  if(name.equals("song")){
-                            song= result.getMusicXBean().getSemantic().get(0).getSlots().get(i).getValue();
+                        String name = result.getMusicXBean().getSemantic().get(0).getSlots().get(i).getName();
+                        if (name.equals("artist")) {
+                            artist = result.getMusicXBean().getSemantic().get(0).getSlots().get(i).getValue();
+                        } else if (name.equals("song")) {
+                            song = result.getMusicXBean().getSemantic().get(0).getSlots().get(i).getValue();
                         }
                     }
-                    mPresenter.getSearchKugouSong(artist+song, "1", "20");
+                    mPresenter.getSearchKugouSong(artist + song, "1", "20");
 
                     break;
             }
@@ -261,60 +290,60 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         } else if (service.equals("joke")) {     //笑话的点播
             mPresenter.getTianJoke();
         } else if (service.equals("r4")) {
-            if (!kuGuoMuiscPlayThread.isPlay() ) {
+            if (!kuGuoMuiscPlayThread.isPlay()) {
                 datas.add(result);
                 WordsToVoice.startSynthesizer(AppController.R4, "不好意思，我好像没听懂");
             }
-        } else  if(service.equals("poetry")){       //诗词查询和诗句对答。
-            if (!kuGuoMuiscPlayThread.isPlay() ) {
+        } else if (service.equals("poetry")) {       //诗词查询和诗句对答。
+            if (!kuGuoMuiscPlayThread.isPlay()) {
                 datas.add(result);
-                WordsToVoice.startSynthesizer(AppController.POETRY,  result.getPoetryBean().getAnswer().getText());
+                WordsToVoice.startSynthesizer(AppController.POETRY, result.getPoetryBean().getAnswer().getText());
             }
         } else if (service.equals("OPENAPPTEST.music_demo")) {
 
             if (result.getCustomMusicBean() != null && result.getCustomMusicBean().getSemantic().size() != 0 &&
-                    result.getCustomMusicBean().getSemantic().get(0).getSlots().size()!=0) {
+                    result.getCustomMusicBean().getSemantic().get(0).getSlots().size() != 0) {
 
                 PointBean pointBean = new PointBean();
                 pointBean.setText(result.getCustomMusicBean().getText());
                 data.setPointBean(pointBean);
                 data.setItemType(BaseBean.POINT);
                 for (int i = 0; i < result.getCustomMusicBean().getSemantic().get(0).getSlots().size(); i++) {
-                    String name =result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getName();
-                    if(name.equals("artist")){
-                        artist= result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getValue();
-                    }else  if(name.equals("song")){
-                        song= result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getValue();
+                    String name = result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getName();
+                    if (name.equals("artist")) {
+                        artist = result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getValue();
+                    } else if (name.equals("song")) {
+                        song = result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getValue();
                     }
                 }
-                mPresenter.getSearchKugouSong(artist+song, "1", "20");
+                mPresenter.getSearchKugouSong(artist + song, "1", "20");
             }
-        }  else if(service.equals("datetime")){
+        } else if (service.equals("datetime")) {
             if (!kuGuoMuiscPlayThread.isPlay()) {
                 datas.add(result);
                 WordsToVoice.startSynthesizer(AppController.DATETIME, result.getDatetimeBean().getAnswer().getText());
             }
-        }else if(service.equals("calc")){
+        } else if (service.equals("calc")) {
             if (!kuGuoMuiscPlayThread.isPlay()) {
                 datas.add(result);
                 WordsToVoice.startSynthesizer(AppController.DATETIME, result.getCalcBean().getAnswer().getText());
             }
-        }else if(service.equals("weather")){
+        } else if (service.equals("weather")) {
             if (!kuGuoMuiscPlayThread.isPlay()) {
                 datas.add(result);
 
                 StringBuilder stringBuffer = new StringBuilder();
-                        String humidity =result.getWeatherBean().getData().getResult().get(0).getHumidity();  //湿度
-                        String tempRange = result.getWeatherBean().getData().getResult().get(0).getTempRange();   // 温度范围
-                        String weather = result.getWeatherBean().getData().getResult().get(0).getWeather(); //天气情况
-                        String wind = result.getWeatherBean().getData().getResult().get(0).getWind();
-                        String prompt = result.getWeatherBean().getData().getResult().get(0).getExp().getCt().getPrompt();
+                String humidity = result.getWeatherBean().getData().getResult().get(0).getHumidity();  //湿度
+                String tempRange = result.getWeatherBean().getData().getResult().get(0).getTempRange();   // 温度范围
+                String weather = result.getWeatherBean().getData().getResult().get(0).getWeather(); //天气情况
+                String wind = result.getWeatherBean().getData().getResult().get(0).getWind();
+                String prompt = result.getWeatherBean().getData().getResult().get(0).getExp().getCt().getPrompt();
 
-                        String airQuality = result.getWeatherBean().getData().getResult().get(0).getAirQuality();
+                String airQuality = result.getWeatherBean().getData().getResult().get(0).getAirQuality();
 
                 stringBuffer.append("空气质量为").append(airQuality)
-                                .append("湿度为").append(humidity).append("温度范围为").append(tempRange)
-                                .append("天气情况为").append(weather).append("穿衣指数为").append(prompt);
+                        .append("湿度为").append(humidity).append("温度范围为").append(tempRange)
+                        .append("天气情况为").append(weather).append("穿衣指数为").append(prompt);
 
                 WordsToVoice.startSynthesizer(AppController.WEATHER, stringBuffer.toString());
 
@@ -326,7 +355,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         }
         mAdapter.notifyDataSetChanged();
         rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
-        if(kuGuoMuiscPlayThread.isPlay())
+        if (kuGuoMuiscPlayThread.isPlay())
             voiceToWords.startRecognizer();
     }
 
@@ -393,7 +422,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
             case R.id.video_n:
 
-            mPresenter.getSearchKugouSong("在人间", "1", "20");
+                mPresenter.getSearchKugouSong("在人间", "1", "20");
 //                mPresenter.getTianJoke();
                 break;
             case R.id.iv_phone:
@@ -500,40 +529,40 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     @Override
     public void getSearchKugouSongSuccess(KuGouSongBean kuGouSongBean) {
         List<KuGouSongBean.DataBean.InfoBean> infoBeanList = kuGouSongBean.getData().getInfo();
-        boolean isgetKuguoSong=false;
+        boolean isgetKuguoSong = false;
         if (infoBeanList.size() != 0) {
             for (int i = 0; i < infoBeanList.size(); i++) {
                 String FileExt = infoBeanList.get(i).getExtname();
-                 singername = infoBeanList.get(i).getSingername();
-                 songname = infoBeanList.get(i).getSongname();
+                singername = infoBeanList.get(i).getSingername();
+                songname = infoBeanList.get(i).getSongname();
                 duration = infoBeanList.get(i).getDuration();
                 fileName = infoBeanList.get(i).getFilename();
-                hash= infoBeanList.get(i).getHash();
+                hash = infoBeanList.get(i).getHash();
 
-                if(artist!=""&& song!=""){
+                if (artist != "" && song != "") {
                     if (FileExt.equals("mp3") && singername.equals(artist) && songname.contains(song)) {
                         mPresenter.getKugouSongInfo(infoBeanList.get(i).getHash());
-                        isgetKuguoSong=true;
+                        isgetKuguoSong = true;
                         break;
                     }
-                }else if (song!="") {
-                    if (FileExt.equals("mp3") &&  songname.equals(song)) {
+                } else if (song != "") {
+                    if (FileExt.equals("mp3") && songname.equals(song)) {
                         mPresenter.getKugouSongInfo(infoBeanList.get(i).getHash());
-                        isgetKuguoSong=true;
+                        isgetKuguoSong = true;
                         break;
                     }
                 }
             }
         }
-        if(!isgetKuguoSong){
+        if (!isgetKuguoSong) {
             PointBean pointBean = new PointBean();
-            pointBean.setText("不好意思没有找到"+artist+song+"的歌曲");
+            pointBean.setText("不好意思没有找到" + artist + song + "的歌曲");
             data.setPointBean(pointBean);
             data.setItemType(BaseBean.POINT);
             datas.add(data);
             mAdapter.notifyDataSetChanged();
             rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
-            WordsToVoice.startSynthesizer(AppController.POINT, "不好意思没有找到"+artist+song+"的歌曲");
+            WordsToVoice.startSynthesizer(AppController.POINT, "不好意思没有找到" + artist + song + "的歌曲");
         }
     }
 
@@ -542,9 +571,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     public void getKugouSongInfoSuccess(KuGouSongInfoResult kuGouSongInfoResult) {
         if (wordsToVoice.isTtsSpeaking())
             wordsToVoice.mTtsStop();
-         songUrl= kuGouSongInfoResult.getUrl();
-        mPresenter.downloadLyric(fileName,duration,hash);
-        WordsToVoice.startSynthesizer(AppController.OPENAPPTEST_MUSIC_DEMO, "为你播放"+singername+"的"+songname );
+        songUrl = kuGouSongInfoResult.getUrl();
+        mPresenter.downloadLyric(fileName, duration, hash);
+        WordsToVoice.startSynthesizer(AppController.OPENAPPTEST_MUSIC_DEMO, "为你播放" + singername + "的" + songname);
 
     }
 
@@ -552,7 +581,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     //获取酷狗音乐歌词
     @Override
     public void downloadLyric(File file) {
-          Logger.e( file.getAbsolutePath());
+        Logger.e(file.getAbsolutePath());
     }
 
     //获取笑话内容
@@ -562,8 +591,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         if (jokeBean != null && jokeBean.getNewslist().size() != 0 && jokeBean.getNewslist().get(0).getTitle() != null
                 && jokeBean.getNewslist().get(0).getContent() != null) {
             data = new BaseBean();
-           // 去除特殊字符串
-           String content = jokeBean.getNewslist().get(0).getContent();
+            // 去除特殊字符串
+            String content = jokeBean.getNewslist().get(0).getContent();
             content = content.replace("<", " ");
             content = content.replace("b", " ");
             content = content.replace("r", " ");
@@ -582,7 +611,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
             voiceToWords.mIatDestroy();
 
             WordsToVoice.startSynthesizer(AppController.JOKE,
-                    "请欣赏笑话" +"       "+ jokeBean.getNewslist().get(0).getTitle() + jokeBean.getNewslist().get(0).getContent());
+                    "请欣赏笑话" + "       " + jokeBean.getNewslist().get(0).getTitle() + jokeBean.getNewslist().get(0).getContent());
 
         }
     }

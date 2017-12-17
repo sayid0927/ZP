@@ -223,8 +223,8 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
     public File saveFile(Response<ResponseBody> response,String destFileName) throws Exception {
 
-        destFileName =Constant.PATH_LYRICS+ File.separator+destFileName+".krc";
-        String  destFileDir = DeviceUtils.getSDPath();
+        destFileName=destFileName+".krc";
+        String  destFileDir = DeviceUtils.getSDPath()+ File.separator+Constant.PATH_LYRICS;
         InputStream in = null;
         FileOutputStream out = null;
         byte[] buf = new byte[1024];
@@ -236,8 +236,12 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
             }
             in = response.body().byteStream();
 
-            File file = new File(dir,destFileName);
-            out = new FileOutputStream(file);
+//            File f = new File(Environment.getExternalStorageDirectory(),filename);
+//            out = new FileOutputStream(f,true);
+//            out.write(filecontent.getBytes("UTF-8"));
+
+            File file = new File(dir.getPath(),destFileName);
+            out = new FileOutputStream(file,true);
             while ((len = in.read(buf)) != -1){
                 out.write(buf,0,len);
             }
