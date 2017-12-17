@@ -18,10 +18,12 @@ package com.zhengpu.aiui.presenter.impl;
 
 import com.orhanobut.logger.Logger;
 import com.zhengpu.aiui.api.Api;
+import com.zhengpu.aiui.base.Constant;
 import com.zhengpu.aiui.base.RxPresenter;
 
 import com.zhengpu.aiui.presenter.contract.MainContract;
 import com.zhengpu.aiui.utils.DeviceUtils;
+import com.zhengpu.aiuilibrary.base.AppController;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.KuGouSongInfoResult;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.TianJokeBean;
@@ -187,7 +189,7 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
     }
 
     @Override
-    public void downloadLyric(String keyword, int duration, String hash) {
+    public void downloadLyric(final String keyword, int duration, String hash) {
 
         Subscription rxSubscription = bookApi.downloadLyric(keyword, duration, hash).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -199,14 +201,19 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
                     @Override
                     public void onError(Throwable e) {
-
+                   Logger.e(e.toString());
                     }
 
                     @Override
                     public void onNext(Response<ResponseBody> responseBodyResponse) {
-
-                        Logger.e(responseBodyResponse.body().toString());
-
+                        try {
+                             File file=   saveFile(responseBodyResponse,keyword);
+                              if(file!=null){
+                                   mView.downloadLyric(file);
+                              }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
         addSubscrebe(rxSubscription);
@@ -214,36 +221,34 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
 
 
+    public File saveFile(Response<ResponseBody> response,String destFileName) throws Exception {
 
-//    private  String destFileName =  + ".krc";
-//
-//    public File saveFile(Response<ResponseBody> response) throws Exception {
-//
-//        String  destFileDir = DeviceUtils.getSDPath();
-//        InputStream in = null;
-//        FileOutputStream out = null;
-//        byte[] buf = new byte[1024];
-//        int len;
-//        try {
-//            File dir = new File(destFileDir);
-//            if (!dir.exists()) {// 如果文件不存在新建一个
-//                dir.mkdirs();
-//            }
-//            in = response.body().byteStream();
-//
-//            File file = new File(dir,destFileName);
-//            out = new FileOutputStream(file);
-//            while ((len = in.read(buf)) != -1){
-//                out.write(buf,0,len);
-//            }
-//            return file;
-//        }catch (Exception e){
-//            e.toString();
-//
-//        }finally {
-//            in.close();
-//            out.close();
-//        }
-//        return null;
-//    }
+        destFileName =Constant.PATH_LYRICS+ File.separator+destFileName+".krc";
+        String  destFileDir = DeviceUtils.getSDPath();
+        InputStream in = null;
+        FileOutputStream out = null;
+        byte[] buf = new byte[1024];
+        int len;
+        try {
+            File dir = new File(destFileDir);
+            if (!dir.exists()) {// 如果文件不存在新建一个
+                dir.mkdirs();
+            }
+            in = response.body().byteStream();
+
+            File file = new File(dir,destFileName);
+            out = new FileOutputStream(file);
+            while ((len = in.read(buf)) != -1){
+                out.write(buf,0,len);
+            }
+            return file;
+        }catch (Exception e){
+            e.toString();
+
+        }finally {
+            in.close();
+            out.close();
+        }
+        return null;
+    }
 }

@@ -9,7 +9,7 @@ public interface IGetWordToVoice {
 
     void SpeechEnd(String wordsData);
 
-    void SpeechError();
+    void SpeechError( );
 
 
 }

@@ -45,6 +45,7 @@ import com.zhengpu.aiuilibrary.iflytekutils.VoiceToWords;
 import com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice;
 import com.zhengpu.aiuilibrary.service.SpeechRecognizerService;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice.wordsToVoice;
 
 
 public class MainActivity extends BaseActivity implements MainContract.View, IGetVoiceToWord, IGetWordToVoice, KuGuoMuiscPlayListener {
@@ -92,7 +95,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     private BaseBean data;
     private List<BaseBean> datas;
     private VoiceToWords voiceToWords;
-    private WordsToVoice wordsToVoice;
+    private  WordsToVoice wordsToVoice;
     private boolean isFist = true;
     private boolean isClickHelp = false;
     private UserChatBean userChatBean;
@@ -103,11 +106,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
     private static final int NUM_OF_PAGE = 20;
     private int currentPage = 1;
-    private String songnameValue;
     private KuGuoMuiscPlayThread kuGuoMuiscPlayThread;
+    private String artist="", song="";
+
     private int  duration;
     private String fileName;
     private String hash;
+    private String singername;
+    private String songname;
+    private String songUrl;
 
 
     @Override
@@ -209,14 +216,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         } else if (service.equals("musicX")) {  // 播放音乐
 
             PointBean pointBean = new PointBean();
-            pointBean.setText(result.getCmdBean().getText());
+            pointBean.setText(result.getMusicXBean().getText());
             data.setPointBean(pointBean);
             data.setItemType(BaseBean.POINT);
 
             switch (result.getMusicXBean().getSemantic().get(0).getIntent()) {
                 case "INSTRUCTION": // 指令命令
                     if (result.getMusicXBean().getSemantic().get(0).getSlots().get(0).getName().equals("insType")) {
-                        switch (result.getCmdBean().getSemantic().get(0).getSlots().get(0).getValue()) {
+                        switch (result.getMusicXBean().getSemantic().get(0).getSlots().get(0).getValue()) {
                             case "volume_minus":
                                 setCurrentVolume(0);  // 音量小
                                 break;
@@ -234,6 +241,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                     break;
 
                 case "PLAY": // 播放歌曲命令
+                    for (int i = 0; i < result.getMusicXBean().getSemantic().get(0).getSlots().size(); i++) {
+                        String name =result.getMusicXBean().getSemantic().get(0).getSlots().get(i).getName();
+                        if(name.equals("artist")){
+                            artist= result.getMusicXBean().getSemantic().get(0).getSlots().get(i).getValue();
+                        }else  if(name.equals("song")){
+                            song= result.getMusicXBean().getSemantic().get(0).getSlots().get(i).getValue();
+                        }
+                    }
+                    mPresenter.getSearchKugouSong(artist+song, "1", "20");
 
                     break;
             }
@@ -252,13 +268,66 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         } else  if(service.equals("poetry")){       //诗词查询和诗句对答。
             if (!kuGuoMuiscPlayThread.isPlay() ) {
                 datas.add(result);
-                WordsToVoice.startSynthesizer(AppController.POETRY,  result.getPoetryBean().getData().getResult().get(0).getShowContent());
+                WordsToVoice.startSynthesizer(AppController.POETRY,  result.getPoetryBean().getAnswer().getText());
             }
-        }else {
+        } else if (service.equals("OPENAPPTEST.music_demo")) {
+
+            if (result.getCustomMusicBean() != null && result.getCustomMusicBean().getSemantic().size() != 0 &&
+                    result.getCustomMusicBean().getSemantic().get(0).getSlots().size()!=0) {
+
+                PointBean pointBean = new PointBean();
+                pointBean.setText(result.getCustomMusicBean().getText());
+                data.setPointBean(pointBean);
+                data.setItemType(BaseBean.POINT);
+                for (int i = 0; i < result.getCustomMusicBean().getSemantic().get(0).getSlots().size(); i++) {
+                    String name =result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getName();
+                    if(name.equals("artist")){
+                        artist= result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getValue();
+                    }else  if(name.equals("song")){
+                        song= result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getValue();
+                    }
+                }
+                mPresenter.getSearchKugouSong(artist+song, "1", "20");
+            }
+        }  else if(service.equals("datetime")){
+            if (!kuGuoMuiscPlayThread.isPlay()) {
+                datas.add(result);
+                WordsToVoice.startSynthesizer(AppController.DATETIME, result.getDatetimeBean().getAnswer().getText());
+            }
+        }else if(service.equals("calc")){
+            if (!kuGuoMuiscPlayThread.isPlay()) {
+                datas.add(result);
+                WordsToVoice.startSynthesizer(AppController.DATETIME, result.getCalcBean().getAnswer().getText());
+            }
+        }else if(service.equals("weather")){
+            if (!kuGuoMuiscPlayThread.isPlay()) {
+                datas.add(result);
+
+                StringBuilder stringBuffer = new StringBuilder();
+                        String humidity =result.getWeatherBean().getData().getResult().get(0).getHumidity();  //湿度
+                        String tempRange = result.getWeatherBean().getData().getResult().get(0).getTempRange();   // 温度范围
+                        String weather = result.getWeatherBean().getData().getResult().get(0).getWeather(); //天气情况
+                        String wind = result.getWeatherBean().getData().getResult().get(0).getWind();
+                        String prompt = result.getWeatherBean().getData().getResult().get(0).getExp().getCt().getPrompt();
+
+                        String airQuality = result.getWeatherBean().getData().getResult().get(0).getAirQuality();
+
+                stringBuffer.append("空气质量为").append(airQuality)
+                                .append("湿度为").append(humidity).append("温度范围为").append(tempRange)
+                                .append("天气情况为").append(weather).append("穿衣指数为").append(prompt);
+
+                WordsToVoice.startSynthesizer(AppController.WEATHER, stringBuffer.toString());
+
+            }
+
+
+        } else {
             datas.add(result);
         }
         mAdapter.notifyDataSetChanged();
         rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
+        if(kuGuoMuiscPlayThread.isPlay())
+            voiceToWords.startRecognizer();
     }
 
     @Override
@@ -267,6 +336,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         voiceToWords.startRecognizer();
     }
 
+
     @Override
     public void SpeechOver() {
 //        Logger.e("说话结束");
@@ -274,6 +344,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
             RippleVoice.stopRippleAnimation();
         if (RippleVoice_N.isRippleAnimationRunning())
             RippleVoice_N.stopRippleAnimation();
+
     }
 
     @Override
@@ -314,6 +385,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                     } else {
                         if (rvSpeech.getVisibility() == View.GONE)
                             rvSpeech.setVisibility(View.VISIBLE);
+
                     }
                 }
 
@@ -371,6 +443,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     @Override
     public void getZhiHuNewsBeanSuccess(ZhiHuNewsBean zhiHuNewsBean) {
 
+
         data = new BaseBean();
         data.setZhiHuNewsBean(zhiHuNewsBean);
         data.setItemType(BaseBean.NEWS);
@@ -395,6 +468,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                 voiceToWords = VoiceToWords.getInstance(MainActivity.this);
                 voiceToWords.setmIGetVoiceToWord(MainActivity.this);
                 break;
+            case AppController.OPENAPPTEST_MUSIC_DEMO:
+                voiceToWords.startRecognizer();
+                kuGuoMuiscPlayThread.playUrl(songUrl);
+                return;
         }
         voiceToWords.startRecognizer();
     }
@@ -416,26 +493,47 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         datas.add(data);
         mAdapter.notifyDataSetChanged();
         rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
-        voiceToWords.startRecognizer();
+        WordsToVoice.startSynthesizer(AppController.NEWS, "为你推荐如下热门新闻");
     }
 
     //搜索酷狗音乐
     @Override
     public void getSearchKugouSongSuccess(KuGouSongBean kuGouSongBean) {
         List<KuGouSongBean.DataBean.InfoBean> infoBeanList = kuGouSongBean.getData().getInfo();
+        boolean isgetKuguoSong=false;
         if (infoBeanList.size() != 0) {
             for (int i = 0; i < infoBeanList.size(); i++) {
                 String FileExt = infoBeanList.get(i).getExtname();
-                String singername = infoBeanList.get(i).getSingername();
-                String songname = infoBeanList.get(i).getSongname();
+                 singername = infoBeanList.get(i).getSingername();
+                 songname = infoBeanList.get(i).getSongname();
                 duration = infoBeanList.get(i).getDuration();
                 fileName = infoBeanList.get(i).getFilename();
                 hash= infoBeanList.get(i).getHash();
-                songnameValue = "在人间";
-                if (FileExt.equals("mp3") && songname.equals(songnameValue)) {
-                    mPresenter.getKugouSongInfo(hash);
+
+                if(artist!=""&& song!=""){
+                    if (FileExt.equals("mp3") && singername.equals(artist) && songname.contains(song)) {
+                        mPresenter.getKugouSongInfo(infoBeanList.get(i).getHash());
+                        isgetKuguoSong=true;
+                        break;
+                    }
+                }else if (song!="") {
+                    if (FileExt.equals("mp3") &&  songname.equals(song)) {
+                        mPresenter.getKugouSongInfo(infoBeanList.get(i).getHash());
+                        isgetKuguoSong=true;
+                        break;
+                    }
                 }
             }
+        }
+        if(!isgetKuguoSong){
+            PointBean pointBean = new PointBean();
+            pointBean.setText("不好意思没有找到"+artist+song+"的歌曲");
+            data.setPointBean(pointBean);
+            data.setItemType(BaseBean.POINT);
+            datas.add(data);
+            mAdapter.notifyDataSetChanged();
+            rvSpeech.scrollToPosition(mAdapter.getItemCount() - 1);
+            WordsToVoice.startSynthesizer(AppController.POINT, "不好意思没有找到"+artist+song+"的歌曲");
         }
     }
 
@@ -444,15 +542,17 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     public void getKugouSongInfoSuccess(KuGouSongInfoResult kuGouSongInfoResult) {
         if (wordsToVoice.isTtsSpeaking())
             wordsToVoice.mTtsStop();
-        kuGuoMuiscPlayThread.playUrl(kuGouSongInfoResult.getUrl());
+         songUrl= kuGouSongInfoResult.getUrl();
         mPresenter.downloadLyric(fileName,duration,hash);
+        WordsToVoice.startSynthesizer(AppController.OPENAPPTEST_MUSIC_DEMO, "为你播放"+singername+"的"+songname );
+
     }
 
 
-
+    //获取酷狗音乐歌词
     @Override
-    public void downloadLyric() {
-
+    public void downloadLyric(File file) {
+          Logger.e( file.getAbsolutePath());
     }
 
     //获取笑话内容
@@ -462,7 +562,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         if (jokeBean != null && jokeBean.getNewslist().size() != 0 && jokeBean.getNewslist().get(0).getTitle() != null
                 && jokeBean.getNewslist().get(0).getContent() != null) {
             data = new BaseBean();
-
+           // 去除特殊字符串
            String content = jokeBean.getNewslist().get(0).getContent();
             content = content.replace("<", " ");
             content = content.replace("b", " ");

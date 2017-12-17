@@ -18,6 +18,7 @@ import com.zhengpu.aiuilibrary.iflytekbean.R4Bean;
 import com.zhengpu.aiuilibrary.iflytekbean.StoryBean;
 import com.zhengpu.aiuilibrary.iflytekbean.VideoBean;
 import com.zhengpu.aiuilibrary.iflytekbean.WeatherBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.CustomMusicBean;
 
 import java.lang.reflect.Type;
 
@@ -202,6 +203,18 @@ public class JsonParser {
             e.printStackTrace();
         }
         return r4Bean;
+    }
+
+    static CustomMusicBean parseResultCustomMusicBean(String json) {
+        CustomMusicBean customMusicBean = new CustomMusicBean();
+        try {
+            Type type = new TypeToken<CustomMusicBean>() {
+            }.getType();
+            customMusicBean = new Gson().fromJson(json, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return customMusicBean;
     }
 
 

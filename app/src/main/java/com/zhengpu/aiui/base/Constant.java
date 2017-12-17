@@ -24,7 +24,7 @@ public class Constant {
     public static final String WECHAT_KEY_API = "e6d6ec3ba2f9d7a3051a6c09f0524738";
 
 
-    public static final String FILEPATH = "TuPian";
+    public static final String FILEPATH = "temp";
 
     public static final String API_BASE_URL = "http://tingapi.ting.baidu.com/";
     public static final String ZHIHU_BASE_URL = "http://news-at.zhihu.com/";

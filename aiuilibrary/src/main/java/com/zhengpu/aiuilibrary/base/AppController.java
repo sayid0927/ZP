@@ -30,8 +30,16 @@ public class AppController {
     public static final String POETRY = "poetry";
     public static final String STORY = "story";
     public static final String OPENAPPTEST_SHIPING = "OPENAPPTEST.shiping";
+    public static final String OPENAPPTEST_MUSIC_DEMO = "OPENAPPTEST.music_demo";
+
+
+
     public static final String WEATHER = "weather";
+    public static final String POINT = "point";
     public static final String R4 = "r4";
+
+
+
 
 
 

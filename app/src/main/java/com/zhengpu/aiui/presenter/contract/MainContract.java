@@ -24,6 +24,7 @@ import com.zhengpu.aiuilibrary.iflytekbean.otherbean.WXItemBean;
 import com.zhengpu.aiuilibrary.iflytekbean.otherbean.ZhiHuNewsBean;
 
 
+import java.io.File;
 import java.util.List;
 
 public interface MainContract {
@@ -40,7 +41,7 @@ public interface MainContract {
 
         void getKugouSongInfoSuccess(KuGouSongInfoResult kuGouSongInfoResult);
         void getTianJokeSuccess(TianJokeBean jokeBean);
-        void downloadLyric ();
+        void downloadLyric (File file);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {

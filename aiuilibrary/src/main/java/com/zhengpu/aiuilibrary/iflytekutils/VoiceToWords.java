@@ -36,6 +36,7 @@ import com.zhengpu.aiuilibrary.iflytekbean.R4Bean;
 import com.zhengpu.aiuilibrary.iflytekbean.StoryBean;
 import com.zhengpu.aiuilibrary.iflytekbean.VideoBean;
 import com.zhengpu.aiuilibrary.iflytekbean.WeatherBean;
+import com.zhengpu.aiuilibrary.iflytekbean.otherbean.CustomMusicBean;
 import com.zhengpu.aiuilibrary.utils.PreferUtil;
 
 import org.json.JSONException;
@@ -381,11 +382,6 @@ public class VoiceToWords {
                                     baseBean.setContext(datetimeBean.getText());
                                     baseBean.setDatetimeBean(datetimeBean);
                                     mIGetVoiceToWord.getResult(service, baseBean);
-
-
-//                                    String str = datetimeBean.getAnswer().getText();
-//                                    CalcAction calcAction = new CalcAction(str);
-//                                    calcAction.start();
                                 }
                             }
                         }
@@ -402,10 +398,6 @@ public class VoiceToWords {
                         baseBean.setFlightBean(flightBean);
                         mIGetVoiceToWord.getResult(service, baseBean);
 
-
-//                        String txt = flightBean.getAnswer().getText();
-//                        CalcAction calcAction = new CalcAction(txt);
-//                        calcAction.start();
                     }
                     break;
                 }
@@ -464,7 +456,7 @@ public class VoiceToWords {
                 case "news": {  //  新闻的搜索和点播
 
                     NewsBean newsBean = JsonParser.parseResultNewsBean(text);
-                  if (newsBean != null && newsBean.getText()!= null) {
+                    if (newsBean != null && newsBean.getText() != null) {
 
                         baseBean.setItemType(BaseBean.NEWS);
                         baseBean.setContext(newsBean.getText());
@@ -473,7 +465,7 @@ public class VoiceToWords {
 //                        CalcAction calcAction = new CalcAction("为你推荐如下热门新闻");
 //                        calcAction.start();
 
-                 }
+                    }
 
                     break;
                 }
@@ -580,19 +572,19 @@ public class VoiceToWords {
                         baseBean.setWeatherBean(weatherBean);
                         mIGetVoiceToWord.getResult(service, baseBean);
 
-                        StringBuilder stringBuffer = new StringBuilder();
-                        String humidity = weatherBean.getData().getResult().get(0).getHumidity();  //湿度
-                        String tempRange = weatherBean.getData().getResult().get(0).getTempRange();   // 温度范围
-                        String weather = weatherBean.getData().getResult().get(0).getWeather(); //天气情况
-                        String wind = weatherBean.getData().getResult().get(0).getWind();
-                        String prompt = weatherBean.getData().getResult().get(0).getExp().getCt().getPrompt();
-
-                        String airQuality = weatherBean.getData().getResult().get(0).getAirQuality();
-
-                        stringBuffer.append("空气质量为").append(airQuality)
-                                .append("湿度为").append(humidity).append("温度范围为").append(tempRange)
-                                .append("天气情况为").append(weather).append("风向以及风力情况为").append(wind)
-                                .append("穿衣指数为").append(prompt);
+//                        StringBuilder stringBuffer = new StringBuilder();
+//                        String humidity = weatherBean.getData().getResult().get(0).getHumidity();  //湿度
+//                        String tempRange = weatherBean.getData().getResult().get(0).getTempRange();   // 温度范围
+//                        String weather = weatherBean.getData().getResult().get(0).getWeather(); //天气情况
+//                        String wind = weatherBean.getData().getResult().get(0).getWind();
+//                        String prompt = weatherBean.getData().getResult().get(0).getExp().getCt().getPrompt();
+//
+//                        String airQuality = weatherBean.getData().getResult().get(0).getAirQuality();
+//
+//                        stringBuffer.append("空气质量为").append(airQuality)
+//                                .append("湿度为").append(humidity).append("温度范围为").append(tempRange)
+//                                .append("天气情况为").append(weather).append("风向以及风力情况为").append(wind)
+//                                .append("穿衣指数为").append(prompt);
 
 //                        CalcAction calcAction = new CalcAction(stringBuffer.toString());
 //                        calcAction.start();
@@ -608,8 +600,14 @@ public class VoiceToWords {
                     break;
                 }
                 case "OPENAPPTEST.music_demo": {  //   艺人跟歌曲 搜索和播放
+                    CustomMusicBean customMusicBean = JsonParser.parseResultCustomMusicBean(text);
+                    if (customMusicBean != null && customMusicBean.getSemantic().size() != 0 && customMusicBean.getSemantic().get(0).getSlots().size() != 0) {
+                        baseBean.setItemType(BaseBean.OPENAPPTEST_MUSIC_DEMO);
+                        baseBean.setContext(customMusicBean.getText());
+                        baseBean.setCustomMusicBean(customMusicBean);
+                        mIGetVoiceToWord.getResult(service, baseBean);
 
-
+                    }
                     break;
                 }
 
