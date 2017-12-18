@@ -22,6 +22,7 @@ public final class PreferUtil {
     private static final String PLAY_VIDEO_NAME = "play_video_name";
 
     private static final String PLAY_STORY_URL = "play_story_url";
+    private static final String PLAY_STORY_LYRICS = "play_story_lyrics";
 
 
     public String getPlayMusicName() {
@@ -49,6 +50,16 @@ public final class PreferUtil {
 
     public String getPlayStoryUrl() {
         return getString(PLAY_STORY_URL, "");
+    }
+
+
+    public void setPlayStoryLyrics(String flag) {
+        putString(PLAY_STORY_LYRICS, flag);
+    }
+
+
+    public String getPlayStoryLyrics() {
+        return getString(PLAY_STORY_LYRICS, "");
     }
 
 

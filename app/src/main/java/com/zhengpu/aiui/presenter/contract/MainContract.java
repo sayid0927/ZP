@@ -41,7 +41,7 @@ public interface MainContract {
 
         void getKugouSongInfoSuccess(KuGouSongInfoResult kuGouSongInfoResult);
         void getTianJokeSuccess(TianJokeBean jokeBean);
-        void downloadLyric (File file);
+        void downloadLyric (File file,byte[] bytes);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {

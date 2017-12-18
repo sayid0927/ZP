@@ -18,6 +18,7 @@ import com.zhengpu.aiuilibrary.iflytekutils.MyWakeuperListener;
 import com.zhengpu.aiuilibrary.iflytekutils.VoiceToWords;
 import com.zhengpu.aiuilibrary.iflytekutils.WakeUpListener;
 import com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice;
+import com.zhengpu.aiuilibrary.utils.PreferUtil;
 
 
 /**
@@ -38,7 +39,7 @@ public class SpeechRecognizerService extends Service implements IGetVoiceToWord,
 
 
         SpeechUtility.createUtility(this.getApplication(), SpeechConstant.APPID + "=5a127875");// 传递科大讯飞appid
-
+        PreferUtil.getInstance().init(this);
         //初始化讯飞语音识别
         voiceToWords = VoiceToWords.getInstance(this);
         voiceToWords.setmIGetVoiceToWord(this);

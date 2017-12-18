@@ -25,18 +25,22 @@ public class KuGou {
     private String songName;
     private AppActionListener appActionListener;
 
+    private boolean b2w=false;
+    private  boolean chy =false;
+
     public KuGou(Context context, AppActionListener appActionListener) {
         this.context = context;
         this.appActionListener = appActionListener;
-//        this.songName= PreferUtil.getInstance().getPlayMusicName();
-        this.songName = "一天一夜";
+        this.songName = PreferUtil.getInstance().getPlayMusicName();
+
     }
 
 
     public void start(AccessibilityNodeInfo info) {
         if (info != null) {
             if (info.getChildCount() == 0) {
-                if (!AppController.appAction && FindNodeInfosById(info, "com.kugou.android:id/y5")) {
+                if ( FindNodeInfosById(info, "com.kugou.android:id/y5")) {
+                    // 模拟点击搜索button
                     AccessibilityNodeInfo parent = info;
                     while (parent != null) {
                         if (parent.isClickable()) {
@@ -45,14 +49,16 @@ public class KuGou {
                         }
                         parent = parent.getParent();
                     }
-                } else if (!AppController.Clickabl && FindNodeInfosById(info, "com.kugou.android:id/abj")) {
+                } else if (FindNodeInfosById(info, "com.kugou.android:id/abj")) {
+                    // 模拟输入歌曲名
                     ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
                     ClipData clipData = ClipData.newPlainText("scb", songName);
                     clipboardManager.setPrimaryClip(clipData);
                     info.performAction(AccessibilityNodeInfo.ACTION_PASTE);
-                    AppController.Clickabl = true;
-                } else if (AppController.Clickabl && !AppController.searchClickabl && FindNodeInfosById(info, "com.kugou.android:id/chy")) {
-                    AppController.searchClickabl = true;
+
+                } else if (chy &&FindNodeInfosById(info, "com.kugou.android:id/chy")) {
+                    // 模拟点击 搜索歌曲 button
+
                     AccessibilityNodeInfo parent = info;
                     while (parent != null) {
                         if (parent.isClickable()) {
@@ -61,18 +67,17 @@ public class KuGou {
                         }
                         parent = parent.getParent();
                     }
-                } else if (AppController.searchClickabl && !AppController.playClickabl && FindNodeInfosById(info, "com.kugou.android:id/b2w")) {
+                } else if (!b2w&&FindNodeInfosById(info, "com.kugou.android:id/b2w")) {
+                    //  模拟点击播放歌曲button
                     AccessibilityNodeInfo parent = info;
                     while (parent != null) {
                         if (parent.isClickable()) {
                             parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                            b2w=true;
+                            chy =true;
                             break;
                         }
                         parent = parent.getParent();
-                    }
-                    AppController.playClickabl = true;
-                    if (!AppController.goHome) {
-                        appActionListener.goHome();
                     }
                 }
             } else {

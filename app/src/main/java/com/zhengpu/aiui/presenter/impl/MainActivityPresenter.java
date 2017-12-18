@@ -209,7 +209,8 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
                         try {
                              File file=   saveFile(responseBodyResponse,keyword);
                               if(file!=null){
-                                   mView.downloadLyric(file);
+                                   mView.downloadLyric(file,responseBodyResponse.body().bytes());
+
                               }
                         } catch (Exception e) {
                             e.printStackTrace();

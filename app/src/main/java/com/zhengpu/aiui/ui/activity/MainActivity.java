@@ -1,10 +1,11 @@
 package com.zhengpu.aiui.ui.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,11 +27,12 @@ import com.zhengpu.aiui.thread.KuGuoMuiscPlayListener;
 import com.zhengpu.aiui.thread.KuGuoMuiscPlayThread;
 import com.zhengpu.aiui.ui.adapter.HelpFragmentAdapter;
 import com.zhengpu.aiui.ui.adapter.TalkApadtep;
+import com.zhengpu.aiui.ui.dialog.CommonDialog;
 import com.zhengpu.aiui.ui.fragment.FragmentHelp_1;
 import com.zhengpu.aiui.ui.fragment.FragmentHelp_Home_2;
-import com.zhengpu.aiui.ui.fragment.LrcFragment;
 import com.zhengpu.aiui.ui.view.HelpViewPager;
 import com.zhengpu.aiuilibrary.base.AppController;
+import com.zhengpu.aiuilibrary.iflytekaction.PlayMusicxAction;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekbean.PointBean;
 import com.zhengpu.aiuilibrary.iflytekbean.UserChatBean;
@@ -53,9 +55,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import me.weyye.hipermission.HiPermission;
-import me.weyye.hipermission.PermissionCallback;
-import me.weyye.hipermission.PermissionItem;
+
+import static com.zhengpu.aiui.utils.DeviceUtils.isAccessibilitySettingsOn;
+import static com.zhengpu.aiuilibrary.utils.DeviceUtils.isAppInstalled;
 
 
 public class MainActivity extends BaseActivity implements MainContract.View, IGetVoiceToWord, IGetWordToVoice, KuGuoMuiscPlayListener {
@@ -142,15 +144,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     @Override
     public void initView() {
 
-//        if (!isAccessibilitySettingsOn(getApplicationContext())) {
-//            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-//        }
+        if (!isAccessibilitySettingsOn(getApplicationContext())) {
+            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
+        }
 
 
         fragmentList = new ArrayList<>();
         fragmentList.add(new FragmentHelp_1());
         fragmentList.add(new FragmentHelp_Home_2());
-        fragmentList.add(new LrcFragment());
 
         helpFragmentAdapter = new HelpFragmentAdapter(fragmentList, getSupportFragmentManager());
         viewpager.setAdapter(helpFragmentAdapter);
@@ -176,32 +177,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         }, 1000);
         mainActivity = this;
 
-        List<PermissionItem> permissonItems = new ArrayList<PermissionItem>();
-        permissonItems.add(new PermissionItem(Manifest.permission.WRITE_EXTERNAL_STORAGE, "定位", R.drawable.permission_ic_location));
-        HiPermission.create(MainActivity.this)
-                .permissions(permissonItems)
-                .checkMutiPermission(new PermissionCallback() {
-                    @Override
-                    public void onClose() {
-                        Logger.e("用户关闭权限申请");
-
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        Logger.e("所有权限申请完成");
-                    }
-
-                    @Override
-                    public void onDeny(String permission, int position) {
-
-                    }
-
-                    @Override
-                    public void onGuarantee(String permission, int position) {
-
-                    }
-                });
 
     }
 
@@ -316,7 +291,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                         song = result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getValue();
                     }
                 }
-                mPresenter.getSearchKugouSong(artist + song, "1", "20");
+//                mPresenter.getSearchKugouSong(artist + song, "1", "20");
+                String appName = "酷狗音乐";
+                if (isAppInstalled(MainActivity.this, appName)) {
+                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist+song, appName, "", MainActivity.this);
+                    playMusicxAction.start();
+                } else {
+                    Logger.e("没有安装酷狗音乐APP");
+                }
             }
         } else if (service.equals("datetime")) {
             if (!kuGuoMuiscPlayThread.isPlay()) {
@@ -348,8 +330,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                 WordsToVoice.startSynthesizer(AppController.WEATHER, stringBuffer.toString());
 
             }
-
-
         } else {
             datas.add(result);
         }
@@ -421,8 +401,41 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                 break;
 
             case R.id.video_n:
+                artist="周杰伦";
+                song = "不能说的秘密";
 
-                mPresenter.getSearchKugouSong("在人间", "1", "20");
+                final String appName = "com.kugou.android";
+                if (isAppInstalled(MainActivity.this, appName)) {
+                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist+song, "酷狗音乐", "", MainActivity.this);
+                    playMusicxAction.start();
+                } else {
+
+                    final CommonDialog dialog = new CommonDialog(MainActivity.this);
+                    dialog.show();
+
+                    dialog.onButOKListener(new CommonDialog.onButOKListener() {
+                        @Override
+                        public void onButOKListener() {
+
+                            String keywords = "安卓酷狗音乐App";
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse("https://www.baidu.com/s?wd=" + keywords + "&tn=SE_PSStatistics_p1d9m0nf"));
+                            startActivity(intent);
+
+                        }
+                    });
+
+                   dialog.onButCancellListener(new CommonDialog.onButCancelListener() {
+                       @Override
+                       public void onButCancelListener() {
+                           dialog.dismiss();
+                       }
+                   });
+//                    Logger.e("没有安装酷狗音乐APP");
+                }
+
+
+//                mPresenter.getSearchKugouSong("在人间", "1", "20");
 //                mPresenter.getTianJoke();
                 break;
             case R.id.iv_phone:
@@ -553,6 +566,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                     }
                 }
             }
+
+//            String FileExt = infoBeanList.get(0).getExtname();
+//            singername = infoBeanList.get(0).getSingername();
+//            songname = infoBeanList.get(0).getSongname();
+//            duration = infoBeanList.get(0).getDuration();
+//            fileName = infoBeanList.get(0).getFilename();
+//            hash = infoBeanList.get(0).getHash();
+//            mPresenter.getKugouSongInfo(infoBeanList.get(0).getHash());
         }
         if (!isgetKuguoSong) {
             PointBean pointBean = new PointBean();
@@ -577,11 +598,23 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
     }
 
-
     //获取酷狗音乐歌词
     @Override
-    public void downloadLyric(File file) {
-        Logger.e(file.getAbsolutePath());
+    public void downloadLyric(File file, byte[] bytes) {
+
+//        if (llCentet.getVisibility() == View.VISIBLE)
+//            llCentet.setVisibility(View.INVISIBLE);
+//        if (rvSpeech.getVisibility() == View.VISIBLE)
+//            rvSpeech.setVisibility(View.GONE);
+//        if (RippleVoice_N.getVisibility() == View.GONE)
+//            RippleVoice_N.setVisibility(View.VISIBLE);
+//        if (viewpager.getVisibility() == View.GONE)
+//            viewpager.setVisibility(View.VISIBLE);
+//
+//        viewpager.setCurrentItem(2);
+//        voiceToWords.mIatDestroy();
+//        PreferUtil.getInstance().setPlayStoryLyrics(file.getAbsolutePath());
+
     }
 
     //获取笑话内容
