@@ -47,21 +47,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginLeft="11dp"
                 android:gravity="center"
-                android:maxWidth="200dp"
                 android:text="" />
 
             <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_title"
                 android:layout_centerInParent="true"
-                android:maxWidth="200dp"
                 android:text="" />
 
         </RelativeLayout>
-
 
     </com.zhengpu.aiui.ui.view.bubbleview.BubbleLinearLayout>
 

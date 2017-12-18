@@ -48,6 +48,7 @@ import com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice;
 import com.zhengpu.aiuilibrary.service.SpeechRecognizerService;
 
 import java.io.File;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,6 +145,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     @Override
     public void initView() {
 
+        Socket socket = new Socket();
+
+        socket.isClosed();
+
         if (!isAccessibilitySettingsOn(getApplicationContext())) {
             startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
         }
@@ -182,6 +187,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
     @Override
     public void showError(String message) {
+
     }
 
     @Override
@@ -433,8 +439,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                    });
 //                    Logger.e("没有安装酷狗音乐APP");
                 }
-
-
 //                mPresenter.getSearchKugouSong("在人间", "1", "20");
 //                mPresenter.getTianJoke();
                 break;
@@ -484,7 +488,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
     @Override
     public void getZhiHuNewsBeanSuccess(ZhiHuNewsBean zhiHuNewsBean) {
-
 
         data = new BaseBean();
         data.setZhiHuNewsBean(zhiHuNewsBean);
