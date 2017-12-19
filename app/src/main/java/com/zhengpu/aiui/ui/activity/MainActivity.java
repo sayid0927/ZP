@@ -279,7 +279,27 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                         PlayVideoAction playVideoAction = new PlayVideoAction(videoName, "爱奇艺", MainActivity.this);
                         playVideoAction.start();
                     } else {
-                        Logger.e("没有安装爱奇艺APP");
+//                        Logger.e("没有安装爱奇艺APP");
+
+                        final CommonDialog dialog = new CommonDialog(MainActivity.this, "你还没爱奇艺APP， 是否去下载该程序");
+                        dialog.show();
+
+                        dialog.onButOKListener(new CommonDialog.onButOKListener() {
+                            @Override
+                            public void onButOKListener() {
+                                dialog.dismiss();
+                                String keywords = "安卓爱奇艺App";
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse("https://www.baidu.com/s?wd=" + keywords + "&tn=SE_PSStatistics_p1d9m0nf"));
+                                startActivity(intent);
+                            }
+                        });
+                        dialog.onButCancellListener(new CommonDialog.onButCancelListener() {
+                            @Override
+                            public void onButCancelListener() {
+                                dialog.dismiss();
+                            }
+                        });
                     }
                 }
             }
@@ -304,13 +324,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
             if (result.getCustomMusicBean() != null && result.getCustomMusicBean().getSemantic().size() != 0 &&
                     result.getCustomMusicBean().getSemantic().get(0).getSlots().size() != 0) {
-
-                userChatBean = new UserChatBean();
-                data = new BaseBean();
-                userChatBean.setText(result.getCustomMusicBean().getText());
-                data.setItemType(BaseBean.USER_CHAT);
-                data.setUserChatBean(userChatBean);
-                datas.add(data);
 
                 for (int i = 0; i < result.getCustomMusicBean().getSemantic().get(0).getSlots().size(); i++) {
                     String name = result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getName();
@@ -359,11 +372,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
                         final CommonDialog dialog = new CommonDialog(MainActivity.this, "你还没酷狗音乐APP， 是否去下载该程序");
                         dialog.show();
-
                         dialog.onButOKListener(new CommonDialog.onButOKListener() {
                             @Override
                             public void onButOKListener() {
-
                                 dialog.dismiss();
                                 String keywords = "安卓酷狗音乐App";
                                 Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -390,7 +401,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         } else if (service.equals("calc")) {
             if (!kuGuoMuiscPlayThread.isPlay()) {
                 datas.add(result);
-                WordsToVoice.startSynthesizer(AppController.DATETIME, result.getCalcBean().getAnswer().getText());
+                WordsToVoice.startSynthesizer(AppController.CALC, result.getCalcBean().getAnswer().getText());
             }
         } else if (service.equals("weather")) {
             if (!kuGuoMuiscPlayThread.isPlay()) {

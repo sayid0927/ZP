@@ -388,6 +388,7 @@ public class VoiceToWords {
                         }
                         break;
                     }
+                    break;
                 }
                 case "flight": {  //飞机票、航班信息的查询及订购。
 
