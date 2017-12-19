@@ -548,15 +548,14 @@ public class VoiceToWords {
                                 baseBean.setVideoBean(videoBean);
                                 mIGetVoiceToWord.getResult(service, baseBean);
 
-
-                                String videoName = videoBean.getSemantic().get(0).getSlots().get(0).getValue();
-                                String appName = "爱奇艺";
-                                if (isAppInstalled(context, appName)) {
-                                    PlayVideoAction playMusicxAction = new PlayVideoAction(videoName, appName, context);
-                                    playMusicxAction.start();
-                                } else {
-                                    Logger.e("没有安装爱奇艺APP");
-                                }
+//                                String videoName = videoBean.getSemantic().get(0).getSlots().get(0).getValue();
+//                                String appName = "爱奇艺";
+//                                if (isAppInstalled(context, appName)) {
+//                                    PlayVideoAction playMusicxAction = new PlayVideoAction(videoName, appName, context);
+//                                    playMusicxAction.start();
+//                                } else {
+//                                    Logger.e("没有安装爱奇艺APP");
+//                                }
                             }
                         }
                     }

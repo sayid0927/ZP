@@ -29,15 +29,15 @@ public class CommonDialog  extends Dialog implements View.OnClickListener {
     private  Context context;
     private TextView tvContext;
     private  Button butOk,butCancel;
-
-
+    private  String contet;
     private  onButOKListener onButOKListener;
     private  onButCancelListener onButCancelListener;
 
 
-    public CommonDialog(@NonNull Context context) {
+    public CommonDialog(@NonNull Context context,String contet) {
         super(context, R.style.dialog);
         this.context = context;
+        this.contet=contet;
     }
 
 
@@ -50,12 +50,14 @@ public class CommonDialog  extends Dialog implements View.OnClickListener {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.commdialog);
         tvContext = (TextView) findViewById(R.id.tv_context);
+        tvContext.setText(contet);
         butOk = (Button) findViewById(R.id.but_ok);
         butCancel = (Button) findViewById(R.id.but_cancel);
         butOk.setOnClickListener(this);
         butCancel.setOnClickListener(this);
         setDialogAttributes((Activity) context, this, 0.5f, 0, Gravity.CENTER);
         setCanceledOnTouchOutside(false);
+
     }
 
     public void setDialogAttributes(Activity context, final Dialog dialog,
@@ -87,7 +89,6 @@ public class CommonDialog  extends Dialog implements View.OnClickListener {
         }
     }
 
-
     public interface onButOKListener {
         void onButOKListener();
     }
@@ -100,6 +101,4 @@ public class CommonDialog  extends Dialog implements View.OnClickListener {
     public void onButCancellListener(onButCancelListener onButCancelListener) {
         this.onButCancelListener = onButCancelListener;
     }
-
-
 }

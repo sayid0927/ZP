@@ -46,11 +46,12 @@ public class KuGou {
 
                 } else if ( AppController.abj && FindNodeInfosById(info, "com.kugou.android:id/abj")) {
                     // 模拟输入歌曲名
+                    AppController.abj = false;
                     ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
                     ClipData clipData = ClipData.newPlainText("scb", songName);
                     clipboardManager.setPrimaryClip(clipData);
                     info.performAction(AccessibilityNodeInfo.ACTION_PASTE);
-                    AppController.abj = false;
+
 
                 } else if (FindNodeInfosById(info, "com.kugou.android:id/chy")) {
                     // 模拟点击 搜索歌曲 button
@@ -63,19 +64,22 @@ public class KuGou {
                         }
                         parent = parent.getParent();
                     }
-                } else if (FindNodeInfosById(info, "com.kugou.android:id/b2w")) {
+                } else if (AppController.b2w && FindNodeInfosById(info, "com.kugou.android:id/b2w")) {
                     //  模拟点击播放歌曲button
+                    AppController.KuGuoplayClickabl=false;
+                    AppController.abj = true;
+                    AppController.b2w=false;
+
                     AccessibilityNodeInfo parent = info;
                     while (parent != null) {
                         if (parent.isClickable()) {
                             parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                            AppController.KuGuoplayClickabl=false;
-                            AppController.abj = true;
                             break;
                         }
                         parent = parent.getParent();
                     }
                 }
+
             } else {
                 for (int i = 0; i < info.getChildCount(); i++) {
                     if (info.getChild(i) != null) {

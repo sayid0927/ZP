@@ -33,6 +33,7 @@ import com.zhengpu.aiui.ui.fragment.FragmentHelp_Home_2;
 import com.zhengpu.aiui.ui.view.HelpViewPager;
 import com.zhengpu.aiuilibrary.base.AppController;
 import com.zhengpu.aiuilibrary.iflytekaction.PlayMusicxAction;
+import com.zhengpu.aiuilibrary.iflytekaction.PlayVideoAction;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekbean.PointBean;
 import com.zhengpu.aiuilibrary.iflytekbean.UserChatBean;
@@ -259,6 +260,26 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
                     break;
             }
+        }else if(service.equals("OPENAPPTEST.shiping")){  //打开 爱奇艺APP 查找 电影 视频 电视剧
+            if (!kuGuoMuiscPlayThread.isPlay()) {
+                userChatBean = new UserChatBean();
+                data = new BaseBean();
+                userChatBean.setText(result.getVideoBean().getText());
+                data.setItemType(BaseBean.USER_CHAT);
+                data.setUserChatBean(userChatBean);
+                datas.add(data);
+
+                 String name = result.getVideoBean().getSemantic().get(0).getSlots().get(0).getName();
+                 if(name.equals("TVSeries") || name.equals("TVShow")|| name.equals("video")|| name.equals("film")){
+                    String  videoName =  result.getVideoBean().getSemantic().get(0).getSlots().get(0).getValue();
+                     if (isAppInstalled(MainActivity.this, "com.qiyi.video")) {
+                         PlayVideoAction playVideoAction = new PlayVideoAction(videoName, "爱奇艺", MainActivity.this);
+                         playVideoAction.start();
+                     } else {
+                         Logger.e("没有安装爱奇艺APP");
+                     }
+                 }
+            }
         } else if (service.equals("openQA")) {   //开放问答
             if (!kuGuoMuiscPlayThread.isPlay()) {
                 datas.add(result);
@@ -276,7 +297,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                 datas.add(result);
                 WordsToVoice.startSynthesizer(AppController.POETRY, result.getPoetryBean().getAnswer().getText());
             }
-        } else if (service.equals("OPENAPPTEST.music_demo")) {
+        } else if (service.equals("OPENAPPTEST.music_demo")) {    //   艺人跟歌曲 搜索和播放
 
             if (result.getCustomMusicBean() != null && result.getCustomMusicBean().getSemantic().size() != 0 &&
                     result.getCustomMusicBean().getSemantic().get(0).getSlots().size() != 0) {
@@ -298,12 +319,41 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                     }
                 }
 //                mPresenter.getSearchKugouSong(artist + song, "1", "20");
-                final String appName = "com.kugou.android";
-                if (isAppInstalled(MainActivity.this, appName)) {
+                if (isAppInstalled(MainActivity.this, "com.kugou.android")) {
                     PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist+song, "酷狗音乐", "", MainActivity.this);
                     playMusicxAction.start();
+
+                    if (wordsToVoice.isTtsSpeaking())
+                        wordsToVoice.mTtsStop();
+                    voiceToWords.mIatDestroy();
+
+
                 } else {
                     Logger.e("没有安装酷狗音乐APP");
+
+                    final CommonDialog dialog = new CommonDialog(MainActivity.this,"你还没酷狗音乐APP， 是否去下载该程序");
+                    dialog.show();
+
+                    dialog.onButOKListener(new CommonDialog.onButOKListener() {
+                        @Override
+                        public void onButOKListener() {
+
+                             dialog.dismiss();
+                            String keywords = "安卓酷狗音乐App";
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse("https://www.baidu.com/s?wd=" + keywords + "&tn=SE_PSStatistics_p1d9m0nf"));
+                            startActivity(intent);
+
+                        }
+                    });
+
+                    dialog.onButCancellListener(new CommonDialog.onButCancelListener() {
+                        @Override
+                        public void onButCancelListener() {
+                            dialog.dismiss();
+                        }
+                    });
+
                 }
             }
         } else if (service.equals("datetime")) {
@@ -408,15 +458,20 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
             case R.id.video_n:
                 artist="周杰伦";
-                song = "不能说的秘密";
+                song = "我的地盘";
 
                 final String appName = "com.kugou.android";
                 if (isAppInstalled(MainActivity.this, appName)) {
                     PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist+song, "酷狗音乐", "", MainActivity.this);
                     playMusicxAction.start();
+
+                    if (wordsToVoice.isTtsSpeaking())
+                        wordsToVoice.mTtsStop();
+                    voiceToWords.mIatDestroy();
+
                 } else {
 
-                    final CommonDialog dialog = new CommonDialog(MainActivity.this);
+                    final CommonDialog dialog = new CommonDialog(MainActivity.this,"你还没酷狗音乐APP， 是否去下载该程序");
                     dialog.show();
 
                     dialog.onButOKListener(new CommonDialog.onButOKListener() {
@@ -443,7 +498,38 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 //                mPresenter.getTianJoke();
                 break;
             case R.id.iv_phone:
-                setCurrentVolume(1);
+
+                String videoName = "康熙王朝电视剧";
+
+                if (isAppInstalled(MainActivity.this, "com.qiyi.video")) {
+                    PlayVideoAction playVideoAction = new PlayVideoAction(videoName, "爱奇艺", MainActivity.this);
+                    playVideoAction.start();
+                } else {
+
+                    final CommonDialog dialog = new CommonDialog(MainActivity.this,"你还没爱奇艺APP， 是否去下载该程序");
+                    dialog.show();
+
+                    dialog.onButOKListener(new CommonDialog.onButOKListener() {
+                        @Override
+                        public void onButOKListener() {
+                            dialog.dismiss();
+
+                            String keywords = "安卓爱奇艺App";
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse("https://www.baidu.com/s?wd=" + keywords + "&tn=SE_PSStatistics_p1d9m0nf"));
+                            startActivity(intent);
+
+                        }
+                    });
+
+                    dialog.onButCancellListener(new CommonDialog.onButCancelListener() {
+                        @Override
+                        public void onButCancelListener() {
+                            dialog.dismiss();
+                        }
+                    });
+                }
+
                 break;
 
             case R.id.iv_help:

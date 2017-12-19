@@ -33,6 +33,9 @@ public class PlayMusicxAction {
         this.context = context;
         AppController.KuGuoplayClickabl = true;
 
+        AppController.abj = true;
+        AppController.b2w = true;
+
 
     }
 

@@ -28,6 +28,7 @@ public class PlayVideoAction {
         this.videoName = videoName;
         this.appName = appName;
         this.context = context;
+        AppController.AiQiPlayClickabl =true;
 
     }
 
@@ -37,9 +38,7 @@ public class PlayVideoAction {
         if (appName != null && videoName != null && context != null) {
 
             PreferUtil.getInstance().setPlayVideoName(videoName);
-
             startAppName();
-
         }
     }
 

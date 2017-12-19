@@ -38,9 +38,10 @@ public class MyAccessibilityService extends AccessibilityService implements AppA
 
             case "com.qiyi.video":
 
-                Qiyi youKu = new Qiyi(this, this);
-                youKu.start(rootNode);
-
+                if(AppController.AiQiPlayClickabl) {
+                    Qiyi youKu = new Qiyi(this, this);
+                    youKu.start(rootNode);
+                }
                 break;
 
 
