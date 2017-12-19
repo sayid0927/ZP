@@ -39,7 +39,7 @@ public class PlayVideoAction {
             PreferUtil.getInstance().setPlayVideoName(videoName);
 
             startAppName();
-            AppController.appAction = true;
+
         }
     }
 

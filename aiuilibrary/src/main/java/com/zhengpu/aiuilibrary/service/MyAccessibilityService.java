@@ -30,7 +30,7 @@ public class MyAccessibilityService extends AccessibilityService implements AppA
         switch (nowPackageName) {
 
             case "com.kugou.android":
-                if (!AppController.playClickabl) {
+                if (AppController.KuGuoplayClickabl) {
                     KuGou kuGou = new KuGou(this, this);
                     kuGou.start(rootNode);
                 }

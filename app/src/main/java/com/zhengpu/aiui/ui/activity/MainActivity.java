@@ -145,10 +145,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     @Override
     public void initView() {
 
-        Socket socket = new Socket();
-
-        socket.isClosed();
-
         if (!isAccessibilitySettingsOn(getApplicationContext())) {
             startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
         }

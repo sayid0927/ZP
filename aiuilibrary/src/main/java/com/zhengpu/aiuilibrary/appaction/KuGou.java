@@ -20,23 +20,15 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class KuGou {
 
-
     private Context context;
     private String songName;
     private AppActionListener appActionListener;
-
-    private boolean b2w=false;
-    private  boolean chy =false;
-    private  boolean abj =false;
-
 
     public KuGou(Context context, AppActionListener appActionListener) {
         this.context = context;
         this.appActionListener = appActionListener;
         this.songName = PreferUtil.getInstance().getPlayMusicName();
-
     }
-
 
     public void start(AccessibilityNodeInfo info) {
         if (info != null) {
@@ -52,12 +44,14 @@ public class KuGou {
                         parent = parent.getParent();
                     }
 
-                } else if (FindNodeInfosById(info, "com.kugou.android:id/abj")) {
+                } else if ( AppController.abj && FindNodeInfosById(info, "com.kugou.android:id/abj")) {
                     // 模拟输入歌曲名
                     ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
                     ClipData clipData = ClipData.newPlainText("scb", songName);
                     clipboardManager.setPrimaryClip(clipData);
                     info.performAction(AccessibilityNodeInfo.ACTION_PASTE);
+                    AppController.abj = false;
+
                 } else if (FindNodeInfosById(info, "com.kugou.android:id/chy")) {
                     // 模拟点击 搜索歌曲 button
 
@@ -75,7 +69,8 @@ public class KuGou {
                     while (parent != null) {
                         if (parent.isClickable()) {
                             parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                            AppController.playClickabl=true;
+                            AppController.KuGuoplayClickabl=false;
+                            AppController.abj = true;
                             break;
                         }
                         parent = parent.getParent();

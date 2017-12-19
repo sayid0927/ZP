@@ -26,16 +26,13 @@ public class PlayMusicxAction {
     private String text;
 
     public PlayMusicxAction(String songName, String appName, String text, Context context) {
+
         this.text = text;
         this.songName = songName;
         this.appName = appName;
         this.context = context;
+        AppController.KuGuoplayClickabl = true;
 
-        AppController.searchClickabl = false;
-        AppController.playClickabl = false;
-        AppController.appAction = false;
-        AppController.Clickabl = false;
-        AppController.goHome = false;
 
     }
 
@@ -46,7 +43,6 @@ public class PlayMusicxAction {
             PreferUtil.getInstance().setPlayMusicName(songName);
 
             startAppName();
-            AppController.appAction = true;
         }
     }
 

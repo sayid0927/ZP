@@ -45,14 +45,14 @@ public class Qiyi {
                         }
                         parent = parent.getParent();
                     }
-                } else if (!AppController.ali && FindNodeInfosById(info, "com.qiyi.video:id/phoneSearchKeyword")) {
-                    AppController.ali = true;
+                } else if ( FindNodeInfosById(info, "com.qiyi.video:id/phoneSearchKeyword")) {
+
                     ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
                     ClipData clipData = ClipData.newPlainText("scb", videoName);
                     clipboardManager.setPrimaryClip(clipData);
                     info.performAction(AccessibilityNodeInfo.ACTION_PASTE);
 
-                } else if (info.getText() != null && AppController.ali && "搜索".equals(info.getText().toString()) && FindNodeInfosById(info, "com.qiyi.video:id/txt_action")) {
+                } else if (info.getText() != null  && "搜索".equals(info.getText().toString()) && FindNodeInfosById(info, "com.qiyi.video:id/txt_action")) {
 
                     AccessibilityNodeInfo parent = info;
                     while (parent != null) {
