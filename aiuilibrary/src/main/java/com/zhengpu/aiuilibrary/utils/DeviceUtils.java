@@ -3,9 +3,13 @@ package com.zhengpu.aiuilibrary.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.provider.MediaStore;
+
+import com.zhengpu.aiuilibrary.iflytekbean.AllAudioSongBean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -65,6 +69,47 @@ public class DeviceUtils {
         return pName.contains(packageName);
     }
 
+
+
+      //获取手机中所有音乐文件
+    public static List<AllAudioSongBean> scanAllAudioFiles(Context context) {
+          //生成动态集合，用于存储数据
+        List<AllAudioSongBean> allAudioSongBeanList = new ArrayList<>();
+          //查询媒体数据库
+        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+          //遍历媒体数据库
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                //歌曲编号
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+                //歌曲名
+                String tilte = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
+                //歌曲的专辑名：MediaStore.Audio.Media.ALBUM
+                String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
+                //歌曲的歌手名： MediaStore.Audio.Media.ARTIST
+                String author = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
+                //歌曲文件的路径 ：MediaStore.Audio.Media.DATA
+                String url = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+                //歌曲的总播放时长 ：MediaStore.Audio.Media.DURATION
+                int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
+                //歌曲文件的大小 ：MediaStore.Audio.Media.SIZE
+                Long size = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
+                if (size > 1024 * 800) {//如果文件大小大于800K，
+                    AllAudioSongBean allAudioSongBean = new AllAudioSongBean();
+                    allAudioSongBean.setMusicId(id);
+                    allAudioSongBean.setMusicTitle(tilte);
+                    allAudioSongBean.setMusicFileUrl(url);
+                     allAudioSongBean.setMusic_file_name(tilte);
+                    allAudioSongBean.setMusic_author(author);
+                    allAudioSongBean.setMusic_url(url);
+                    allAudioSongBean.setMusic_duration(duration);
+                    allAudioSongBeanList.add(allAudioSongBean);
+                }
+                cursor.moveToNext();
+            }
+        }
+        return allAudioSongBeanList;
+    }
 }
 
 

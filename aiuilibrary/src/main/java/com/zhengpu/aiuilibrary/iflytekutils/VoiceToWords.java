@@ -182,6 +182,7 @@ public class VoiceToWords {
         // 退出时释放连接
         if (mIat != null && mIat.isUnderstanding()) {
             mIat.stopUnderstanding();
+
         }
     }
 

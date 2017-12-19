@@ -34,6 +34,7 @@ import com.zhengpu.aiui.ui.view.HelpViewPager;
 import com.zhengpu.aiuilibrary.base.AppController;
 import com.zhengpu.aiuilibrary.iflytekaction.PlayMusicxAction;
 import com.zhengpu.aiuilibrary.iflytekaction.PlayVideoAction;
+import com.zhengpu.aiuilibrary.iflytekbean.AllAudioSongBean;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekbean.PointBean;
 import com.zhengpu.aiuilibrary.iflytekbean.UserChatBean;
@@ -49,7 +50,6 @@ import com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice;
 import com.zhengpu.aiuilibrary.service.SpeechRecognizerService;
 
 import java.io.File;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +60,7 @@ import butterknife.OnClick;
 
 import static com.zhengpu.aiui.utils.DeviceUtils.isAccessibilitySettingsOn;
 import static com.zhengpu.aiuilibrary.utils.DeviceUtils.isAppInstalled;
+import static com.zhengpu.aiuilibrary.utils.DeviceUtils.scanAllAudioFiles;
 
 
 public class MainActivity extends BaseActivity implements MainContract.View, IGetVoiceToWord, IGetWordToVoice, KuGuoMuiscPlayListener {
@@ -120,6 +121,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     private String singername;
     private String songname;
     private String songUrl;
+    private int PalyMode = -1; // 0 本地播放 1 酷狗播放
 
 
     @Override
@@ -145,6 +147,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void initView() {
+
 
         if (!isAccessibilitySettingsOn(getApplicationContext())) {
             startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
@@ -260,7 +263,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
                     break;
             }
-        }else if(service.equals("OPENAPPTEST.shiping")){  //打开 爱奇艺APP 查找 电影 视频 电视剧
+        } else if (service.equals("OPENAPPTEST.shiping")) {  //打开 爱奇艺APP 查找 电影 视频 电视剧
             if (!kuGuoMuiscPlayThread.isPlay()) {
                 userChatBean = new UserChatBean();
                 data = new BaseBean();
@@ -269,16 +272,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                 data.setUserChatBean(userChatBean);
                 datas.add(data);
 
-                 String name = result.getVideoBean().getSemantic().get(0).getSlots().get(0).getName();
-                 if(name.equals("TVSeries") || name.equals("TVShow")|| name.equals("video")|| name.equals("film")){
-                    String  videoName =  result.getVideoBean().getSemantic().get(0).getSlots().get(0).getValue();
-                     if (isAppInstalled(MainActivity.this, "com.qiyi.video")) {
-                         PlayVideoAction playVideoAction = new PlayVideoAction(videoName, "爱奇艺", MainActivity.this);
-                         playVideoAction.start();
-                     } else {
-                         Logger.e("没有安装爱奇艺APP");
-                     }
-                 }
+                String name = result.getVideoBean().getSemantic().get(0).getSlots().get(0).getName();
+                if (name.equals("TVSeries") || name.equals("TVShow") || name.equals("video") || name.equals("film")) {
+                    String videoName = result.getVideoBean().getSemantic().get(0).getSlots().get(0).getValue();
+                    if (isAppInstalled(MainActivity.this, "com.qiyi.video")) {
+                        PlayVideoAction playVideoAction = new PlayVideoAction(videoName, "爱奇艺", MainActivity.this);
+                        playVideoAction.start();
+                    } else {
+                        Logger.e("没有安装爱奇艺APP");
+                    }
+                }
             }
         } else if (service.equals("openQA")) {   //开放问答
             if (!kuGuoMuiscPlayThread.isPlay()) {
@@ -309,7 +312,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                 data.setUserChatBean(userChatBean);
                 datas.add(data);
 
-
                 for (int i = 0; i < result.getCustomMusicBean().getSemantic().get(0).getSlots().size(); i++) {
                     String name = result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getName();
                     if (name.equals("artist")) {
@@ -318,42 +320,66 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                         song = result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getValue();
                     }
                 }
+
+                //  本地播放
+                List<AllAudioSongBean> allAudioSongBeanList = scanAllAudioFiles(MainActivity.this);
+                for (int i = 0; i < allAudioSongBeanList.size(); i++) {
+                    String Author = allAudioSongBeanList.get(i).getMusic_author();           //  歌手
+                    String Music_Title = allAudioSongBeanList.get(i).getMusicTitle();       //歌名
+                    if (artist != "" && song != null) {
+                        if (artist.equals(Author) && song.equals(Music_Title)) {    //  如果歌手跟歌名一样
+                            KuGuoMuiscPlayThread.getInstance(MainActivity.this).playUrl(allAudioSongBeanList.get(i).getMusicFileUrl());
+                            PalyMode = 0;
+                        }
+                    } else if (song != "") {
+                        if (song.equals(Music_Title)) {
+                            KuGuoMuiscPlayThread.getInstance(MainActivity.this).playUrl(allAudioSongBeanList.get(i).getMusicFileUrl());
+                            PalyMode = 0;
+                        }
+                    }else if(artist != ""){
+                        if (artist.equals(Author)) {
+                            KuGuoMuiscPlayThread.getInstance(MainActivity.this).playUrl(allAudioSongBeanList.get(i).getMusicFileUrl());
+                            PalyMode = 0;
+                        }
+                    }
+                }
 //                mPresenter.getSearchKugouSong(artist + song, "1", "20");
-                if (isAppInstalled(MainActivity.this, "com.kugou.android")) {
-                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist+song, "酷狗音乐", "", MainActivity.this);
-                    playMusicxAction.start();
+                //  酷狗播放
+                if (PalyMode != 0) {
+                    if (isAppInstalled(MainActivity.this, "com.kugou.android")) {
+                        PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist + song, "酷狗音乐", "", MainActivity.this);
+                        playMusicxAction.start();
+                        PalyMode = 1;
+                        if (wordsToVoice.isTtsSpeaking())
+                            wordsToVoice.mTtsStop();
+                        voiceToWords.mIatDestroy();
 
-                    if (wordsToVoice.isTtsSpeaking())
-                        wordsToVoice.mTtsStop();
-                    voiceToWords.mIatDestroy();
+                    } else {
+//                        Logger.e("没有安装酷狗音乐APP");
 
+                        final CommonDialog dialog = new CommonDialog(MainActivity.this, "你还没酷狗音乐APP， 是否去下载该程序");
+                        dialog.show();
 
-                } else {
-                    Logger.e("没有安装酷狗音乐APP");
+                        dialog.onButOKListener(new CommonDialog.onButOKListener() {
+                            @Override
+                            public void onButOKListener() {
 
-                    final CommonDialog dialog = new CommonDialog(MainActivity.this,"你还没酷狗音乐APP， 是否去下载该程序");
-                    dialog.show();
+                                dialog.dismiss();
+                                String keywords = "安卓酷狗音乐App";
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.setData(Uri.parse("https://www.baidu.com/s?wd=" + keywords + "&tn=SE_PSStatistics_p1d9m0nf"));
+                                startActivity(intent);
 
-                    dialog.onButOKListener(new CommonDialog.onButOKListener() {
-                        @Override
-                        public void onButOKListener() {
+                            }
+                        });
 
-                             dialog.dismiss();
-                            String keywords = "安卓酷狗音乐App";
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://www.baidu.com/s?wd=" + keywords + "&tn=SE_PSStatistics_p1d9m0nf"));
-                            startActivity(intent);
-
-                        }
-                    });
-
-                    dialog.onButCancellListener(new CommonDialog.onButCancelListener() {
-                        @Override
-                        public void onButCancelListener() {
-                            dialog.dismiss();
-                        }
-                    });
-
+                        dialog.onButCancellListener(new CommonDialog.onButCancelListener() {
+                            @Override
+                            public void onButCancelListener() {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
                 }
             }
         } else if (service.equals("datetime")) {
@@ -457,12 +483,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                 break;
 
             case R.id.video_n:
-                artist="周杰伦";
+                artist = "周杰伦";
                 song = "我的地盘";
 
                 final String appName = "com.kugou.android";
                 if (isAppInstalled(MainActivity.this, appName)) {
-                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist+song, "酷狗音乐", "", MainActivity.this);
+                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist + song, "酷狗音乐", "", MainActivity.this);
                     playMusicxAction.start();
 
                     if (wordsToVoice.isTtsSpeaking())
@@ -471,7 +497,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 
                 } else {
 
-                    final CommonDialog dialog = new CommonDialog(MainActivity.this,"你还没酷狗音乐APP， 是否去下载该程序");
+                    final CommonDialog dialog = new CommonDialog(MainActivity.this, "你还没酷狗音乐APP， 是否去下载该程序");
                     dialog.show();
 
                     dialog.onButOKListener(new CommonDialog.onButOKListener() {
@@ -486,12 +512,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                         }
                     });
 
-                   dialog.onButCancellListener(new CommonDialog.onButCancelListener() {
-                       @Override
-                       public void onButCancelListener() {
-                           dialog.dismiss();
-                       }
-                   });
+                    dialog.onButCancellListener(new CommonDialog.onButCancelListener() {
+                        @Override
+                        public void onButCancelListener() {
+                            dialog.dismiss();
+                        }
+                    });
 //                    Logger.e("没有安装酷狗音乐APP");
                 }
 //                mPresenter.getSearchKugouSong("在人间", "1", "20");
@@ -506,7 +532,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                     playVideoAction.start();
                 } else {
 
-                    final CommonDialog dialog = new CommonDialog(MainActivity.this,"你还没爱奇艺APP， 是否去下载该程序");
+                    final CommonDialog dialog = new CommonDialog(MainActivity.this, "你还没爱奇艺APP， 是否去下载该程序");
                     dialog.show();
 
                     dialog.onButOKListener(new CommonDialog.onButOKListener() {
