@@ -285,10 +285,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
             if (result.getCustomMusicBean() != null && result.getCustomMusicBean().getSemantic().size() != 0 &&
                     result.getCustomMusicBean().getSemantic().get(0).getSlots().size() != 0) {
 
-                PointBean pointBean = new PointBean();
-                pointBean.setText(result.getCustomMusicBean().getText());
-                data.setPointBean(pointBean);
-                data.setItemType(BaseBean.POINT);
+                userChatBean = new UserChatBean();
+                data = new BaseBean();
+                userChatBean.setText(result.getCustomMusicBean().getText());
+                data.setItemType(BaseBean.USER_CHAT);
+                data.setUserChatBean(userChatBean);
+                datas.add(data);
+
+
                 for (int i = 0; i < result.getCustomMusicBean().getSemantic().get(0).getSlots().size(); i++) {
                     String name = result.getCustomMusicBean().getSemantic().get(0).getSlots().get(i).getName();
                     if (name.equals("artist")) {
@@ -298,9 +302,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                     }
                 }
 //                mPresenter.getSearchKugouSong(artist + song, "1", "20");
-                String appName = "酷狗音乐";
+                final String appName = "com.kugou.android";
                 if (isAppInstalled(MainActivity.this, appName)) {
-                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist+song, appName, "", MainActivity.this);
+                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist+song, "酷狗音乐", "", MainActivity.this);
                     playMusicxAction.start();
                 } else {
                     Logger.e("没有安装酷狗音乐APP");

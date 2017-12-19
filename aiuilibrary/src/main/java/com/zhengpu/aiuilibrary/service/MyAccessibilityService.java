@@ -30,7 +30,7 @@ public class MyAccessibilityService extends AccessibilityService implements AppA
         switch (nowPackageName) {
 
             case "com.kugou.android":
-                if (AppController.appAction) {
+                if (!AppController.playClickabl) {
                     KuGou kuGou = new KuGou(this, this);
                     kuGou.start(rootNode);
                 }
@@ -55,35 +55,13 @@ public class MyAccessibilityService extends AccessibilityService implements AppA
 
     @Override
     public void goHome() {
-        //点击  Home键健
-        if (AppController.appAction)
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        sleep(2000);
-                        performGlobalAction(AccessibilityService.GLOBAL_ACTION_HOME);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();
-        AppController.playClickabl = false;
-        AppController.searchClickabl = false;
-        AppController.appAction = false;
-        AppController.Clickabl = false;
-        AppController.goHome = true;
+
 
     }
 
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
-        AppController.appAction = false;
-        AppController.Clickabl = false;
-        AppController.goHome = false;
-        AppController.playClickabl = false;
-        AppController.searchClickabl = false;
         Log.e(TAG, "AccessibilityService >>>>  授权成功");
 
     }

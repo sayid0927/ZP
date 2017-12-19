@@ -10,12 +10,7 @@ public class AppController {
 
     public static boolean service_flag = false;//表示是否在一项服务中
     public static String SRResult = "";    //识别结果
-    public static boolean searchClickabl = true;
-    public static boolean playClickabl = true;
-    public static boolean appAction = true;
-    public static boolean Clickabl = true;
-    public static boolean goHome = true;
-    public static boolean ali = false;
+    public static boolean playClickabl = false;
 
     public  static  final  String LAUNCHER_TEXT="launcher_text";
     public static final String BAIKE = "baike";
