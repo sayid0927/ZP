@@ -100,6 +100,7 @@ public class FragmentHelp_Home_2 extends BaseFragment {
                     fragmentHelp2.setVisibility(View.GONE);
                     fragmentHelpWebSearch.setVisibility(View.VISIBLE);
                     MainActivity.mainActivity.setScanScroll(false);
+
                 }
                 visibilityType = 3;
                 break;

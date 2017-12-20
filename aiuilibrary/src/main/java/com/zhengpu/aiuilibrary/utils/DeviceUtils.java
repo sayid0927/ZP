@@ -1,12 +1,15 @@
 package com.zhengpu.aiuilibrary.utils;
 
+import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.view.accessibility.AccessibilityManager;
 
 import com.zhengpu.aiuilibrary.iflytekbean.AllAudioSongBean;
+import com.zhengpu.aiuilibrary.service.MyAccessibilityService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +58,27 @@ public class DeviceUtils {
         return versionCode;
     }
 
+    /**
+     * 判断AccessibilityService服务是否已经启动
+     */
+    public static boolean isStartAccessibilityService(Context context){
+        final String service = "com.zhengpu.aiuilibrary" + "/" + MyAccessibilityService.class.getCanonicalName();
+        AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        List<AccessibilityServiceInfo> serviceInfos = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC);
+        for (AccessibilityServiceInfo info : serviceInfos) {
+            String id = info.getId();
+            if (id.contains(service)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+
+
+    /***
+     * 判断是否安装了某个APP
+     */
     public static boolean isAppInstalled(Context context, String packageName) {
         final PackageManager packageManager = context.getPackageManager();
         List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
@@ -69,9 +92,9 @@ public class DeviceUtils {
         return pName.contains(packageName);
     }
 
-
-
-      //获取手机中所有音乐文件
+    /***
+     * 获取手机中所有音乐文件
+     */
     public static List<AllAudioSongBean> scanAllAudioFiles(Context context) {
           //生成动态集合，用于存储数据
         List<AllAudioSongBean> allAudioSongBeanList = new ArrayList<>();

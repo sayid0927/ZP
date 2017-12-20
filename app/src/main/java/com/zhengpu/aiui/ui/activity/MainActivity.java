@@ -149,9 +149,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     public void initView() {
 
 
-        if (!isAccessibilitySettingsOn(getApplicationContext())) {
-            startActivity(new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS));
-        }
+
 
 
         fragmentList = new ArrayList<>();
@@ -183,6 +181,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         mainActivity = this;
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(MainActivity.this, SpeechRecognizerService.class));
     }
 
     @Override
@@ -322,6 +326,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
             }
         } else if (service.equals("OPENAPPTEST.music_demo")) {    //   艺人跟歌曲 搜索和播放
 
+            PalyMode =-1;
+
             if (result.getCustomMusicBean() != null && result.getCustomMusicBean().getSemantic().size() != 0 &&
                     result.getCustomMusicBean().getSemantic().get(0).getSlots().size() != 0) {
 
@@ -393,6 +399,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                     }
                 }
             }
+        } else if(service.equals("flight")){
+
+                datas.add(result);
+                if(result.getFlightBean().getData()!=null){
+
+                    WordsToVoice.startSynthesizer(AppController.DATETIME, result.getFlightBean().getAnswer().getText());
+
+                }else {
+                    WordsToVoice.startSynthesizer(AppController.DATETIME, result.getFlightBean().getAnswer().getText());
+                }
         } else if (service.equals("datetime")) {
             if (!kuGuoMuiscPlayThread.isPlay()) {
                 datas.add(result);
@@ -437,7 +453,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
         Logger.e(result);
         voiceToWords.startRecognizer();
     }
-
 
     @Override
     public void SpeechOver() {
@@ -485,6 +500,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                             llCentet.setVisibility(View.VISIBLE);
                         break;
                     } else {
+
                         if (rvSpeech.getVisibility() == View.GONE)
                             rvSpeech.setVisibility(View.VISIBLE);
 
@@ -494,45 +510,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
                 break;
 
             case R.id.video_n:
-                artist = "周杰伦";
-                song = "我的地盘";
-
-                final String appName = "com.kugou.android";
-                if (isAppInstalled(MainActivity.this, appName)) {
-                    PlayMusicxAction playMusicxAction = new PlayMusicxAction(artist + song, "酷狗音乐", "", MainActivity.this);
-                    playMusicxAction.start();
-
-                    if (wordsToVoice.isTtsSpeaking())
-                        wordsToVoice.mTtsStop();
-                    voiceToWords.mIatDestroy();
-
-                } else {
-
-                    final CommonDialog dialog = new CommonDialog(MainActivity.this, "你还没酷狗音乐APP， 是否去下载该程序");
-                    dialog.show();
-
-                    dialog.onButOKListener(new CommonDialog.onButOKListener() {
-                        @Override
-                        public void onButOKListener() {
-
-                            String keywords = "安卓酷狗音乐App";
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(Uri.parse("https://www.baidu.com/s?wd=" + keywords + "&tn=SE_PSStatistics_p1d9m0nf"));
-                            startActivity(intent);
-
-                        }
-                    });
-
-                    dialog.onButCancellListener(new CommonDialog.onButCancelListener() {
-                        @Override
-                        public void onButCancelListener() {
-                            dialog.dismiss();
-                        }
-                    });
-//                    Logger.e("没有安装酷狗音乐APP");
-                }
-//                mPresenter.getSearchKugouSong("在人间", "1", "20");
-//                mPresenter.getTianJoke();
+                mPresenter.getWXHot(NUM_OF_PAGE, currentPage);
                 break;
             case R.id.iv_phone:
 
@@ -655,6 +633,20 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
     //获取微信热门新闻
     @Override
     public void getWXHotSuccess(WXItemBean wxItemBeans) {
+
+        if (llCentet.getVisibility() == View.VISIBLE)
+            llCentet.setVisibility(View.INVISIBLE);
+
+        if (rvSpeech.getVisibility() == View.GONE)
+            rvSpeech.setVisibility(View.VISIBLE);
+
+        if (RippleVoice_N.getVisibility() == View.GONE)
+            RippleVoice_N.setVisibility(View.VISIBLE);
+
+        if (viewpager.getVisibility() == View.VISIBLE)
+            viewpager.setVisibility(View.GONE);
+
+
         data = new BaseBean();
         data.setWxItemBean(wxItemBeans);
         data.setItemType(BaseBean.NEWS);
@@ -700,6 +692,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, IGe
 //            fileName = infoBeanList.get(0).getFilename();
 //            hash = infoBeanList.get(0).getHash();
 //            mPresenter.getKugouSongInfo(infoBeanList.get(0).getHash());
+
         }
         if (!isgetKuguoSong) {
             PointBean pointBean = new PointBean();

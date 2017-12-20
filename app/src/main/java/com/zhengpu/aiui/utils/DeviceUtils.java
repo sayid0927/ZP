@@ -87,7 +87,7 @@ public class DeviceUtils {
     //   判断是否开启AccessibilityService服务
     public static boolean isAccessibilitySettingsOn(Context mContext) {
         int accessibilityEnabled = 0;
-        final String service = "com.zeunpro.watch" + "/" + MyAccessibilityService.class.getCanonicalName();
+        final String service = "com.zhengpu.aiuilibrary" + "/" + MyAccessibilityService.class.getCanonicalName();
         try {
             accessibilityEnabled = Settings.Secure.getInt(
                     mContext.getApplicationContext().getContentResolver(),

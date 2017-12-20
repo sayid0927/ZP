@@ -3,6 +3,7 @@ package com.zhengpu.aiuilibrary.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 
 import com.iflytek.cloud.SpeechConstant;
@@ -20,6 +21,8 @@ import com.zhengpu.aiuilibrary.iflytekutils.WakeUpListener;
 import com.zhengpu.aiuilibrary.iflytekutils.WordsToVoice;
 import com.zhengpu.aiuilibrary.utils.PreferUtil;
 
+import static com.zhengpu.aiuilibrary.utils.DeviceUtils.isStartAccessibilityService;
+
 
 /**
  * ....
@@ -36,6 +39,12 @@ public class SpeechRecognizerService extends Service implements IGetVoiceToWord,
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (!isStartAccessibilityService(getApplicationContext())) {
+           Intent intent=  new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
 
 
         SpeechUtility.createUtility(this.getApplication(), SpeechConstant.APPID + "=5a127875");// 传递科大讯飞appid

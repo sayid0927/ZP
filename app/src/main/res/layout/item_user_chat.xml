@@ -14,7 +14,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="23dp"
         android:layout_marginTop="29dp"
-        android:src="@mipmap/user_chat" />
+        android:src="@drawable/user_chat" />
 
 
     <com.zhengpu.aiui.ui.view.bubbleview.BubbleTextVew

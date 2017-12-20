@@ -58,7 +58,6 @@
             </intent-filter>
         </activity>
 
-
         <service
             android:name="com.zhengpu.aiuilibrary.service.MyAccessibilityService"
             android:label="正谱小机器人服务"
@@ -74,6 +73,13 @@
 
 
         <service android:name="com.zhengpu.aiuilibrary.service.SpeechRecognizerService" />
+
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="febc4fbf0608365583de051665e08862" />
+
+
 
 
     </application>
