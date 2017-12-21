@@ -85,8 +85,6 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
     @Override
     public void getWXHot(int num, int page) {
-
-
         Subscription rxSubscription = bookApi.getWXHot(num, page).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WXItemBean>() {
@@ -103,7 +101,6 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
                     @Override
                     public void onNext(WXItemBean wxItemBeans) {
                         if (wxItemBeans != null && wxItemBeans.getCode() == 200 && mView != null) {
-
                             mView.getWXHotSuccess(wxItemBeans);
                         }
                     }
@@ -135,6 +132,7 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
                     }
                 });
         addSubscrebe(rxSubscription);
+
     }
 
     @Override

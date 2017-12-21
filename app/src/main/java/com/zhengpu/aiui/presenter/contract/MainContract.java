@@ -35,7 +35,7 @@ public interface MainContract {
 
         void getErrror(String error);
 
-        void getWXHotSuccess(WXItemBean wxItemBeans);
+        void getWXHotSuccess(WXItemBean newslistBean);
 
         void getSearchKugouSongSuccess(KuGouSongBean kuGouSongBean);
 

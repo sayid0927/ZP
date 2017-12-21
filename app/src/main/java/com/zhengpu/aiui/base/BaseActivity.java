@@ -30,6 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setupActivityComponent(BaseApplication.getBaseApplication().getAppComponent());
         attachView();
         initView();
+
     }
 
     @Override

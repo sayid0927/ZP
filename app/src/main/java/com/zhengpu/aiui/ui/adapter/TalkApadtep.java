@@ -3,17 +3,14 @@ package com.zhengpu.aiui.ui.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.QuickContactBadge;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.zhengpu.aiui.R;
 import com.zhengpu.aiui.utils.GlideUtils;
-import com.zhengpu.aiui.utils.ToastUtils;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 import com.zhengpu.aiuilibrary.iflytekbean.WeatherBean;
 
@@ -100,7 +97,6 @@ public class TalkApadtep extends BaseMultiItemQuickAdapter<BaseBean, BaseViewHol
                 break;
 
             case BaseBean.JOKE:
-
 
                 helper.setText(R.id.tv_title, item.getTianJokeBean().getNewslist().get(0).getTitle());
                 helper.setText(R.id.tv_content, item.getTianJokeBean().getNewslist().get(0).getContent());

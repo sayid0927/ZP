@@ -157,7 +157,7 @@ public class VoiceToWords {
 
         mIat.setParameter(SpeechConstant.VAD_ENABLE, "1");
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
-        mIat.setParameter(SpeechConstant.VAD_BOS, "20000");
+        mIat.setParameter(SpeechConstant.VAD_BOS, "200000");
 
         // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
         mIat.setParameter(SpeechConstant.VAD_EOS, "1000");
@@ -361,10 +361,10 @@ public class VoiceToWords {
                                     baseBean.setCalcBean(calcBean);
                                     mIGetVoiceToWord.getResult(service, baseBean);
 
+                                    String str = calcBean.getAnswer().getText();
+                                    CalcAction calcAction = new CalcAction(service,str);
+                                    calcAction.start();
 
-//                                    String str = calcBean.getAnswer().getText();
-//                                    CalcAction calcAction = new CalcAction(str);
-//                                    calcAction.start();
                                 }
                             }
                             break;
@@ -383,6 +383,11 @@ public class VoiceToWords {
                                     baseBean.setContext(datetimeBean.getText());
                                     baseBean.setDatetimeBean(datetimeBean);
                                     mIGetVoiceToWord.getResult(service, baseBean);
+
+                                    String str = datetimeBean.getAnswer().getText();
+                                    CalcAction calcAction = new CalcAction(service,str);
+                                    calcAction.start();
+
                                 }
                             }
                         }
@@ -506,7 +511,6 @@ public class VoiceToWords {
 //                        calcAction.start();
 
                     }
-
                     break;
                 }
                 case "poetry": {  //     诗词查询和诗句对答。

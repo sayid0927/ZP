@@ -1,6 +1,7 @@
 package com.zhengpu.aiuilibrary.iflytekbean.otherbean;
 
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.zhengpu.aiuilibrary.iflytekbean.BaseBean;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * Created by wengmf on 2017/12/12.
  */
 
-public class WXItemBean {
+public class WXItemBean  implements MultiItemEntity {
 
 
     /**
@@ -20,8 +21,19 @@ public class WXItemBean {
      */
 
     private int code;
+    private  int type;
     private String msg;
     private List<NewslistBean> newslist;
+
+    @Override
+    public int getItemType() {
+        return type;
+    }
+
+    public int setItemType() {
+        return type;
+    }
+
 
     public int getCode() {
         return code;

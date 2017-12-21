@@ -40,11 +40,11 @@ public class SpeechRecognizerService extends Service implements IGetVoiceToWord,
     public void onCreate() {
         super.onCreate();
 
-        if (!isStartAccessibilityService(getApplicationContext())) {
-           Intent intent=  new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
+//        if (!isStartAccessibilityService(getApplicationContext())) {
+//           Intent intent=  new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//        }
 
 
         SpeechUtility.createUtility(this.getApplication(), SpeechConstant.APPID + "=5a127875");// 传递科大讯飞appid

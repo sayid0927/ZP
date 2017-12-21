@@ -57,9 +57,15 @@
                 android:layout_centerInParent="true"
                 android:background="@drawable/voice" />
 
+
         </com.skyfishjy.library.RippleBackground>
 
+
+
+
     </LinearLayout>
+
+
 
 
     <RelativeLayout
